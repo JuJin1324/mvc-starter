@@ -11,7 +11,7 @@
 
 ## 구성
 ### 데이터 객체 흐름
-> requestBody -> DTO -> Entity -> DTO -> responseBody 
+> RequestBody -> DTO -> Entity -> DTO -> ResponseBody 
 
 ## 테스트
 ### Response Body 객체
