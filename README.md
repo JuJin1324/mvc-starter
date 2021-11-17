@@ -10,11 +10,8 @@
 > Framework: JPA
 
 ## 구성
-### Member
-
-### Team
-
-### Board
+### 데이터 객체 흐름
+> requestBody -> DTO -> Entity -> DTO -> responseBody 
 
 ## 테스트
 ### Response Body 객체
