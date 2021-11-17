@@ -24,8 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RequiredArgsConstructor
 public class ApiTestClient {
-    private final MockMvc          mockMvc;
-    private final ObjectMapper     objectMapper;
+    private final MockMvc      mockMvc;
+    private final ObjectMapper objectMapper;
 
     public void reqExpectBadRequest(MockHttpServletRequestBuilder requestBuilder, Map<String, Object> reqBody, String expectedMsg) throws Exception {
         mockMvc.perform(requestBuilder
@@ -37,13 +37,14 @@ public class ApiTestClient {
                 .andExpect(jsonPath("$.message").value(expectedMsg));
     }
 
-    public void reqExpectNotFound(MockHttpServletRequestBuilder requestBuilder, Map<String, Object> reqBody) throws Exception {
+    public void reqExpectNotFound(MockHttpServletRequestBuilder requestBuilder, Map<String, Object> reqBody, String resourceName) throws Exception {
         mockMvc.perform(requestBuilder
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(reqBody == null ? "" : objectMapper.writeValueAsString(reqBody)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(String.valueOf(HttpStatus.NOT_FOUND.value())))
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.getReasonPhrase()))
-                .andExpect(jsonPath("$.message").value(ErrorMessageConst.RESOURCE_NOT_FOUND));
+                .andExpect(jsonPath("$.message")
+                        .value(ErrorMessageConst.RESOURCE_NOT_FOUND + String.format(" [%s]", resourceName)));
     }
 }

@@ -10,8 +10,8 @@ import lombok.Getter;
 public class ResourceNotFoundException extends RuntimeException {
     private final String error;
 
-    public ResourceNotFoundException() {
-        super(ErrorMessageConst.RESOURCE_NOT_FOUND);
+    public ResourceNotFoundException(String resourceName) {
+        super(ErrorMessageConst.RESOURCE_NOT_FOUND + String.format(" [%s]", resourceName));
         this.error = "ResourceNotFound";
     }
 }

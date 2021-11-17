@@ -15,6 +15,7 @@ import practice.mvcstarter.exceptions.ResourceNotFoundException;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TeamService {
+    public static final String RESOURCE_NAME = "Team";
     private final TeamRepository teamRepository;
 
     /**
@@ -45,7 +46,7 @@ public class TeamService {
 
         return teamRepository.findById(teamId)
                 .map(TeamDto::toRead)
-                .orElseThrow(ResourceNotFoundException::new);
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
     }
 
     /**
@@ -71,7 +72,7 @@ public class TeamService {
         dto.validateToUpdate();
 
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(ResourceNotFoundException::new);
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
         team.update(dto.getTeamName());
     }
 
@@ -85,7 +86,7 @@ public class TeamService {
         }
 
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(ResourceNotFoundException::new);
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
         teamRepository.delete(team);
     }
 }

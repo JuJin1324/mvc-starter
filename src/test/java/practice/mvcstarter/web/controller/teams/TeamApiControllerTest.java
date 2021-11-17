@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import practice.mvcstarter.domain.teams.Team;
+import practice.mvcstarter.domain.teams.TeamService;
 import practice.mvcstarter.web.controller.ApiTestClient;
 import practice.mvcstarter.web.controller.exceptions.ExceptionController;
 import practice.mvcstarter.web.controller.initdb.InitTeam;
@@ -53,7 +54,7 @@ class TeamApiControllerTest {
     @DisplayName("[팀 단건 조회] 존재하지 않는 teamId")
     void getSingleTeam_whenNotExistTeamId_thenReturnNotFound() throws Exception {
         Long invalidTeamId = 999999999L;
-        apiTestClient.reqExpectNotFound(get("/api/teams/{teamId}", invalidTeamId), null);
+        apiTestClient.reqExpectNotFound(get("/api/teams/{teamId}", invalidTeamId), null, TeamService.RESOURCE_NAME);
     }
 
     @Test
