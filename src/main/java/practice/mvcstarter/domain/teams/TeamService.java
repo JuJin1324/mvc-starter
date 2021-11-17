@@ -1,6 +1,8 @@
 package practice.mvcstarter.domain.teams;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
@@ -45,6 +47,15 @@ public class TeamService {
                 .map(TeamDto::toRead)
                 .orElseThrow(ResourceNotFoundException::new);
     }
+
+    /**
+     * 팀 리스트 조회
+     */
+    public Page<TeamDto> getTeamPage(Pageable pageable) {
+        return teamRepository.findAll(pageable)
+                .map(TeamDto::toRead);
+    }
+
 
     /**
      * 팀 갱신

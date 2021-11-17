@@ -16,3 +16,6 @@
 
 ### Board
 
+## 테스트
+### Response Body 객체
+> 테스트에서 TestRestTemplate 으로 Response Body 객체를 가져오기 위해서는 해당 Response Body 객체에 @NoArgsConstructor 필요.

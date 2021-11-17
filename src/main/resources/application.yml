@@ -1,1 +1,48 @@
+spring:
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/Documents/dev/h2/starter-practice
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 256
+        batch_fetch_style: dynamic
+        query:
+          in_clause_parameter_padding: true   # SQL In Clause 사용 시 In 에 2의 제곱 수로만 In 절 생성하도록 해주는 옵션
+    open-in-view: false
+  data:
+    web:
+      pageable:
+        default-page-size: 20
+logging:
+  level:
+    practice.jpastarter: debug
+    org.hibernate.SQL: debug
+#    org.hibernate.type: trace
 
+---
+spring:
+  config.activate.on-profile: test
+
+---
+spring:
+  config.activate.on-profile: prod
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false
+
+logging:
+  level:
+    root: info
+    web: info
+    practice.jpastarter: info
+    org.hibernate.SQL: info
