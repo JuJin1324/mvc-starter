@@ -1,4 +1,4 @@
-package practice.mvcstarter.web.controller.initdb;
+package practice.mvcstarter.web.controllers.initdb;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;

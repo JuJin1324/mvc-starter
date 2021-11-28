@@ -1,4 +1,4 @@
-package practice.mvcstarter.web.controller.teams;
+package practice.mvcstarter.web.controllers.teams;
 
 import java.util.List;
 

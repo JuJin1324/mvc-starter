@@ -1,4 +1,4 @@
-package practice.mvcstarter.web.controller.exceptions;
+package practice.mvcstarter.web.controllers.exceptions;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package practice.mvcstarter.web.controller.teams;
+package practice.mvcstarter.web.controllers.teams;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,9 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import practice.mvcstarter.domain.teams.Team;
 import practice.mvcstarter.domain.teams.TeamService;
-import practice.mvcstarter.web.controller.ApiTestClient;
-import practice.mvcstarter.web.controller.exceptions.ExceptionControllerAdvice;
-import practice.mvcstarter.web.controller.initdb.InitTeam;
+import practice.mvcstarter.web.controllers.ApiTestClient;
+import practice.mvcstarter.web.controllers.exceptions.ExceptionControllerAdvice;
+import practice.mvcstarter.web.controllers.initdb.InitTeam;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

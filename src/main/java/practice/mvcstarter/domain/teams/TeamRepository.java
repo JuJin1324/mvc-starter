@@ -2,8 +2,7 @@ package practice.mvcstarter.domain.teams;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
-import practice.mvcstarter.domain.repositories.CommonRepository;
+import practice.mvcstarter.domain.CommonRepository;
 
 import java.util.List;
 import java.util.Optional;
