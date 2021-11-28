@@ -67,8 +67,8 @@ class TeamApiControllerTest {
         Team givenTeam = initTeam.givenAllTeams().get(0);
         System.out.println("=================================== given =================================== ");
         /* when */
-        GetSingleTeamResBody resBody = testRestTemplate
-                .getForObject("/api/teams/{teamId}", GetSingleTeamResBody.class, givenTeam.getId());
+        TeamApiController.GetSingleTeamResBody resBody = testRestTemplate
+                .getForObject("/api/teams/{teamId}", TeamApiController.GetSingleTeamResBody.class, givenTeam.getId());
         /* then */
         assertEquals(givenTeam.getId(), resBody.getTeamId());
         assertEquals(givenTeam.getName(), resBody.getTeamName());

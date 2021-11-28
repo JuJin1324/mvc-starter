@@ -1,5 +1,8 @@
 package practice.mvcstarter.web.controllers.teams;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import practice.mvcstarter.domain.teams.TeamDto;
 import practice.mvcstarter.domain.teams.TeamService;
+
+import java.util.List;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
@@ -37,5 +42,20 @@ public class TeamApiController {
     public Page<GetSingleTeamResBody> getTeamPage(Pageable pageable) {
         return teamService.getTeamPage(pageable)
                 .map(dto -> new GetSingleTeamResBody(dto.getTeamId(), dto.getTeamName()));
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class GetSingleTeamResBody {
+        private Long   teamId;
+        private String teamName;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class GetTeamListResBody {
+        List<GetSingleTeamResBody> list;
     }
 }
