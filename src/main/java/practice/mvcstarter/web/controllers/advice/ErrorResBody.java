@@ -1,4 +1,4 @@
-package practice.mvcstarter.web.controllers.exceptions;
+package practice.mvcstarter.web.controllers.advice;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

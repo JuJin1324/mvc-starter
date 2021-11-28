@@ -15,7 +15,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import practice.mvcstarter.domain.teams.Team;
 import practice.mvcstarter.domain.teams.TeamService;
 import practice.mvcstarter.web.controllers.ApiTestClient;
-import practice.mvcstarter.web.controllers.exceptions.ExceptionControllerAdvice;
+import practice.mvcstarter.web.controllers.advice.ExceptionControllerAdvice;
 import practice.mvcstarter.web.controllers.initdb.InitTeam;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,13 +34,16 @@ class TeamApiControllerTest {
     ApiTestClient apiTestClient;
 
     @Autowired
-    TestRestTemplate testRestTemplate;
+    TestRestTemplate          testRestTemplate;
     @Autowired
-    InitTeam         initTeam;
+    InitTeam                  initTeam;
+    @Autowired
+    TeamApiController         teamApiController;
+    @Autowired
+    ExceptionControllerAdvice exceptionControllerAdvice;
 
     @BeforeEach
-    void setUp(@Autowired TeamApiController teamApiController,
-               @Autowired ExceptionControllerAdvice exceptionControllerAdvice) {
+    void setUp() {
         // 한글 깨짐 처리
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(teamApiController)
                 .setControllerAdvice(exceptionControllerAdvice)
