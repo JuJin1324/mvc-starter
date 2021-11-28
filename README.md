@@ -16,3 +16,12 @@
 ## 테스트
 ### Response Body 객체
 > 테스트에서 TestRestTemplate 으로 Response Body 객체를 가져오기 위해서는 해당 Response Body 객체에 @NoArgsConstructor 필요.
+
+### JPA
+> [jpa-starter](https://github.com/JuJin1324/jpa-starter.git)
+
+### Exception 처리
+> [exception-starter](https://github.com/JuJin1324/exception-starter.git)
+
+### Validation 처리
+> [validation-starter](https://github.com/JuJin1324/validation-starter.git)
