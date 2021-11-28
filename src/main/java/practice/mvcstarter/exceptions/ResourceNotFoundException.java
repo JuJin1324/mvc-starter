@@ -12,6 +12,6 @@ public class ResourceNotFoundException extends RuntimeException {
 
     public ResourceNotFoundException(String resourceName) {
         super(ErrorMessageConst.RESOURCE_NOT_FOUND + String.format(" [%s]", resourceName));
-        this.error = "ResourceNotFound";
+        this.error = ErrorConst.RESOURCE_NOT_FOUND;
     }
 }

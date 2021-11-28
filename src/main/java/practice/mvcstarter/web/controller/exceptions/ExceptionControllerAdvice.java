@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class ExceptionController {
+public class ExceptionControllerAdvice {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
