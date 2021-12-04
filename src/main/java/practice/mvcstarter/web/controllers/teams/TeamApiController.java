@@ -7,13 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import practice.mvcstarter.domain.teams.TeamDto;
 import practice.mvcstarter.domain.teams.TeamService;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -26,6 +25,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeamApiController {
     private final TeamService teamService;
+
+    /**
+     * 팀 생성
+     */
+    @PostMapping("")
+    public Long createTeam(@Validated @RequestBody CreateTeamReqBody reqBody) {
+        return teamService.createTeam(reqBody.toDto());
+    }
 
     /**
      * 팀 조회 - 단건
@@ -43,6 +50,16 @@ public class TeamApiController {
     public Page<GetSingleTeamResBody> getTeamPage(@PageableDefault(size = 20) Pageable pageable) {
         return teamService.getTeamPage(pageable)
                 .map(dto -> new GetSingleTeamResBody(dto.getTeamId(), dto.getTeamName()));
+    }
+
+    @Data
+    static class CreateTeamReqBody {
+        @NotBlank
+        private String teamName;
+
+        public TeamDto toDto() {
+            return TeamDto.toCreate(teamName);
+        }
     }
 
     @Data

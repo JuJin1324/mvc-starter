@@ -4,12 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import practice.mvcstarter.exceptions.ErrorConst;
+import practice.mvcstarter.exceptions.InvalidRequestBodyException;
 import practice.mvcstarter.exceptions.ResourceDuplicatedException;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
 
@@ -45,11 +47,15 @@ public class ExceptionControllerAdvice {
         return new ErrorResBody(HttpStatus.BAD_REQUEST, ErrorConst.TYPE_MISMATCH, getTypeMismatchErrorMessage(e));
     }
 
-    @ExceptionHandler
+    @ExceptionHandler({
+            HttpMessageNotReadableException.class,
+            MethodArgumentNotValidException.class
+    })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResBody handleInvalidRequestBodyException(HttpServletRequest request, final HttpMessageNotReadableException e) {
-        log.error("requestURI: {}, errorMessage: {}", request.getRequestURI(), e.getMessage());
-        return new ErrorResBody(HttpStatus.BAD_REQUEST, ErrorConst.INVALID_REQUEST_BODY, e.getMessage());
+    public ErrorResBody handleInvalidRequestBodyException(HttpServletRequest request, final Exception e) {
+        InvalidRequestBodyException ie = new InvalidRequestBodyException(e.getMessage());
+        log.error("requestURI: {}, errorMessage: {}", request.getRequestURI(), ie.getMessage());
+        return new ErrorResBody(HttpStatus.BAD_REQUEST, ErrorConst.INVALID_REQUEST_BODY, ie.getMessage());
     }
 
     private String getTypeMismatchErrorMessage(MethodArgumentTypeMismatchException e) {

@@ -12,6 +12,7 @@ import practice.mvcstarter.exceptions.ErrorMessageConst;
 
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -27,13 +28,18 @@ public class ApiTestClient {
     private final ObjectMapper objectMapper;
 
     public void reqExpectBadRequest(MockHttpServletRequestBuilder requestBuilder, Map<String, Object> reqBody, String expectedMsg) throws Exception {
-        mockMvc.perform(requestBuilder
+        MvcResult mvcResult = mockMvc.perform(requestBuilder
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(reqBody == null ? "" : objectMapper.writeValueAsString(reqBody)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.getReasonPhrase()))
-                .andExpect(jsonPath("$.message").value(expectedMsg));
+                .andReturn();
+
+        String content = mvcResult.getResponse().getContentAsString();
+        Map<String, Object> resBody = objectMapper.readValue(content, Map.class);
+        String message = (String) resBody.get("message");
+        assertThat(message).contains(expectedMsg);
     }
 
     public void reqExpectNotFound(MockHttpServletRequestBuilder requestBuilder, Map<String, Object> reqBody, String resourceName) throws Exception {

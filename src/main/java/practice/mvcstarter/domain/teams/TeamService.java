@@ -57,7 +57,6 @@ public class TeamService {
                 .map(TeamDto::toRead);
     }
 
-
     /**
      * 팀 갱신
      */

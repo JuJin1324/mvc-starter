@@ -10,6 +10,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -17,14 +18,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import practice.mvcstarter.domain.teams.Team;
 import practice.mvcstarter.domain.teams.TeamService;
+import practice.mvcstarter.exceptions.ErrorMessageConst;
+import practice.mvcstarter.exceptions.InvalidRequestBodyException;
 import practice.mvcstarter.web.controllers.ApiTestClient;
 import practice.mvcstarter.web.controllers.advice.ExceptionControllerAdvice;
 import practice.mvcstarter.web.controllers.initdb.InitTeam;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,7 +43,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TeamApiControllerTest {
-    private static final int TEAM_TOTAL_COUNT = InitTeam.TEAM_TOTAL_COUNT;
+    private static final String TEAM_NAME        = "팀 이름";
+    private static final int    TEAM_TOTAL_COUNT = InitTeam.TEAM_TOTAL_COUNT;
 
     ApiTestClient apiTestClient;
 
@@ -50,6 +56,8 @@ class TeamApiControllerTest {
     TeamApiController         teamApiController;
     @Autowired
     ExceptionControllerAdvice exceptionControllerAdvice;
+    @Autowired
+    TeamService               teamService;
 
     @BeforeEach
     void setUp() {
@@ -61,6 +69,30 @@ class TeamApiControllerTest {
                 .alwaysDo(print())
                 .build();
         apiTestClient = new ApiTestClient(mockMvc, new ObjectMapper());
+    }
+
+    @Test
+    @DisplayName("[팀 생성] 유효하지 않은 Request Body")
+    void createTeam_whenInvalidReqBody_thenThrowException() throws Exception {
+        apiTestClient.reqExpectBadRequest(post("/api/teams"), givenCreateTeamReqBody(null),
+                ErrorMessageConst.INVALID_REQUEST_BODY);
+        apiTestClient.reqExpectBadRequest(post("/api/teams"), givenCreateTeamReqBody(""),
+                ErrorMessageConst.INVALID_REQUEST_BODY);
+    }
+
+    @Test
+    @DisplayName("[팀 생성] 신규 팀 생성")
+    @Commit
+    void createTeam_whenCreateNewTeam_thenReturnTeamId() throws Exception {
+        /* when */
+        Long teamId = testRestTemplate.postForObject("/api/teams", givenCreateTeamReqBody(TEAM_NAME), Long.class);
+
+        /* then */
+        assertNotEquals(0L, teamId);
+
+        /* after */
+        System.out.println("=============================== after ===============================");
+        teamService.deleteTeam(teamId);
     }
 
     @Test
@@ -112,5 +144,12 @@ class TeamApiControllerTest {
                 totalPage);
     }
 
+    private Map<String, Object> givenCreateTeamReqBody(String teamName) {
+        HashMap<String, Object> reqBody = new HashMap<>();
+        if (teamName != null) {
+            reqBody.put("teamName", teamName);
+        }
 
+        return reqBody;
+    }
 }
