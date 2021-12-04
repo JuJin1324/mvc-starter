@@ -21,6 +21,7 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class InitTeam {
     public static final String TEAM_NAME = "Spring Integration Test 팀 이름";
+    public static final int TEAM_TOTAL_COUNT = 40;
 
     private final InitService initService;
 
@@ -45,8 +46,8 @@ public class InitTeam {
         }
 
         public void createTeams() {
-            IntStream.range(1, 20)
-                    .forEach(idx -> teamRepository.save(new Team(TEAM_NAME + " " + idx)));
+            IntStream.range(1, TEAM_TOTAL_COUNT)
+                    .forEach(idx -> teamRepository.save(Team.createTeam(TEAM_NAME + " " + idx)));
         }
 
         public void deleteTeams() {

@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.util.StringUtils;
 import practice.mvcstarter.exceptions.ErrorMessageConst;
 
 import java.util.Map;
@@ -43,5 +45,16 @@ public class ApiTestClient {
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.getReasonPhrase()))
                 .andExpect(jsonPath("$.message")
                         .value(ErrorMessageConst.RESOURCE_NOT_FOUND + String.format(" [%s]", resourceName)));
+    }
+
+    public void reqPageable(MockHttpServletRequestBuilder requestBuilder,
+                                           int pageNumber,
+                                           int pageSize,
+                                           int totalPages) throws Exception {
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.pageable.pageNumber").value(String.valueOf(pageNumber)))
+                .andExpect(jsonPath("$.pageable.pageSize").value(String.valueOf(pageSize)))
+                .andExpect(jsonPath("$.totalPages").value(String.valueOf(totalPages)));
     }
 }

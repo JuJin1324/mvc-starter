@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -18,9 +21,13 @@ import practice.mvcstarter.web.controllers.ApiTestClient;
 import practice.mvcstarter.web.controllers.advice.ExceptionControllerAdvice;
 import practice.mvcstarter.web.controllers.initdb.InitTeam;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
@@ -31,6 +38,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TeamApiControllerTest {
+    private static final int TEAM_TOTAL_COUNT = InitTeam.TEAM_TOTAL_COUNT;
+
     ApiTestClient apiTestClient;
 
     @Autowired
@@ -48,21 +57,22 @@ class TeamApiControllerTest {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(teamApiController)
                 .setControllerAdvice(exceptionControllerAdvice)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))  // 한글 깨짐 처리
+                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .alwaysDo(print())
                 .build();
         apiTestClient = new ApiTestClient(mockMvc, new ObjectMapper());
     }
 
     @Test
-    @DisplayName("[팀 단건 조회] 존재하지 않는 teamId")
+    @DisplayName("[팀 조회 - 단건] 존재하지 않는 teamId")
     void getSingleTeam_whenNotExistTeamId_thenReturnNotFound() throws Exception {
         Long invalidTeamId = 999999999L;
         apiTestClient.reqExpectNotFound(get("/api/teams/{teamId}", invalidTeamId), null, TeamService.RESOURCE_NAME);
     }
 
     @Test
-    @DisplayName("[팀 단건 조회] 존재하는 teamId")
-    void getUsersByUserKeys_whenEmptyReqBody_thenResponseBadRequest() throws Exception {
+    @DisplayName("[팀 조회 - 단건] 존재하는 teamId")
+    void getSingleTeam_whenEmptyReqBody_thenResponseBadRequest() {
         /* given */
         Team givenTeam = initTeam.givenAllTeams().get(0);
         System.out.println("=================================== given =================================== ");
@@ -73,4 +83,34 @@ class TeamApiControllerTest {
         assertEquals(givenTeam.getId(), resBody.getTeamId());
         assertEquals(givenTeam.getName(), resBody.getTeamName());
     }
+
+    @Test
+    @DisplayName("[팀 조회 - 페이지] RequestParam 없이 요청")
+    void getTeamPage_whenHasNoRequestParams_thenReturnDefault() throws Exception {
+        final int defaultPageNo = 0;
+        final int defaultPageSize = 20;
+        final int totalPage = TEAM_TOTAL_COUNT / defaultPageSize;
+
+        apiTestClient.reqPageable(
+                get("/api/teams"),
+                defaultPageNo,
+                defaultPageSize,
+                totalPage);
+    }
+
+    @Test
+    @DisplayName("[팀 조회 - 페이지] Page & Size 요청")
+    void getTeamPage_whenHasRequestParamsPageAndSize_thenReturnPage() throws Exception {
+        final int givenPage = 1;
+        final int givenSize = 10;
+        final int totalPage = TEAM_TOTAL_COUNT / givenSize;
+
+        apiTestClient.reqPageable(
+                get("/api/teams?page={page}&size={size}", givenPage, givenSize),
+                givenPage,
+                givenSize,
+                totalPage);
+    }
+
+
 }

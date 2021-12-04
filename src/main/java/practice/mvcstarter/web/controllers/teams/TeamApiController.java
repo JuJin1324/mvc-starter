@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +28,7 @@ public class TeamApiController {
     private final TeamService teamService;
 
     /**
-     * 팀 단건 조회
+     * 팀 조회 - 단건
      */
     @GetMapping("/{teamId}")
     public GetSingleTeamResBody getSingleTeam(@PathVariable("teamId") Long teamId) {
@@ -36,10 +37,10 @@ public class TeamApiController {
     }
 
     /**
-     * 팀 페이지 조회
+     * 팀 조회 - 페이지
      */
     @GetMapping("")
-    public Page<GetSingleTeamResBody> getTeamPage(Pageable pageable) {
+    public Page<GetSingleTeamResBody> getTeamPage(@PageableDefault(size = 20) Pageable pageable) {
         return teamService.getTeamPage(pageable)
                 .map(dto -> new GetSingleTeamResBody(dto.getTeamId(), dto.getTeamName()));
     }

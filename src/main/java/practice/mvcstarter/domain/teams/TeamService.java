@@ -30,7 +30,7 @@ public class TeamService {
         }
         dto.validateToCreate();
 
-        Team team = new Team(dto.getTeamName());
+        Team team = Team.createTeam(dto.getTeamName());
         teamRepository.save(team);
 
         return team.getId();
