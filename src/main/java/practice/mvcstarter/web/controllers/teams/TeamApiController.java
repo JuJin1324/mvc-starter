@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import practice.mvcstarter.domain.teams.TeamDto;
@@ -52,6 +53,25 @@ public class TeamApiController {
                 .map(dto -> new GetSingleTeamResBody(dto.getTeamId(), dto.getTeamName()));
     }
 
+    /**
+     * 팀 갱신
+     */
+    @PutMapping("/{teamId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateTeam(@PathVariable("teamId") Long teamId,
+                           @Validated @RequestBody UpdateTeamReqBody reqBody) {
+        teamService.updateTeam(teamId, reqBody.toDto());
+    }
+
+    /**
+     * 팀 삭제
+     */
+    @DeleteMapping("/{teamId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTeam(@PathVariable("teamId") Long teamId) {
+        teamService.deleteTeam(teamId);
+    }
+
     @Data
     static class CreateTeamReqBody {
         @NotBlank
@@ -59,6 +79,16 @@ public class TeamApiController {
 
         public TeamDto toDto() {
             return TeamDto.toCreate(teamName);
+        }
+    }
+
+    @Data
+    static class UpdateTeamReqBody {
+        @NotBlank
+        private String teamName;
+
+        public TeamDto toDto() {
+            return TeamDto.toUpdate(teamName);
         }
     }
 

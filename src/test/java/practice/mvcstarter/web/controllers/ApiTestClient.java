@@ -63,4 +63,11 @@ public class ApiTestClient {
                 .andExpect(jsonPath("$.pageable.pageSize").value(String.valueOf(pageSize)))
                 .andExpect(jsonPath("$.totalPages").value(String.valueOf(totalPages)));
     }
+
+    public void reqExpectNoContent(MockHttpServletRequestBuilder requestBuilder, Map<String, Object> reqBody) throws Exception {
+        mockMvc.perform(requestBuilder
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(reqBody == null ? "" : objectMapper.writeValueAsString(reqBody)))
+                .andExpect(status().isNoContent());
+    }
 }
