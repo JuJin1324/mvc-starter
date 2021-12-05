@@ -62,6 +62,12 @@ public class MemberApiController {
         memberService.updateMember(memberId, reqBody.toDto());
     }
 
+    @DeleteMapping("/{memberId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMember(@PathVariable("memberId") Long memberId) {
+        memberService.deleteMember(memberId);
+    }
+
     @Data
     static class CreateMemberReqBody {
         @NotBlank

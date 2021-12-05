@@ -205,6 +205,23 @@ class MemberApiControllerTest {
                 givenUpdateMemberReqBody(MEMBER_NAME_NEW, MEMBER_AGE_NEW));
     }
 
+    @Test
+    @DisplayName("[회원 삭제] 1.존재하지 않는 memberId")
+    void deleteMember_whenNotExistMemberId_thenReturnNotFound() throws Exception {
+        apiTestClient.reqExpectNotFound(delete("/api/members/{memberId}", MEMBER_ID_NOT_EXIST),
+                null, MemberService.RESOURCE_NAME);
+    }
+
+    @Test
+    @DisplayName("[회원 삭제] 2.정상 처리")
+    @Commit
+    void deleteMember_whenExistMemberId_thenReturnNoContent() throws Exception {
+        Member givenMember = initMember.givenAllMembers().get(0);
+        System.out.println("=================================== given =================================== ");
+
+        apiTestClient.reqExpectNoContent(delete("/api/members/{memberId}", givenMember.getId()), null);
+    }
+
     private Map<String, Object> givenCreateMemberReqBody(String name, String nickName, String age) {
         Map<String, Object> reqBody = new HashMap<>();
         if (name != null) {
