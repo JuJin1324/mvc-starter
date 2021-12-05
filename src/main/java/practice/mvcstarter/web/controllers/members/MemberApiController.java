@@ -1,5 +1,7 @@
 package practice.mvcstarter.web.controllers.members;
 
+import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +20,7 @@ import javax.validation.constraints.NotNull;
  */
 
 @RestController
-@RequestMapping("/api/teams")
+@RequestMapping("/api/members")
 @RequiredArgsConstructor
 public class MemberApiController {
     private final MemberService memberService;
@@ -31,6 +33,7 @@ public class MemberApiController {
         return memberService.createMember(reqBody.toDto());
     }
 
+    @Data
     static class CreateMemberReqBody {
         @NotBlank
         private String  name;
