@@ -50,9 +50,8 @@ public class Member {
                 .build();
     }
 
-    public void update(String name, String nickName, Integer age) {
+    public void update(String name, Integer age) {
         this.name = name;
-        this.nickName = nickName;
         this.age = age;
     }
 

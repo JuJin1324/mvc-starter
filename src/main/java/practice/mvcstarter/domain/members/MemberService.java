@@ -63,7 +63,17 @@ public class MemberService {
       * 회원 갱신
       */
      public void updateMember(Long memberId, MemberDto dto) {
+        if (memberId == null) {
+            throw new IllegalArgumentException("memberId is null.");
+        }
+        if (dto == null) {
+            throw new IllegalArgumentException("toUpdate Dto is null.");
+        }
+        dto.validateToUpdate();
 
+         Member member = memberRepository.findById(memberId)
+                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
+         member.update(dto.getName(), dto.getAge());
      }
 
      /**

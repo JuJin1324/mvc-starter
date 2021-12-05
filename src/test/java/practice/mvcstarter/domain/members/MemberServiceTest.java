@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import practice.mvcstarter.domain.teams.Team;
+import practice.mvcstarter.domain.teams.TeamDto;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
 
 import java.util.Optional;
@@ -23,9 +24,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
-    private static final Long   MEMBER_ID         = 777L;
-    private static final Long   MEMBER_ID_INVALID = 999999999L;
-    private static final String MEMBER_NAME       = "회원 이름";
+    private static final Long   MEMBER_ID           = 777L;
+    private static final Long   MEMBER_ID_NOT_EXIST = 999999999L;
+    private static final String MEMBER_NAME         = "회원 이름";
     private static final String MEMBER_NICK_NAME  = "회원 닉네임";
     private static final int    MEMBER_AGE        = 20;
 
@@ -45,14 +46,10 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("[회원 생성] 1.매개변수가 null 인 경우")
-    void createMember_whenParamIsNull_thenThrowException() {
-        assertThrows(IllegalArgumentException.class, () -> memberService.createMember(null));
-    }
-
-    @Test
-    @DisplayName("[회원 생성] 2.dto validation 미통과")
+    @DisplayName("[회원 생성] 1.유효하지 않은 매개변수")
     void createMember_whenInvalidParam_thenThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> memberService.createMember(null));
+
         /* 이름 blank */
         assertThrows(IllegalArgumentException.class, () ->
                 memberService.createMember(MemberDto.toCreate(null, null, null)));
@@ -77,8 +74,8 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("[회원 생성] 3.dto validation 통과")
-    void createMember_whenValidParam_thenReturnMemberId() {
+    @DisplayName("[회원 생성] 2.정상 생성")
+    void createMember_whenNormal_thenReturnMemberId() {
         /* given */
         MemberDto givenDto = MemberDto.toCreate(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
 
@@ -90,21 +87,21 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("[회원 조회 - 단건] 1.매개변수가 null 인 경우")
-    void getSingleMember_whenParamIsNull_thenThrowException() {
+    @DisplayName("[회원 조회 - 단건] 1.유효하지 않은 매개변수")
+    void getSingleMember_whenInvalidParam_thenThrowException() {
         assertThrows(IllegalArgumentException.class, () -> memberService.getSingleMember(null));
     }
 
     @Test
-    @DisplayName("[회원 조회 - 단건] 2.매개변수가 invalid 인 경우")
-    void getSingleMember_whenInvalidParam_thenThrowException() {
+    @DisplayName("[회원 조회 - 단건] 2.존재하지 않는 memberId")
+    void getSingleMember_whenNotExistMemberId_thenThrowException() {
         /* given */
-        when(memberRepository.findById(MEMBER_ID_INVALID))
+        when(memberRepository.findById(MEMBER_ID_NOT_EXIST))
                 .thenReturn(Optional.empty());
 
         /* when, then */
         assertThrows(ResourceNotFoundException.class, () ->
-                memberService.getSingleMember(MEMBER_ID_INVALID));
+                memberService.getSingleMember(MEMBER_ID_NOT_EXIST));
     }
 
     @Test
@@ -143,5 +140,52 @@ class MemberServiceTest {
         assertThat(dto.getAge()).isEqualTo(givenMember.getAge());
 
         assertThat(dto.getTeam().getTeamName()).isEqualTo(givenTeam.getName());
+    }
+
+    @Test
+    @DisplayName("[회원 갱신] 1.유효하지 않은 매개변수")
+    void updateTeam_whenInvalidParam_thenThrowException() {
+        assertThrows(IllegalArgumentException.class, () ->
+                memberService.updateMember(null, null));
+        assertThrows(IllegalArgumentException.class, () ->
+                memberService.updateMember(MEMBER_ID, null));
+
+        assertThrows(IllegalArgumentException.class, () ->
+                memberService.updateMember(MEMBER_ID, MemberDto.toUpdate(null, null)));
+        assertThrows(IllegalArgumentException.class, () ->
+                memberService.updateMember(MEMBER_ID, MemberDto.toUpdate("", null)));
+        assertThrows(IllegalArgumentException.class, () ->
+                memberService.updateMember(MEMBER_ID, MemberDto.toUpdate(MEMBER_NAME_NEW, null)));
+    }
+
+    @Test
+    @DisplayName("[회원 갱신] 2.존재하지 않는 memberId")
+    void updateMember_whenNotExistMemberId_thenThrowException() {
+        /* given */
+        MemberDto givenDto = MemberDto.toUpdate(MEMBER_NAME_NEW, MEMBER_AGE_NEW);
+        when(memberRepository.findById(MEMBER_ID_NOT_EXIST))
+                .thenReturn(Optional.empty());
+
+        /* when, then */
+        assertThrows(ResourceNotFoundException.class, () ->
+                memberService.updateMember(MEMBER_ID_NOT_EXIST, givenDto));
+    }
+
+    @Test
+    @DisplayName("[회원 갱신] 3.정상 갱신")
+    void updateTeam_whenNormal_thenUpdateTeam() {
+        /* given */
+        Member givenMember = Member.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
+        when(memberRepository.findById(MEMBER_ID))
+                .thenReturn(Optional.of(givenMember));
+
+        MemberDto givenDto = MemberDto.toUpdate(MEMBER_NAME_NEW, MEMBER_AGE_NEW);
+
+        /* when */
+        memberService.updateMember(MEMBER_ID, givenDto);
+
+        /* then */
+        assertThat(givenMember.getName()).isEqualTo(MEMBER_NAME_NEW);
+        assertThat(givenMember.getAge()).isEqualTo(MEMBER_AGE_NEW);
     }
 }

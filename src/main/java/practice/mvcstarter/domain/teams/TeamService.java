@@ -67,7 +67,7 @@ public class TeamService {
             throw new IllegalArgumentException("teamId is null.");
         }
         if (dto == null) {
-            throw new IllegalArgumentException("toCreate Dto is null.");
+            throw new IllegalArgumentException("toUpdate Dto is null.");
         }
         dto.validateToUpdate();
 
