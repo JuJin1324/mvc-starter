@@ -123,7 +123,8 @@ class TeamApiControllerTest {
                 get("/api/teams"),
                 defaultPageNo,
                 defaultPageSize,
-                totalPage);
+                totalPage
+        );
     }
 
     @Test
@@ -137,7 +138,8 @@ class TeamApiControllerTest {
                 get("/api/teams?page={page}&size={size}", givenPage, givenSize),
                 givenPage,
                 givenSize,
-                totalPage);
+                totalPage
+        );
     }
 
     @Test

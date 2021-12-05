@@ -16,13 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import practice.mvcstarter.domain.members.Member;
 import practice.mvcstarter.domain.members.MemberService;
-import practice.mvcstarter.domain.teams.Team;
-import practice.mvcstarter.domain.teams.TeamService;
 import practice.mvcstarter.exceptions.ErrorMessageConst;
 import practice.mvcstarter.web.controllers.ApiTestClient;
 import practice.mvcstarter.web.controllers.advice.ExceptionControllerAdvice;
 import practice.mvcstarter.web.controllers.initdb.InitMember;
-import practice.mvcstarter.web.controllers.teams.TeamApiController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,11 +39,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class MemberApiControllerTest {
-    public static final  Long   MEMBER_ID_NOT_EXIST = 999999999L;
-    private static final String MEMBER_NAME         = InitMember.MEMBER_NAME;
-    private static final String MEMBER_NICK_NAME         = InitMember.MEMBER_NICK_NAME;
-
-    private static final String TEAM_NAME_NEW       = "새로운 팀 이름";
+    public static final  Long    MEMBER_ID_NOT_EXIST = 999999999L;
+    private static final String  MEMBER_NAME         = InitMember.MEMBER_NAME;
+    private static final String  MEMBER_NICK_NAME    = InitMember.MEMBER_NICK_NAME;
+    private static final Integer MEMBER_TOTAL_COUNT  = InitMember.MEMBER_TOTAL_COUNT;
 
     ApiTestClient apiTestClient;
 
@@ -137,6 +133,36 @@ class MemberApiControllerTest {
         assertEquals(givenMember.getName(), resBody.getName());
         assertEquals(givenMember.getNickName(), resBody.getNickName());
         assertEquals(givenMember.getAge(), resBody.getAge());
+    }
+
+    @Test
+    @DisplayName("[회원 조회 - 페이지] 1.RequestParam 없이 요청")
+    void getMemberPage_whenHasNoRequestParams_thenReturnDefault() throws Exception {
+        final int defaultPageNo = 0;
+        final int defaultPageSize = 20;
+        final int totalPage = MEMBER_TOTAL_COUNT / defaultPageSize;
+
+        apiTestClient.reqPageable(
+                get("/api/members"),
+                defaultPageNo,
+                defaultPageSize,
+                totalPage
+        );
+    }
+
+    @Test
+    @DisplayName("[회원 조회 - 페이지] 2.Page & Size 요청")
+    void getMemberPage_whenHasRequestParamsPageAndSize_thenReturnPage() throws Exception {
+        final int givenPage = 1;
+        final int givenSize = 10;
+        final int totalPage = MEMBER_TOTAL_COUNT / givenSize;
+
+        apiTestClient.reqPageable(
+                get("/api/members?page={page}&size={size}", givenPage, givenSize),
+                givenPage,
+                givenSize,
+                totalPage
+        );
     }
 
     private Map<String, Object> givenCreateMemberReqBody(String name, String nickName, String age) {

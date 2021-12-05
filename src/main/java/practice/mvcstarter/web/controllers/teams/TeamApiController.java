@@ -40,8 +40,7 @@ public class TeamApiController {
      */
     @GetMapping("/{teamId}")
     public GetSingleTeamResBody getSingleTeam(@PathVariable("teamId") Long teamId) {
-        TeamDto team = teamService.getSingleTeam(teamId);
-        return new GetSingleTeamResBody(team.getTeamId(), team.getTeamName());
+        return GetSingleTeamResBody.createReqBody(teamService.getSingleTeam(teamId));
     }
 
     /**
@@ -50,7 +49,7 @@ public class TeamApiController {
     @GetMapping("")
     public Page<GetSingleTeamResBody> getTeamPage(@PageableDefault(size = 20) Pageable pageable) {
         return teamService.getTeamPage(pageable)
-                .map(dto -> new GetSingleTeamResBody(dto.getTeamId(), dto.getTeamName()));
+                .map(GetSingleTeamResBody::createReqBody);
     }
 
     /**
@@ -98,6 +97,13 @@ public class TeamApiController {
     static class GetSingleTeamResBody {
         private Long   teamId;
         private String teamName;
+
+        public static GetSingleTeamResBody createReqBody(TeamDto teamDto) {
+            return new GetSingleTeamResBody(
+                    teamDto.getTeamId(),
+                    teamDto.getTeamName()
+            );
+        }
     }
 
     @Data
