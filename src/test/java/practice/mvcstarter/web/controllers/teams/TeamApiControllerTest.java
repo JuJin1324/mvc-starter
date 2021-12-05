@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TeamApiControllerTest {
     public static final  Long   TEAM_ID_NOT_EXIST = 999999999L;
-    private static final String TEAM_NAME         = "팀 이름";
+    private static final String TEAM_NAME         = InitTeam.TEAM_NAME;
     private static final String TEAM_NAME_NEW     = "새로운 팀 이름";
     private static final int    TEAM_TOTAL_COUNT  = InitTeam.TEAM_TOTAL_COUNT;
 

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import practice.mvcstarter.domain.CommonRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -18,4 +19,10 @@ public interface MemberRepository extends CommonRepository<Member, Long> {
     <S extends Member> S save(S entity);
 
     void delete(Member entity);
+
+    /* For MVC Test Only */
+    List<Member> findAllByNameLike(String nameLike);
+
+    /* For MVC Test Only */
+    void deleteAll(Iterable<? extends Member> entities);
 }

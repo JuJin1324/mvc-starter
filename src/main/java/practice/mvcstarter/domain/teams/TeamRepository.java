@@ -20,7 +20,8 @@ public interface TeamRepository extends CommonRepository<Team, Long> {
 
     void delete(Team entity);
 
+    /* For MVC Test Only */
     List<Team> findAllByNameLike(String nameLike);
-
+    /* For MVC Test Only */
     void deleteAll(Iterable<? extends Team> entities);
 }
