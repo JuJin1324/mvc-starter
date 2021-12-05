@@ -67,13 +67,13 @@ public class TeamServiceTest {
     }
 
     @Test
-    @DisplayName("[팀 단건 조회] 1.매개변수가 null 인 경우")
+    @DisplayName("[팀 조회 - 단건] 1.매개변수가 null 인 경우")
     void getSingleTeam_whenParamIsNull_thenThrowException() {
         assertThrows(IllegalArgumentException.class, () -> teamService.getSingleTeam(null));
     }
 
     @Test
-    @DisplayName("[팀 단건 조회] 2.매개변수가 invalid 인 경우")
+    @DisplayName("[팀 조회 - 단건] 2.매개변수가 invalid 인 경우")
     void getSingleTeam_whenInvalidParam_thenThrowException() {
         /* given */
         when(teamRepository.findById(INVALID_TEAM_ID))
@@ -84,7 +84,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    @DisplayName("[팀 단건 조회] 3.매개변수가 정상 인 경우")
+    @DisplayName("[팀 조회 - 단건] 3.매개변수가 정상 인 경우")
     void getSingleTeam_whenValidParam_thenReturnTeamDto() {
         /* given */
         Team givenTeam = Team.createTeam(TEAM_NAME);

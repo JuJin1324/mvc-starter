@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface TeamRepository extends CommonRepository<Team, Long> {
     Page<Team> findAll(Pageable pageable);
 
-    Optional<Team> findById(Long aLong);
+    Optional<Team> findById(Long id);
 
     <S extends Team> S save(S entity);
 

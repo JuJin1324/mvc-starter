@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,6 +21,7 @@ import javax.persistence.Id;
 public class Team {
     @Id
     @GeneratedValue
+    @Column(name = "team_id")
     private Long id;
 
     private String name;

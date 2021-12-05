@@ -16,10 +16,9 @@ public class TeamDto {
 //    private Integer numberOfMembers;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private TeamDto(Long teamId, String teamName, Integer numberOfMembers) {
+    private TeamDto(Long teamId, String teamName) {
         this.teamId = teamId;
         this.teamName = teamName;
-//        this.numberOfMembers = numberOfMembers;
     }
 
     public static TeamDto toCreate(String teamName) {
@@ -43,13 +42,13 @@ public class TeamDto {
 
     public void validateToCreate() {
         if (!StringUtils.hasText(teamName)) {
-            throw new IllegalArgumentException("teamDto's name is null.");
+            throw new IllegalArgumentException("[TeamDto] teamName is blank.");
         }
     }
 
     public void validateToUpdate() {
         if (!StringUtils.hasText(teamName)) {
-            throw new IllegalArgumentException("teamDto's name is null.");
+            throw new IllegalArgumentException("[TeamDto] teamName is blank.");
         }
     }
 }

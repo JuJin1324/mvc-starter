@@ -16,6 +16,7 @@ import practice.mvcstarter.exceptions.ResourceNotFoundException;
 @RequiredArgsConstructor
 public class TeamService {
     public static final String RESOURCE_NAME = "Team";
+
     private final TeamRepository teamRepository;
 
     /**
@@ -37,7 +38,7 @@ public class TeamService {
     }
 
     /**
-     * 팀 단건 조회
+     * 팀 조회 - 단건
      */
     public TeamDto getSingleTeam(Long teamId) {
         if (teamId == null) {
@@ -50,7 +51,7 @@ public class TeamService {
     }
 
     /**
-     * 팀 리스트 조회
+     * 팀 조회 - 페이지
      */
     public Page<TeamDto> getTeamPage(Pageable pageable) {
         return teamRepository.findAll(pageable)
