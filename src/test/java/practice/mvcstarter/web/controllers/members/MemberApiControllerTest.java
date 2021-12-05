@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import practice.mvcstarter.domain.members.Member;
 import practice.mvcstarter.domain.members.MemberService;
+import practice.mvcstarter.domain.teams.Team;
+import practice.mvcstarter.domain.teams.TeamService;
 import practice.mvcstarter.exceptions.ErrorMessageConst;
 import practice.mvcstarter.web.controllers.ApiTestClient;
 import practice.mvcstarter.web.controllers.advice.ExceptionControllerAdvice;
@@ -26,8 +28,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 /**
@@ -43,6 +44,9 @@ class MemberApiControllerTest {
     private static final String  MEMBER_NAME         = InitMember.MEMBER_NAME;
     private static final String  MEMBER_NICK_NAME    = InitMember.MEMBER_NICK_NAME;
     private static final Integer MEMBER_TOTAL_COUNT  = InitMember.MEMBER_TOTAL_COUNT;
+
+    private static final String MEMBER_NAME_NEW = "새로운 팀 이름";
+    private static final String MEMBER_AGE_NEW  = "23";
 
     ApiTestClient apiTestClient;
 
@@ -165,6 +169,42 @@ class MemberApiControllerTest {
         );
     }
 
+    @Test
+    @DisplayName("[회원 갱신] 1.존재하지 않는 teamId")
+    void updateMember_whenNotExistTeamId_thenReturnNotFound() throws Exception {
+        apiTestClient.reqExpectNotFound(put("/api/members/{memberId}", MEMBER_ID_NOT_EXIST),
+                givenUpdateMemberReqBody(MEMBER_NAME_NEW, MEMBER_AGE_NEW), MemberService.RESOURCE_NAME);
+    }
+
+    @Test
+    @DisplayName("[회원 갱신] 2.유효하지 않은 Reqeust Body")
+    void updateMember_whenInvalidReqBody_thenThrowException() throws Exception {
+        Member givenMember = initMember.givenAllMembers().get(0);
+        System.out.println("=================================== given =================================== ");
+
+        apiTestClient.reqExpectBadRequest(put("/api/members/{memberId}", givenMember.getId()),
+                givenUpdateMemberReqBody(null, null), ErrorMessageConst.INVALID_REQUEST_BODY);
+        apiTestClient.reqExpectBadRequest(put("/api/members/{memberId}", givenMember.getId()),
+                givenUpdateMemberReqBody("", null), ErrorMessageConst.INVALID_REQUEST_BODY);
+
+        apiTestClient.reqExpectBadRequest(put("/api/members/{memberId}", givenMember.getId()),
+                givenUpdateMemberReqBody(MEMBER_NAME_NEW, null), ErrorMessageConst.INVALID_REQUEST_BODY);
+        apiTestClient.reqExpectBadRequest(put("/api/members/{memberId}", givenMember.getId()),
+                givenUpdateMemberReqBody(MEMBER_NAME_NEW, "qqq"), ErrorMessageConst.INVALID_REQUEST_BODY);
+    }
+
+    @Test
+    @DisplayName("[회원 갱신] 3.정상 처리")
+    @Commit
+    void updateMember_whenExistTeamId_thenReturnNoContent() throws Exception {
+        Member givenMember = initMember.givenAllMembers().get(0);
+        System.out.println("=================================== given =================================== ");
+
+        apiTestClient.reqExpectNoContent(
+                put("/api/members/{memberId}", givenMember.getId()),
+                givenUpdateMemberReqBody(MEMBER_NAME_NEW, MEMBER_AGE_NEW));
+    }
+
     private Map<String, Object> givenCreateMemberReqBody(String name, String nickName, String age) {
         Map<String, Object> reqBody = new HashMap<>();
         if (name != null) {
@@ -172,6 +212,22 @@ class MemberApiControllerTest {
         }
         if (nickName != null) {
             reqBody.put("nickName", nickName);
+        }
+        if (age != null) {
+            try {
+                reqBody.put("age", Long.valueOf(age));
+            } catch (NumberFormatException e) {
+                reqBody.put("age", age);
+            }
+        }
+
+        return reqBody;
+    }
+
+    private Map<String, Object> givenUpdateMemberReqBody(String name, String age) {
+        Map<String, Object> reqBody = new HashMap<>();
+        if (name != null) {
+            reqBody.put("name", name);
         }
         if (age != null) {
             try {

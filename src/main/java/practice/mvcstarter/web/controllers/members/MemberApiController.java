@@ -1,9 +1,13 @@
 package practice.mvcstarter.web.controllers.members;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import practice.mvcstarter.domain.members.MemberDto;
@@ -48,6 +52,16 @@ public class MemberApiController {
                 .map(GetSingleMemberResBody::createReqBody);
     }
 
+    /**
+     * 회원 갱신
+     */
+    @PutMapping("/{memberId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateMember(@PathVariable("memberId") Long memberId,
+                             @Validated @RequestBody UpdateMemberReqBody reqBody) {
+        memberService.updateMember(memberId, reqBody.toDto());
+    }
+
     @Data
     static class CreateMemberReqBody {
         @NotBlank
@@ -59,6 +73,18 @@ public class MemberApiController {
 
         public MemberDto toDto() {
             return MemberDto.toCreate(name, nickName, age);
+        }
+    }
+
+    @Data
+    static class UpdateMemberReqBody {
+        @NotBlank
+        private String  name;
+        @NotNull
+        private Integer age;
+
+        public MemberDto toDto() {
+            return MemberDto.toUpdate(name, age);
         }
     }
 
