@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import practice.mvcstarter.exceptions.ResourceNotFoundException;
 
 
 /**
@@ -42,7 +43,13 @@ public class MemberService {
      * 회원 조회 - 단건
      */
      public MemberDto getSingleMember(Long memberId) {
-         return null;
+         if (memberId == null) {
+             throw new IllegalArgumentException("memberId is null.");
+         }
+
+         return memberRepository.findById(memberId)
+                 .map(MemberDto::toRead)
+                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
      }
 
      /**

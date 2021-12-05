@@ -22,9 +22,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class TeamServiceTest {
     private static final String TEAM_NAME       = "팀 이름";
-    private static final String NEW_TEAM_NAME   = "새로운 팀 이름";
-    private static final Long   INVALID_TEAM_ID = 999999999L;
-    private static final Long   VALID_TEAM_ID   = 777L;
+    private static final String TEAM_NAME_NEW   = "새로운 팀 이름";
+    private static final Long   TEAM_ID_INVALID = 999999999L;
+    private static final Long   TEAM_ID         = 777L;
 
     @Mock
     private TeamRepository teamRepository;
@@ -76,11 +76,12 @@ public class TeamServiceTest {
     @DisplayName("[팀 조회 - 단건] 2.매개변수가 invalid 인 경우")
     void getSingleTeam_whenInvalidParam_thenThrowException() {
         /* given */
-        when(teamRepository.findById(INVALID_TEAM_ID))
+        when(teamRepository.findById(TEAM_ID_INVALID))
                 .thenReturn(Optional.empty());
 
         /* when, then */
-        assertThrows(ResourceNotFoundException.class, () -> teamService.getSingleTeam(INVALID_TEAM_ID));
+        assertThrows(ResourceNotFoundException.class, () ->
+                teamService.getSingleTeam(TEAM_ID_INVALID));
     }
 
     @Test
@@ -88,11 +89,11 @@ public class TeamServiceTest {
     void getSingleTeam_whenValidParam_thenReturnTeamDto() {
         /* given */
         Team givenTeam = Team.createTeam(TEAM_NAME);
-        when(teamRepository.findById(VALID_TEAM_ID))
+        when(teamRepository.findById(TEAM_ID))
                 .thenReturn(Optional.of(givenTeam));
 
         /* when */
-        TeamDto dto = teamService.getSingleTeam(VALID_TEAM_ID);
+        TeamDto dto = teamService.getSingleTeam(TEAM_ID);
 
         /* then */
         assertThat(dto.getTeamName()).isEqualTo(givenTeam.getName());
@@ -102,35 +103,35 @@ public class TeamServiceTest {
     @DisplayName("[팀 갱신] 1.매개변수가 null 인 경우")
     void updateTeam_whenParamIsNull_thenThrowException() {
         assertThrows(IllegalArgumentException.class, () -> teamService.updateTeam(null, null));
-        assertThrows(IllegalArgumentException.class, () -> teamService.updateTeam(VALID_TEAM_ID, null));
+        assertThrows(IllegalArgumentException.class, () -> teamService.updateTeam(TEAM_ID, null));
     }
 
     @Test
     @DisplayName("[팀 갱신] 2.매개변수가 invalid 인 경우")
     void updateTeam_whenInvalidParam_thenThrowException() {
         /* given */
-        TeamDto givenDto = TeamDto.toUpdate(NEW_TEAM_NAME);
-        when(teamRepository.findById(INVALID_TEAM_ID))
+        TeamDto givenDto = TeamDto.toUpdate(TEAM_NAME_NEW);
+        when(teamRepository.findById(TEAM_ID_INVALID))
                 .thenReturn(Optional.empty());
 
         /* when, then */
-        assertThrows(ResourceNotFoundException.class, () -> teamService.updateTeam(INVALID_TEAM_ID, givenDto));
+        assertThrows(ResourceNotFoundException.class, () -> teamService.updateTeam(TEAM_ID_INVALID, givenDto));
     }
 
     @Test
     @DisplayName("[팀 갱신] 3.매개변수가 정상 인 경우")
     void updateTeam_whenValidParam_thenUpdateTeam() {
         /* given */
-        TeamDto givenDto = TeamDto.toUpdate(NEW_TEAM_NAME);
+        TeamDto givenDto = TeamDto.toUpdate(TEAM_NAME_NEW);
         Team givenTeam = Team.createTeam(TEAM_NAME);
-        when(teamRepository.findById(VALID_TEAM_ID))
+        when(teamRepository.findById(TEAM_ID))
                 .thenReturn(Optional.of(givenTeam));
 
         /* when */
-        teamService.updateTeam(VALID_TEAM_ID, givenDto);
+        teamService.updateTeam(TEAM_ID, givenDto);
 
         /* then */
-        assertThat(givenTeam.getName()).isEqualTo(NEW_TEAM_NAME);
+        assertThat(givenTeam.getName()).isEqualTo(TEAM_NAME_NEW);
     }
 
     @Test
@@ -143,11 +144,11 @@ public class TeamServiceTest {
     @DisplayName("[팀 삭제] 2.매개변수가 invalid 인 경우")
     void deleteTeam_whenInvalidParam_thenThrowException() {
         /* given */
-        when(teamRepository.findById(INVALID_TEAM_ID))
+        when(teamRepository.findById(TEAM_ID_INVALID))
                 .thenReturn(Optional.empty());
 
         /* when, then */
-        assertThrows(ResourceNotFoundException.class, () -> teamService.deleteTeam(INVALID_TEAM_ID));
+        assertThrows(ResourceNotFoundException.class, () -> teamService.deleteTeam(TEAM_ID_INVALID));
     }
 
     @Test
@@ -155,11 +156,11 @@ public class TeamServiceTest {
     void deleteTeam_whenValidParam_thenUpdateTeam() {
         /* given */
         Team givenTeam = Team.createTeam(TEAM_NAME);
-        when(teamRepository.findById(VALID_TEAM_ID))
+        when(teamRepository.findById(TEAM_ID))
                 .thenReturn(Optional.of(givenTeam));
 
         /* when */
-        teamService.deleteTeam(VALID_TEAM_ID);
+        teamService.deleteTeam(TEAM_ID);
 
         /* then */
         verify(teamRepository, times(1)).delete(givenTeam);
