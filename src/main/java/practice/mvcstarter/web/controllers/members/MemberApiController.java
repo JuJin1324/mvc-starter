@@ -1,13 +1,8 @@
 package practice.mvcstarter.web.controllers.members;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import practice.mvcstarter.domain.members.MemberDto;
 import practice.mvcstarter.domain.members.MemberService;
 
@@ -33,6 +28,21 @@ public class MemberApiController {
         return memberService.createMember(reqBody.toDto());
     }
 
+    /**
+     * 회원 조회 단건
+     */
+    @GetMapping("/{memberId}")
+    public GetSingleMemberResBody getSingleMember(@PathVariable("memberId") Long memberId) {
+        MemberDto member = memberService.getSingleMember(memberId);
+
+        return new GetSingleMemberResBody(
+                member.getMemberId(),
+                member.getName(),
+                member.getNickName(),
+                member.getAge()
+        );
+    }
+
     @Data
     static class CreateMemberReqBody {
         @NotBlank
@@ -45,5 +55,15 @@ public class MemberApiController {
         public MemberDto toDto() {
             return MemberDto.toCreate(name, nickName, age);
         }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class GetSingleMemberResBody {
+        private Long    memberId;
+        private String  name;
+        private String  nickName;
+        private Integer age;
     }
 }

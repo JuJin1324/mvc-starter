@@ -45,6 +45,7 @@ public class MemberDto {
 
     public static MemberDto toRead(Member member) {
         return MemberDto.builder()
+                .memberId(member.getId())
                 .name(member.getName())
                 .nickName(member.getNickName())
                 .age(member.getAge())

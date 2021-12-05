@@ -14,16 +14,22 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import practice.mvcstarter.domain.members.Member;
 import practice.mvcstarter.domain.members.MemberService;
+import practice.mvcstarter.domain.teams.Team;
+import practice.mvcstarter.domain.teams.TeamService;
 import practice.mvcstarter.exceptions.ErrorMessageConst;
 import practice.mvcstarter.web.controllers.ApiTestClient;
 import practice.mvcstarter.web.controllers.advice.ExceptionControllerAdvice;
 import practice.mvcstarter.web.controllers.initdb.InitMember;
+import practice.mvcstarter.web.controllers.teams.TeamApiController;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -69,7 +75,7 @@ class MemberApiControllerTest {
 
     @Test
     @DisplayName("[회원 생성] 1.유효하지 않은 Request Body")
-    void createTeam_whenInvalidReqBody_thenThrowException() throws Exception {
+    void createMember_whenInvalidReqBody_thenThrowException() throws Exception {
         apiTestClient.reqExpectBadRequest(post("/api/members"), givenCreateMemberReqBody(null, null, null),
                 ErrorMessageConst.INVALID_REQUEST_BODY);
         apiTestClient.reqExpectBadRequest(post("/api/members"), givenCreateMemberReqBody("", null, null),
@@ -89,20 +95,48 @@ class MemberApiControllerTest {
     @Test
     @DisplayName("[회원 생성] 2.신규 회원 생성")
     @Commit
-    void createTeam_whenCreateNewTeam_thenReturnTeamId() {
+    void createMember_whenCreateNewTeam_thenReturnMemberId() {
         /* when */
-        Long teamId = testRestTemplate.postForObject(
+        Long memberId = testRestTemplate.postForObject(
                 "/api/members",
                 givenCreateMemberReqBody(MEMBER_NAME, MEMBER_NICK_NAME, "22"),
                 Long.class
         );
 
         /* then */
-        assertNotEquals(0L, teamId);
+        assertNotEquals(0L, memberId);
 
         /* after */
         System.out.println("=============================== after ===============================");
-        memberService.deleteMember(teamId);
+        memberService.deleteMember(memberId);
+    }
+
+    @Test
+    @DisplayName("[회원 조회 - 단건] 1.존재하지 않는 memberId")
+    void getSingleMember_whenNotExistMemberId_thenReturnNotFound() throws Exception {
+        apiTestClient.reqExpectNotFound(
+                get("/api/members/{memberId}", MEMBER_ID_NOT_EXIST),
+                null,
+                MemberService.RESOURCE_NAME
+        );
+    }
+
+    @Test
+    @DisplayName("[회원 조회 - 단건] 2.존재하는 memberId")
+    void getSingleMember_whenExistMemberId_thenReturnTeam() {
+        /* given */
+        Member givenMember = initMember.givenAllMembers().get(0);
+        System.out.println("=================================== given =================================== ");
+
+        /* when */
+        MemberApiController.GetSingleMemberResBody resBody = testRestTemplate
+                .getForObject("/api/members/{memberId}", MemberApiController.GetSingleMemberResBody.class, givenMember.getId());
+
+        /* then */
+        assertEquals(givenMember.getId(), resBody.getMemberId());
+        assertEquals(givenMember.getName(), resBody.getName());
+        assertEquals(givenMember.getNickName(), resBody.getNickName());
+        assertEquals(givenMember.getAge(), resBody.getAge());
     }
 
     private Map<String, Object> givenCreateMemberReqBody(String name, String nickName, String age) {
