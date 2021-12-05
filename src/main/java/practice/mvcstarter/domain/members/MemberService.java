@@ -62,6 +62,7 @@ public class MemberService {
      /**
       * 회원 갱신
       */
+     @Transactional
      public void updateMember(Long memberId, MemberDto dto) {
         if (memberId == null) {
             throw new IllegalArgumentException("memberId is null.");
@@ -79,7 +80,14 @@ public class MemberService {
      /**
       * 회원 삭제
       */
+     @Transactional
      public void deleteMember(Long memberId) {
+        if (memberId == null) {
+            throw new IllegalArgumentException("memberId is null.");
+        }
 
+         Member member = memberRepository.findById(memberId)
+                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
+         memberRepository.delete(member);
      }
 }

@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TeamServiceTest {
-    private static final String TEAM_NAME       = "팀 이름";
+    private static final String TEAM_NAME         = "팀 이름";
     private static final String TEAM_NAME_NEW     = "새로운 팀 이름";
     private static final Long   TEAM_ID_NOT_EXIST = 999999999L;
     private static final Long   TEAM_ID           = 777L;
@@ -142,7 +142,8 @@ public class TeamServiceTest {
     @Test
     @DisplayName("[팀 삭제] 1.유효하지 않은 매개변수")
     void deleteTeam_whenInvalidParam_thenThrowException() {
-        assertThrows(IllegalArgumentException.class, () -> teamService.deleteTeam(null));
+        assertThrows(IllegalArgumentException.class, () ->
+                teamService.deleteTeam(null));
     }
 
     @Test

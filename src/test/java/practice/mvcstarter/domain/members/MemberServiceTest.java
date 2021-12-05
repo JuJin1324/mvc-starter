@@ -188,4 +188,38 @@ class MemberServiceTest {
         assertThat(givenMember.getName()).isEqualTo(MEMBER_NAME_NEW);
         assertThat(givenMember.getAge()).isEqualTo(MEMBER_AGE_NEW);
     }
+
+    @Test
+    @DisplayName("[회원 삭제] 1.유효하지 않은 매개변수")
+    void deleteMember_whenInvalidParam_thenThrowException() {
+        assertThrows(IllegalArgumentException.class, () ->
+                memberService.deleteMember(null));
+    }
+
+    @Test
+    @DisplayName("[회원 삭제] 2.존재하지 않는 memberId")
+    void deleteMember_whenNotExistMemberId_thenThrowException() {
+        /* given */
+        when(memberRepository.findById(MEMBER_ID_NOT_EXIST))
+                .thenReturn(Optional.empty());
+
+        /* when, then */
+        assertThrows(ResourceNotFoundException.class, () ->
+                memberService.deleteMember(MEMBER_ID_NOT_EXIST));
+    }
+
+    @Test
+    @DisplayName("[회원 삭제] 3.정상 삭제")
+    void deleteMember_whenNormal_thenUpdateTeam() {
+        /* given */
+        Member givenMember = Member.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
+        when(memberRepository.findById(MEMBER_ID))
+                .thenReturn(Optional.of(givenMember));
+
+        /* when */
+        memberService.deleteMember(MEMBER_ID);
+
+        /* then */
+        verify(memberRepository, times(1)).delete(givenMember);
+    }
 }
