@@ -1,13 +1,7 @@
 package practice.mvcstarter.domain.boards;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import practice.mvcstarter.domain.members.Member;
-import practice.mvcstarter.domain.members.MemberDto;
-import practice.mvcstarter.exceptions.ResourceNotFoundException;
 
 /**
  * Created by Yoo Ju Jin(jujin@100fac.com)
@@ -15,53 +9,32 @@ import practice.mvcstarter.exceptions.ResourceNotFoundException;
  * Copyright (C) 2021, Centum Factorial all rights reserved.
  */
 
-@Service
-@Transactional(readOnly = true)
-@RequiredArgsConstructor
-public class BoardService {
-    public static final String RESOURCE_NAME = "Board";
-
-    private final BoardRepository boardRepository;
+public interface BoardService {
 
     /**
      * 게시판 생성
      *
      * @return memberId
      */
-    @Transactional
-    public Long createBoard(BoardDto dto) {
-
-        return null;
-    }
+    Long createBoard(BoardDto dto);
 
     /**
      * 게시판 조회 - 단건
      */
-    public BoardDto getSingleBoard(Long boardId) {
-
-        return null;
-    }
+    BoardDto getSingleBoard(Long boardId);
 
     /**
      * 게시판 조회 - 페이지
      */
-    public Page<BoardDto> getBoardPage(Pageable pageable) {
-        return null;
-    }
+    Page<BoardDto> getBoardPage(Pageable pageable);
 
     /**
      * 게시판 갱신
      */
-    @Transactional
-    public void updateBoard(Long boardId, BoardDto dto) {
-
-    }
+    void updateBoard(Long boardId, BoardDto dto);
 
     /**
      * 게시판 삭제
      */
-    @Transactional
-    public void deleteBoard(Long boardId) {
-
-    }
+    void deleteBoard(Long boardId);
 }
