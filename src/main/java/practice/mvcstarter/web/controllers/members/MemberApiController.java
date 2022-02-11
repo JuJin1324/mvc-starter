@@ -22,7 +22,7 @@ import javax.validation.constraints.NotNull;
  */
 
 @RestController
-@RequestMapping("/api/members")
+@RequestMapping("/api/v1.0/members")
 @RequiredArgsConstructor
 public class MemberApiController {
     private final MemberService memberService;
@@ -62,6 +62,19 @@ public class MemberApiController {
         memberService.updateMember(memberId, reqBody.toDto());
     }
 
+    /**
+     * 회원 갱신 - 프로필
+     */
+    @PutMapping("/{memberId}/profile")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateMemberProfile(@PathVariable("memberId") Long memberId,
+                                    @Validated @RequestBody UpdateMemberProfileReqBody reqBody) {
+        memberService.updateMemberProfile(memberId, reqBody.toDto());
+    }
+
+    /**
+     * 회원 삭제
+     */
     @DeleteMapping("/{memberId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMember(@PathVariable("memberId") Long memberId) {
@@ -91,6 +104,16 @@ public class MemberApiController {
 
         public MemberDto toDto() {
             return MemberDto.toUpdate(name, age);
+        }
+    }
+
+    @Data
+    static class UpdateMemberProfileReqBody {
+        @NotBlank
+        private String base64Image;
+
+        public MemberDto toDto() {
+            return MemberDto.toUpdateProfile(base64Image);
         }
     }
 

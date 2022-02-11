@@ -17,12 +17,15 @@ public class MemberDto {
     private final String nickName;
     private final Integer age;
 
+    private final String base64Image;
+
     @Builder(access = AccessLevel.PRIVATE)
-    private MemberDto(Long memberId, String name, String nickName, Integer age) {
+    private MemberDto(Long memberId, String name, String nickName, Integer age, String base64Image) {
         this.memberId = memberId;
         this.name = name;
         this.nickName = nickName;
         this.age = age;
+        this.base64Image = base64Image;
     }
 
     public static MemberDto toCreate(String name, String nickName, Integer age) {
@@ -37,6 +40,12 @@ public class MemberDto {
         return MemberDto.builder()
                 .name(name)
                 .age(age)
+                .build();
+    }
+
+    public static MemberDto toUpdateProfile(String base64Image) {
+        return MemberDto.builder()
+                .base64Image(base64Image)
                 .build();
     }
 

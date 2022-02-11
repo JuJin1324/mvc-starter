@@ -78,6 +78,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     /**
+     * 회원 갱신 - 프로필
+     */
+    @Override
+    public void updateMemberProfile(Long memberId, MemberDto dto) {
+
+    }
+
+    /**
      * 회원 삭제
      */
     @Transactional

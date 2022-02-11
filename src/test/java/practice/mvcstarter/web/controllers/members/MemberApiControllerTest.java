@@ -97,14 +97,14 @@ class MemberApiControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(reqBody))
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test
     @DisplayName("회원 삭제")
     void deleteMember() throws Exception {
         mockMvc.perform(delete("/api/members/{memberId}", 1L))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     private Map<String, Object> givenCreateMemberReqBody(String name, String nickName, String age) {

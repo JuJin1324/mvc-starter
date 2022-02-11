@@ -33,6 +33,11 @@ public interface MemberService {
     void updateMember(Long memberId, MemberDto dto);
 
     /**
+     * 회원 프로필 갱신
+     */
+    void updateMemberProfile(Long memberId, MemberDto dto);
+
+    /**
      * 회원 삭제
      */
     void deleteMember(Long memberId);
