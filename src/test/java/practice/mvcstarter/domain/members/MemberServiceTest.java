@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import practice.mvcstarter.domain.teams.Team;
-import practice.mvcstarter.domain.teams.TeamDto;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
 
 import java.util.Optional;
@@ -27,8 +25,8 @@ class MemberServiceTest {
     private static final Long   MEMBER_ID           = 777L;
     private static final Long   MEMBER_ID_NOT_EXIST = 999999999L;
     private static final String MEMBER_NAME         = "회원 이름";
-    private static final String MEMBER_NICK_NAME  = "회원 닉네임";
-    private static final int    MEMBER_AGE        = 20;
+    private static final String MEMBER_NICK_NAME    = "회원 닉네임";
+    private static final int    MEMBER_AGE          = 20;
 
     private static final String MEMBER_NAME_NEW = "새로운 회원 이름";
     private static final int    MEMBER_AGE_NEW  = 30;
@@ -119,27 +117,6 @@ class MemberServiceTest {
         assertThat(dto.getName()).isEqualTo(givenMember.getName());
         assertThat(dto.getNickName()).isEqualTo(givenMember.getNickName());
         assertThat(dto.getAge()).isEqualTo(givenMember.getAge());
-    }
-
-    @Test
-    @DisplayName("[회원 조회 - 단건] 3.팀이 있는 회원 조회")
-    void getSingleMember_whenReadMemberHasTeam_thenReturnMemberDto() {
-        /* given */
-        Member givenMember = Member.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
-        Team givenTeam = Team.createTeam(TEAM_NAME);
-        givenMember.updateTeam(givenTeam);
-        when(memberRepository.findById(MEMBER_ID))
-                .thenReturn(Optional.of(givenMember));
-
-        /* when */
-        MemberDto dto = memberService.getSingleMember(MEMBER_ID);
-
-        /* then */
-        assertThat(dto.getName()).isEqualTo(givenMember.getName());
-        assertThat(dto.getNickName()).isEqualTo(givenMember.getNickName());
-        assertThat(dto.getAge()).isEqualTo(givenMember.getAge());
-
-        assertThat(dto.getTeam().getTeamName()).isEqualTo(givenTeam.getName());
     }
 
     @Test

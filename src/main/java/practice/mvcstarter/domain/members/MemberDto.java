@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
-import practice.mvcstarter.domain.teams.TeamDto;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
@@ -13,19 +12,17 @@ import practice.mvcstarter.domain.teams.TeamDto;
 
 @Getter
 public class MemberDto {
-    private Long    memberId;
-    private String  name;
-    private String  nickName;
-    private Integer age;
-    private TeamDto team;
+    private final Long   memberId;
+    private final String name;
+    private final String nickName;
+    private final Integer age;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private MemberDto(Long memberId, String name, String nickName, Integer age, TeamDto team) {
+    private MemberDto(Long memberId, String name, String nickName, Integer age) {
         this.memberId = memberId;
         this.name = name;
         this.nickName = nickName;
         this.age = age;
-        this.team = team;
     }
 
     public static MemberDto toCreate(String name, String nickName, Integer age) {
@@ -49,7 +46,6 @@ public class MemberDto {
                 .name(member.getName())
                 .nickName(member.getNickName())
                 .age(member.getAge())
-                .team(member.hasTeam() ? TeamDto.toRead(member.getTeam()) : null)
                 .build();
     }
 

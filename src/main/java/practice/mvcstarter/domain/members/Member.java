@@ -4,11 +4,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import practice.mvcstarter.domain.teams.Team;
 
-import javax.persistence.*;
-
-import static javax.persistence.FetchType.LAZY;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
@@ -29,17 +28,12 @@ public class Member {
 
     private Integer age;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "team_id")
-    private Team team;
-
     @Builder
-    public Member(Long id, String name, String nickName, Integer age, Team team) {
+    public Member(Long id, String name, String nickName, Integer age) {
         this.id = id;
         this.name = name;
         this.nickName = nickName;
         this.age = age;
-        this.team = team;
     }
 
     public static Member createMember(String name, String nickName, Integer age) {
@@ -53,13 +47,5 @@ public class Member {
     public void update(String name, Integer age) {
         this.name = name;
         this.age = age;
-    }
-
-    public void updateTeam(Team team) {
-        this.team = team;
-    }
-
-    public boolean hasTeam() {
-        return this.getTeam() != null;
     }
 }
