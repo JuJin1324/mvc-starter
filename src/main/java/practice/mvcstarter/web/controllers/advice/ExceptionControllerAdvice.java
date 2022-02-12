@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import practice.mvcstarter.exceptions.ErrorConst;
-import practice.mvcstarter.exceptions.InvalidRequestBodyException;
-import practice.mvcstarter.exceptions.ResourceDuplicatedException;
-import practice.mvcstarter.exceptions.ResourceNotFoundException;
+import practice.mvcstarter.exceptions.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,7 +32,7 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResBody handleResourceDuplicatedException(HttpServletRequest request, final ResourceDuplicatedException e) {
+    public ErrorResBody handleResourceDuplicatedException(HttpServletRequest request, final ErrorException e) {
         log.error("requestURI: {}, errorMessage: {}", request.getRequestURI(), e.getMessage());
         return new ErrorResBody(HttpStatus.BAD_REQUEST, e.getError(), e.getMessage());
     }

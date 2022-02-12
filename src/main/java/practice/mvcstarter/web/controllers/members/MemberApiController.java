@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -44,15 +41,6 @@ public class MemberApiController {
     }
 
     /**
-     * 회원 조회 - 페이지
-     */
-    @GetMapping("")
-    public Page<GetSingleMemberResBody> getMemberPage(@PageableDefault(size = 20) Pageable pageable) {
-        return memberService.getMemberPage(pageable)
-                .map(GetSingleMemberResBody::createReqBody);
-    }
-
-    /**
      * 회원 갱신
      */
     @PutMapping("/{memberId}")
@@ -80,6 +68,33 @@ public class MemberApiController {
     public void deleteMember(@PathVariable("memberId") Long memberId) {
         memberService.deleteMember(memberId);
     }
+
+
+    /**
+     * 관심 게시글 조회 - 목록
+     */
+    @GetMapping("/{memberId}/boards/attractive")
+    public GetAttractiveBoardsResBody getAttractiveBoards(@PathVariable("memberId") Long memberId) {
+        return null;
+    }
+
+    /**
+     * 내가 쓴 게시글 조회 - 목록
+     */
+    @GetMapping("/{memberId}/boards/mine")
+    public GetMineBoardsResBody getMineBoards(@PathVariable("memberId") Long memberId) {
+        return null;
+    }
+
+//    /**
+//     * 회원 조회 - 페이지
+//     */
+//    @GetMapping("")
+//    public Page<GetSingleMemberResBody> getMemberPage(@PageableDefault(size = 20) Pageable pageable) {
+//        return memberService.getMemberPage(pageable)
+//                .map(GetSingleMemberResBody::createReqBody);
+//    }
+
 
     @Data
     static class CreateMemberReqBody {
@@ -134,5 +149,16 @@ public class MemberApiController {
                     memberDto.getAge()
             );
         }
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class GetAttractiveBoardsResBody {
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class GetMineBoardsResBody {
+
     }
 }

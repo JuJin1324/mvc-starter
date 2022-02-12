@@ -40,7 +40,7 @@ class MemberServiceTest {
 
     @BeforeEach
     void setUp() {
-        memberService = new MemberService(memberRepository);
+        memberService = new MemberServiceImpl(memberRepository);
     }
 
     @Test

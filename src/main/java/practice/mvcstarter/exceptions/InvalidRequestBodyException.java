@@ -8,13 +8,11 @@ import org.springframework.util.StringUtils;
  * Created Date : 2021/12/04
  */
 
-@Getter
-public class InvalidRequestBodyException extends RuntimeException {
-    private final String error;
+public class InvalidRequestBodyException extends ErrorException {
 
     public InvalidRequestBodyException(String resourceName) {
         super(ErrorMessageConst.INVALID_REQUEST_BODY +
-                (StringUtils.hasText(resourceName) ? String.format(" [%s]", resourceName) : ""));
-        this.error = ErrorConst.INVALID_REQUEST_BODY;
+                        (StringUtils.hasText(resourceName) ? String.format(" [%s]", resourceName) : ""),
+                ErrorConst.INVALID_REQUEST_BODY);
     }
 }

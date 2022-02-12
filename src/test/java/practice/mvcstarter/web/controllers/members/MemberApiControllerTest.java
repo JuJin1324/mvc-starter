@@ -59,9 +59,9 @@ class MemberApiControllerTest {
     @DisplayName("회원 생성")
     @Commit
     void createMember() throws Exception {
-        Map<String, Object> reqBody = givenCreateMemberReqBody("멤버 이름", "멤버 닉네임", "22");
+        Map<String, Object> reqBody = givenCreateMemberReqBody("멤버 이름1", "멤버 닉네임1", "21");
         mockMvc.perform(
-                        post("/api/members")
+                        post("/api/v1.0/members")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(reqBody))
                 )
@@ -71,21 +71,9 @@ class MemberApiControllerTest {
     @Test
     @DisplayName("회원 조회 - 단건")
     void getSingleMember() throws Exception {
-        mockMvc.perform(get("/api/members/{memberId}", 1L))
+        mockMvc.perform(get("/api/v1.0/members/{memberId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value(String.valueOf(HttpStatus.CREATED.value())));
-    }
-
-    @Test
-    @DisplayName("회원 조회 - 페이지")
-    void getMemberPage() throws Exception {
-        final int givenPage = 1;
-        final int givenSize = 10;
-
-        mockMvc.perform(get("/api/members?page={page}&size={size}", givenPage, givenSize))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.pageable.pageNumber").value(String.valueOf(givenPage)))
-                .andExpect(jsonPath("$.pageable.pageSize").value(String.valueOf(givenSize)));
     }
 
     @Test
@@ -93,7 +81,19 @@ class MemberApiControllerTest {
     void updateMember() throws Exception {
         Map<String, Object> reqBody = givenUpdateMemberReqBody("멤버 닉네임", "23");
         mockMvc.perform(
-                        put("/api/members/{memberId}", 1L)
+                        put("/api/v1.0/members/{memberId}", 1L)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(reqBody))
+                )
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("회원 갱신 - 프로필")
+    void updateMemberProfile() throws Exception {
+        Map<String, Object> reqBody = givenUpdateMemberReqBody("멤버 닉네임", "23");
+        mockMvc.perform(
+                        put("/api/v1.0/members/{memberId}", 1L)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(reqBody))
                 )
@@ -103,9 +103,37 @@ class MemberApiControllerTest {
     @Test
     @DisplayName("회원 삭제")
     void deleteMember() throws Exception {
-        mockMvc.perform(delete("/api/members/{memberId}", 1L))
+        mockMvc.perform(delete("/api/v1.0/members/{memberId}", 1L))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    @DisplayName("관심 게시글 조회 - 목록")
+    void getAttractiveBoards() throws Exception {
+        Long memberId = 1L;
+        mockMvc.perform(get("/api/v1.0/members/{memberId}/boards/attractive", memberId))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("내가 쓴 게시글 조회 - 목록")
+    void getMineBoards() throws Exception {
+        Long memberId = 1L;
+        mockMvc.perform(get("/api/v1.0/members/{memberId}/boards/mine", memberId))
+                .andExpect(status().isOk());
+    }
+
+    //    @Test
+//    @DisplayName("회원 조회 - 페이지")
+//    void getMemberPage() throws Exception {
+//        final int givenPage = 1;
+//        final int givenSize = 10;
+//
+//        mockMvc.perform(get("/api/members?page={page}&size={size}", givenPage, givenSize))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.pageable.pageNumber").value(String.valueOf(givenPage)))
+//                .andExpect(jsonPath("$.pageable.pageSize").value(String.valueOf(givenSize)));
+//    }
 
     private Map<String, Object> givenCreateMemberReqBody(String name, String nickName, String age) {
         Map<String, Object> reqBody = new HashMap<>();

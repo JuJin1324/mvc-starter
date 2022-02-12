@@ -36,7 +36,7 @@ class BoardServiceTest {
 
     @BeforeEach
     void setUp() {
-        boardService = new BoardService(boardRepository);
+        boardService = new BoardServiceImpl(boardRepository);
     }
 
     @Test
