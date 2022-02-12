@@ -14,15 +14,17 @@ import java.time.LocalDateTime;
 
 @Getter
 public class FileDto {
-    private final String      fileName;
-    private final ContentType contentType;
+    private final Long          fileId;
+    private final String        fileName;
+    private final ContentType   contentType;
     private final Resource      resource;
     private final String        base64Image;
     private final LocalDateTime expiredTimeKST;
     private final boolean       isImage;
 
     @Builder
-    private FileDto(String fileName, ContentType contentType, Resource resource, String base64Image, LocalDateTime expiredTimeKST, boolean isImage) {
+    private FileDto(Long fileId, String fileName, ContentType contentType, Resource resource, String base64Image, LocalDateTime expiredTimeKST, boolean isImage) {
+        this.fileId = fileId;
         this.fileName = fileName;
         this.contentType = contentType;
         this.resource = resource;
@@ -33,6 +35,7 @@ public class FileDto {
 
     public static FileDto toRead(File file, Resource resource) throws IOException {
         return FileDto.builder()
+                .fileId(file.getId())
                 .fileName(file.getUploadFileName())
                 .contentType(file.getContentType())
                 .resource(resource)

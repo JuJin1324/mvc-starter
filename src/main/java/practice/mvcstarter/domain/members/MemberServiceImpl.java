@@ -5,7 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import practice.mvcstarter.domain.files.File;
+import practice.mvcstarter.domain.files.FileDto;
+import practice.mvcstarter.domain.files.FileService;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
+
+import java.util.UUID;
 
 /**
  * Created by Yoo Ju Jin(jujin@100fac.com)
@@ -19,6 +24,7 @@ public class MemberServiceImpl implements MemberService {
     public static final String RESOURCE_NAME = "Member";
 
     private final MemberRepository memberRepository;
+    private final FileService fileService;
 
     /**
      * 회원 생성
@@ -54,10 +60,10 @@ public class MemberServiceImpl implements MemberService {
     /**
      * 회원 조회 - 페이지
      */
-    public Page<MemberDto> getMemberPage(Pageable pageable) {
-        return memberRepository.findAll(pageable)
-                .map(MemberDto::toRead);
-    }
+//    public Page<MemberDto> getMemberPage(Pageable pageable) {
+//        return memberRepository.findAll(pageable)
+//                .map(MemberDto::toRead);
+//    }
 
     /**
      * 회원 갱신
@@ -82,7 +88,19 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     public void updateMemberProfile(Long memberId, MemberDto dto) {
+        if (memberId == null) {
+            throw new IllegalArgumentException("memberId is null.");
+        }
+        if (dto == null) {
+            throw new IllegalArgumentException("toUpdate Dto is null.");
+        }
+        dto.validateToUpdateProfile();
 
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
+
+        File file = fileService.uploadBase64(UUID.randomUUID().toString(), dto.getContentType(), dto.getBase64Image());
+        member.updateProfile(file);
     }
 
     /**

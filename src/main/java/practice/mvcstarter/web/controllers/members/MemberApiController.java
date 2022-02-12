@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import practice.mvcstarter.domain.files.ContentType;
 import practice.mvcstarter.domain.members.MemberDto;
 import practice.mvcstarter.domain.members.MemberService;
 
@@ -126,9 +127,11 @@ public class MemberApiController {
     static class UpdateMemberProfileReqBody {
         @NotBlank
         private String base64Image;
+        @NotBlank
+        private ContentType contentType;
 
         public MemberDto toDto() {
-            return MemberDto.toUpdateProfile(base64Image);
+            return MemberDto.toUpdateProfile(base64Image, contentType);
         }
     }
 

@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface FileRepository extends CommonRepository<File, Long> {
 
     Optional<File> findById(Long fileId);
+
+    <S extends File> S save(S entity);
 }

@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
+import practice.mvcstarter.domain.files.ContentType;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
@@ -12,19 +13,21 @@ import org.springframework.util.StringUtils;
 
 @Getter
 public class MemberDto {
-    private final Long   memberId;
-    private final String name;
-    private final String nickName;
+    private final Long    memberId;
+    private final String  name;
+    private final String  nickName;
     private final Integer age;
 
+    private final ContentType contentType;
     private final String base64Image;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private MemberDto(Long memberId, String name, String nickName, Integer age, String base64Image) {
+    private MemberDto(Long memberId, String name, String nickName, Integer age, ContentType contentType, String base64Image) {
         this.memberId = memberId;
         this.name = name;
         this.nickName = nickName;
         this.age = age;
+        this.contentType = contentType;
         this.base64Image = base64Image;
     }
 
@@ -43,9 +46,10 @@ public class MemberDto {
                 .build();
     }
 
-    public static MemberDto toUpdateProfile(String base64Image) {
+    public static MemberDto toUpdateProfile(String base64Image, ContentType contentType) {
         return MemberDto.builder()
                 .base64Image(base64Image)
+                .contentType(contentType)
                 .build();
     }
 
@@ -76,6 +80,15 @@ public class MemberDto {
         }
         if (age == null) {
             throw new IllegalArgumentException("[MemberDto] age is null.");
+        }
+    }
+
+    public void validateToUpdateProfile() {
+        if (!StringUtils.hasText(base64Image)) {
+            throw new IllegalArgumentException("[MemberDto] base64Image is blank.");
+        }
+        if (contentType == null) {
+            throw new IllegalArgumentException("[MemberDto] contentType is null.");
         }
     }
 }

@@ -23,11 +23,6 @@ public interface MemberService {
     MemberDto getSingleMember(Long memberId);
 
     /**
-     * 회원 조회 - 페이지
-     */
-    Page<MemberDto> getMemberPage(Pageable pageable);
-
-    /**
      * 회원 갱신
      */
     void updateMember(Long memberId, MemberDto dto);

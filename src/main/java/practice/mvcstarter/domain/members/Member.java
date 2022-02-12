@@ -4,10 +4,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import practice.mvcstarter.domain.files.File;
+import practice.mvcstarter.exceptions.FileIsNotBase64Exception;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
@@ -28,6 +31,9 @@ public class Member {
 
     private Integer age;
 
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private final List<MemberFile> memberFiles = new ArrayList<>();
+
     @Builder
     public Member(Long id, String name, String nickName, Integer age) {
         this.id = id;
@@ -47,5 +53,34 @@ public class Member {
     public void update(String name, Integer age) {
         this.name = name;
         this.age = age;
+    }
+
+    public void updateProfile(File file) {
+        if (!file.isImage()) {
+            throw new FileIsNotBase64Exception(file.getUploadFileName());
+        }
+
+        Optional<MemberFile> optional = this.findMemberFile(FileType.PROFILE);
+        if (optional.isPresent()) {
+            MemberFile profile = optional.get();
+            profile.updateFile(file);
+        } else {
+            MemberFile profile = MemberFile.createProfile(this, file);
+            memberFiles.add(profile);
+        }
+    }
+
+    public Optional<File> getProfile() {
+        return this.findMemberFile(FileType.PROFILE)
+                .map(MemberFile::getFile);
+    }
+
+    private Optional<MemberFile> findMemberFile(FileType fileType) {
+        if (this.getMemberFiles().isEmpty()) {
+            return Optional.empty();
+        }
+        return this.getMemberFiles().stream()
+                .filter(memberFile -> memberFile.getFileType() == fileType)
+                .findAny();
     }
 }
