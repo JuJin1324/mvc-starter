@@ -61,4 +61,14 @@ public class BoardServiceImpl implements BoardService {
     public void deleteBoard(Long boardId) {
 
     }
+
+    @Override
+    public Page<BoardDto> getAttractiveBoardPage(Long memberId, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<BoardDto> getMineBoardPage(Long memberId, Pageable pageable) {
+        return null;
+    }
 }

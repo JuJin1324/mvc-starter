@@ -2,7 +2,7 @@ package practice.mvcstarter.domain.members;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
+import practice.mvcstarter.domain.boards.BoardDto;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
@@ -28,7 +28,7 @@ public interface MemberService {
     void updateMember(Long memberId, MemberDto dto);
 
     /**
-     * 회원 프로필 갱신
+     * 회원 갱신 - 프로필
      */
     void updateMemberProfile(Long memberId, MemberDto dto);
 

@@ -37,4 +37,14 @@ public interface BoardService {
      * 게시판 삭제
      */
     void deleteBoard(Long boardId);
+
+    /**
+     * 특정 회원의 관심 게시글 조회 - 페이지
+     */
+    Page<BoardDto> getAttractiveBoardPage(Long memberId, Pageable pageable);
+
+    /**
+     * 특정 회원이 작성한 게시글 조회 - 페이지
+     */
+    Page<BoardDto> getMineBoardPage(Long memberId, Pageable pageable);
 }
