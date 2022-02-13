@@ -1,10 +1,9 @@
 package practice.mvcstarter.domain.members;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import practice.mvcstarter.domain.CommonRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -12,9 +11,14 @@ import java.util.Optional;
  * Created Date : 2021/12/05
  */
 public interface MemberRepository extends CommonRepository<Member, Long> {
-    Page<Member> findAll(Pageable pageable);
 
     Optional<Member> findById(Long id);
+
+    @Query("select m from Member m " +
+            "left join fetch m.memberFiles mf " +
+            "left join fetch mf.file " +
+            "where m.id = :id")
+    Optional<Member> findWithMemberFilesById(@Param("id") Long id);
 
     <S extends Member> S save(S entity);
 

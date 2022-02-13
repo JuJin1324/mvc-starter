@@ -18,7 +18,7 @@ public enum ContentType {
 
     private final String value;
 
-    public static String getExtention(ContentType contentType) {
+    public static String getExtension(ContentType contentType) {
         if (contentType == IMAGE_PNG) {
             return "png";
         } else if (contentType == IMAGE_JPEG) {

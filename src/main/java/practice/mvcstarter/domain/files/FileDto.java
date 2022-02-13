@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Base64;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
@@ -40,7 +41,7 @@ public class FileDto {
                 .contentType(file.getContentType())
                 .resource(resource)
                 .base64Image(file.isImage() ?
-                        new String(resource.getInputStream().readAllBytes()) : null)
+                        Base64.getEncoder().encodeToString(resource.getInputStream().readAllBytes()) : null)
                 .expiredTimeKST(file.getExpiredTimeKST())
                 .isImage(file.isImage())
                 .build();

@@ -5,8 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.mvcstarter.domain.files.ContentType;
 import practice.mvcstarter.domain.files.File;
+import practice.mvcstarter.domain.files.FileDto;
 import practice.mvcstarter.domain.files.FileService;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
+
+import java.util.Optional;
 
 /**
  * Created by Yoo Ju Jin(jujin@100fac.com)
@@ -48,9 +51,13 @@ public class MemberServiceImpl implements MemberService {
             throw new IllegalArgumentException("memberId is null.");
         }
 
-        return memberRepository.findById(memberId)
-                .map(MemberDto::toRead)
+        Member member = memberRepository.findWithMemberFilesById(memberId)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
+
+        Optional<FileDto> fileDtoOptional = member.getProfile()
+                .map(file -> fileService.getFile(file.getId()));
+
+        return MemberDto.toRead(member, fileDtoOptional);
     }
 
     /**
@@ -76,7 +83,7 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
-        member.update(dto.getName(), dto.getAge());
+        member.update(dto.getNickName(), dto.getAge());
     }
 
     /**
@@ -93,13 +100,13 @@ public class MemberServiceImpl implements MemberService {
         }
         dto.validateToUpdateProfile();
 
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findWithMemberFilesById(memberId)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
         member.getProfile()
                 .ifPresent(file -> fileService.deleteFile(file.getId()));
 
         if (dto.hasBase64Image()) {
-            String uploadFileName = member.getNickName() + "님의 프로필" + "." + ContentType.getExtention(dto.getContentType());
+            String uploadFileName = member.getNickName() + "님의 프로필" + "." + ContentType.getExtension(dto.getContentType());
             File file = fileService.uploadBase64(uploadFileName, dto.getContentType(), dto.getBase64Image());
             member.updateProfile(file);
         }
@@ -114,8 +121,10 @@ public class MemberServiceImpl implements MemberService {
             throw new IllegalArgumentException("memberId is null.");
         }
 
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findWithMemberFilesById(memberId)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
+        member.getProfile()
+                .ifPresent(file -> fileService.deleteFile(file.getId()));
         memberRepository.delete(member);
     }
 }

@@ -52,7 +52,7 @@ class FileApiControllerTest {
     @Test
     @DisplayName("파일 조회 - 다운로드")
     void getFileDownload() throws Exception {
-        Long fileId = 1L;
+        Long fileId = 2L;
         mockMvc.perform(get("/api/v1.0/files/{fileId}/download", fileId))
                 .andExpect(status().isOk());
     }
@@ -60,7 +60,7 @@ class FileApiControllerTest {
     @Test
     @DisplayName("파일 조회 - base64 image")
     void getFileBase64() throws Exception {
-        Long fileId = 1L;
+        Long fileId = 2L;
         mockMvc.perform(get("/api/v1.0/files/{fileId}/base64", fileId))
                 .andExpect(status().isOk());
     }

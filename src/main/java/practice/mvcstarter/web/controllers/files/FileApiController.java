@@ -1,5 +1,6 @@
 package practice.mvcstarter.web.controllers.files;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -60,9 +61,11 @@ public class FileApiController {
     @Data
     @AllArgsConstructor
     static class GetFileBase64ResBody {
-        private String        fileName;
-        private String        contentType;
-        private String        base64Image;
+        private String fileName;
+        private String contentType;
+        private String base64Image;
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime expiredTimeKST;
 
         public static GetFileBase64ResBody createResBody(FileDto fileDto) {

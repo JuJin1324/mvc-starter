@@ -31,7 +31,8 @@ public class Member {
 
     private Integer age;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @Getter(AccessLevel.PRIVATE)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<MemberFile> memberFiles = new ArrayList<>();
 
     @Builder
@@ -50,8 +51,8 @@ public class Member {
                 .build();
     }
 
-    public void update(String name, Integer age) {
-        this.name = name;
+    public void update(String nickName, Integer age) {
+        this.nickName = nickName;
         this.age = age;
     }
 
@@ -65,8 +66,8 @@ public class Member {
             MemberFile profile = optional.get();
             profile.updateFile(file);
         } else {
-            MemberFile profile = MemberFile.createProfile(this, file);
-            memberFiles.add(profile);
+            MemberFile newProfile = MemberFile.createProfile(this, file);
+            memberFiles.add(newProfile);
         }
     }
 

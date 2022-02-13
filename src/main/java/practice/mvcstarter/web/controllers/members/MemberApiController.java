@@ -29,6 +29,7 @@ public class MemberApiController {
      * 회원 생성
      */
     @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
     public Long createMember(@Validated @RequestBody CreateMemberReqBody reqBody) {
         return memberService.createMember(reqBody.toDto());
     }
@@ -114,20 +115,18 @@ public class MemberApiController {
     @Data
     static class UpdateMemberReqBody {
         @NotBlank
-        private String  name;
+        private String  nickName;
         @NotNull
         private Integer age;
 
         public MemberDto toDto() {
-            return MemberDto.toUpdate(name, age);
+            return MemberDto.toUpdate(nickName, age);
         }
     }
 
     @Data
     static class UpdateMemberProfileReqBody {
-        @NotBlank
-        private String base64Image;
-        @NotBlank
+        private String      base64Image;
         private ContentType contentType;
 
         public MemberDto toDto() {
@@ -143,13 +142,17 @@ public class MemberApiController {
         private String  name;
         private String  nickName;
         private Integer age;
+        private String  contentType;
+        private String  base64Image;
 
         public static GetSingleMemberResBody createReqBody(MemberDto memberDto) {
             return new GetSingleMemberResBody(
                     memberDto.getMemberId(),
                     memberDto.getName(),
                     memberDto.getNickName(),
-                    memberDto.getAge()
+                    memberDto.getAge(),
+                    memberDto.getContentType() != null ? memberDto.getContentType().getValue() : null,
+                    memberDto.getBase64Image()
             );
         }
     }

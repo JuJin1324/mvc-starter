@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
 import practice.mvcstarter.domain.files.ContentType;
+import practice.mvcstarter.domain.files.FileDto;
+
+import java.util.Optional;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
@@ -19,7 +22,7 @@ public class MemberDto {
     private final Integer age;
 
     private final ContentType contentType;
-    private final String base64Image;
+    private final String      base64Image;
 
     @Builder(access = AccessLevel.PRIVATE)
     private MemberDto(Long memberId, String name, String nickName, Integer age, ContentType contentType, String base64Image) {
@@ -39,9 +42,9 @@ public class MemberDto {
                 .build();
     }
 
-    public static MemberDto toUpdate(String name, Integer age) {
+    public static MemberDto toUpdate(String nickName, Integer age) {
         return MemberDto.builder()
-                .name(name)
+                .nickName(nickName)
                 .age(age)
                 .build();
     }
@@ -53,12 +56,22 @@ public class MemberDto {
                 .build();
     }
 
-    public static MemberDto toRead(Member member) {
+    public static MemberDto toRead(Member member, Optional<FileDto> fileDtoOptional) {
+        ContentType contentType = null;
+        String base64Image = null;
+        if (fileDtoOptional.isPresent()) {
+            FileDto fileDto = fileDtoOptional.get();
+            contentType = fileDto.getContentType();
+            base64Image = fileDto.getBase64Image();
+        }
+
         return MemberDto.builder()
                 .memberId(member.getId())
                 .name(member.getName())
                 .nickName(member.getNickName())
                 .age(member.getAge())
+                .contentType(contentType)
+                .base64Image(base64Image)
                 .build();
     }
 
@@ -75,8 +88,8 @@ public class MemberDto {
     }
 
     public void validateToUpdate() {
-        if (!StringUtils.hasText(name)) {
-            throw new IllegalArgumentException("[MemberDto] name is blank.");
+        if (!StringUtils.hasText(nickName)) {
+            throw new IllegalArgumentException("[MemberDto] nickName is blank.");
         }
         if (age == null) {
             throw new IllegalArgumentException("[MemberDto] age is null.");

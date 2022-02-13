@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -28,6 +25,7 @@ public class File {
     @Column(name = "file_id")
     private Long id;
 
+    @Convert(converter = ContentTypeConverter.class)
     private ContentType contentType;
 
     private String storeFilePath;
@@ -58,7 +56,8 @@ public class File {
     }
 
     public void expireAfter(int amountToAdd, ChronoUnit chronoUnit) {
-        this.expiredTimeUTC = LocalDateTime.now().plus(amountToAdd, chronoUnit);
+        this.expiredTimeUTC = LocalDateTime.now(ZoneId.of("UTC"))
+                .plus(amountToAdd, chronoUnit);
     }
 
     public LocalDateTime getExpiredTimeKST() {

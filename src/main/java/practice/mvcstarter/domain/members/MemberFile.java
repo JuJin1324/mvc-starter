@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import practice.mvcstarter.domain.files.File;
 
 import javax.persistence.*;
@@ -21,12 +23,17 @@ public class MemberFile {
     @Column(name = "member_file_id")
     private Long id;
 
+    @Convert(converter = FileTypeConverter.class)
     private FileType fileType;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FILE_ID")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private File file;
 
     @Builder
