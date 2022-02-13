@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import practice.mvcstarter.domain.files.ContentType;
+import practice.mvcstarter.domain.files.File;
 import practice.mvcstarter.domain.files.FileService;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
 
@@ -161,11 +162,6 @@ class MemberServiceTest {
                 memberService.updateMemberProfile(null, null));
         assertThrows(IllegalArgumentException.class, () ->
                 memberService.updateMemberProfile(MEMBER_ID_VALID, null));
-
-        assertThrows(IllegalArgumentException.class, () ->
-                memberService.updateMemberProfile(MEMBER_ID_VALID, MemberDto.toUpdateProfile(null, null)));
-        assertThrows(IllegalArgumentException.class, () ->
-                memberService.updateMemberProfile(MEMBER_ID_VALID, MemberDto.toUpdateProfile("", null)));
         assertThrows(IllegalArgumentException.class, () ->
                 memberService.updateMemberProfile(MEMBER_ID_VALID, MemberDto.toUpdateProfile(BASE64_IMAGE, null)));
     }
@@ -181,6 +177,42 @@ class MemberServiceTest {
         /* when, then */
         assertThrows(ResourceNotFoundException.class, () ->
                 memberService.updateMemberProfile(MEMBER_ID_NOT_EXIST, givenDto));
+    }
+
+    @Test
+    @DisplayName("[회원 갱신 - 프로필] 3.input dto 에 base64 image 가 있는 경우")
+    void updateMemberProfile_whenDtoHasBase64_thenMemberHasNewProfileFile() throws Exception {
+    	/* given */
+        Member givenMember = givenMember(MEMBER_NAME, MEMBER_AGE, MEMBER_NICK_NAME);
+        when(memberRepository.findById(MEMBER_ID_VALID))
+                .thenReturn(Optional.of(givenMember));
+
+        File givenFile = File.createFile(ContentType.IMAGE_PNG, "/home/files/image.png", "image.png", 10L);
+        when(fileService.uploadBase64(any(), any(), any()))
+                .thenReturn(givenFile);
+
+    	/* when */
+        MemberDto givenDto = MemberDto.toUpdateProfile(BASE64_IMAGE, CONTENT_TYPE_PNG);
+        memberService.updateMemberProfile(MEMBER_ID_VALID, givenDto);
+
+    	/* then */
+        assertThat(givenMember.getProfile().get()).isEqualTo(givenFile);
+    }
+
+    @Test
+    @DisplayName("[회원 갱신 - 프로필] 4.input dto 에 base64 image 가 없는 경우")
+    void updateMemberProfile_whenDtoHasNoBase64_thenMemberHasNoProfile() throws Exception {
+        /* given */
+        Member givenMember = givenMember(MEMBER_NAME, MEMBER_AGE, MEMBER_NICK_NAME);
+        when(memberRepository.findById(MEMBER_ID_VALID))
+                .thenReturn(Optional.of(givenMember));
+
+        /* when */
+        MemberDto givenDto = MemberDto.toUpdateProfile(null, null);
+        memberService.updateMemberProfile(MEMBER_ID_VALID, givenDto);
+
+        /* then */
+        assertThat(givenMember.getProfile().isEmpty()).isTrue();
     }
 
     @Test
@@ -215,5 +247,14 @@ class MemberServiceTest {
 
         /* then */
         verify(memberRepository, times(1)).delete(givenMember);
+    }
+
+    private Member givenMember(String name, int age, String nickName) {
+        return Member.builder()
+                .id(MEMBER_ID_VALID)
+                .name(name)
+                .age(age)
+                .nickName(nickName)
+                .build();
     }
 }

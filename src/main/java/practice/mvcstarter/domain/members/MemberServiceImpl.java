@@ -82,6 +82,7 @@ public class MemberServiceImpl implements MemberService {
     /**
      * 회원 갱신 - 프로필
      */
+    @Transactional
     @Override
     public void updateMemberProfile(Long memberId, MemberDto dto) {
         if (memberId == null) {
@@ -94,14 +95,13 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
+        member.getProfile()
+                .ifPresent(file -> fileService.deleteFile(file.getId()));
 
         if (dto.hasBase64Image()) {
             String uploadFileName = member.getNickName() + "님의 프로필" + "." + ContentType.getExtention(dto.getContentType());
             File file = fileService.uploadBase64(uploadFileName, dto.getContentType(), dto.getBase64Image());
             member.updateProfile(file);
-        } else {
-            member.getProfile()
-                    .ifPresent(file -> fileService.deleteFile(file.getId()));
         }
     }
 
