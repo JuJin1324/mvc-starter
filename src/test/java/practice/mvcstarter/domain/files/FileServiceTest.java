@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -145,6 +146,27 @@ class FileServiceTest {
         /* then */
         assertThat(file.isImage()).isTrue();
         assertThat(file.getBase64Image()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("[파일 제거] 1.유효하지 않은 매개변수")
+    void deleteFile_whenInvalidParams_thenThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> fileService.deleteFile(null));
+    }
+
+    @Test
+    @DisplayName("[파일 제거] 2.저장된 파일 제거")
+    void deleteFile_whenDeleteStoredFile() {
+        /* given */
+        File givenFile = fileService.uploadBase64(FILE_NAME_VALID, CONTENT_TYPE_PNG, BASE64_IMAGE);
+        when(fileRepository.findById(FILE_ID_VALID))
+                .thenReturn(Optional.of(givenFile));
+
+        /* when */
+        fileService.deleteFile(FILE_ID_VALID);
+
+        /* then */
+        verify(fileRepository).delete(givenFile);
     }
 
     private File givenFile(ContentType contentType, String storeFilePath, String uploadFileName, Long fileSize, LocalDateTime expiredTimeUTC) {

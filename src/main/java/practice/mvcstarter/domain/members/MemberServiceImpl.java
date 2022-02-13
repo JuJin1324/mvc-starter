@@ -1,16 +1,12 @@
 package practice.mvcstarter.domain.members;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import practice.mvcstarter.domain.files.ContentType;
 import practice.mvcstarter.domain.files.File;
-import practice.mvcstarter.domain.files.FileDto;
 import practice.mvcstarter.domain.files.FileService;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
-
-import java.util.UUID;
 
 /**
  * Created by Yoo Ju Jin(jujin@100fac.com)
@@ -24,7 +20,7 @@ public class MemberServiceImpl implements MemberService {
     public static final String RESOURCE_NAME = "Member";
 
     private final MemberRepository memberRepository;
-    private final FileService fileService;
+    private final FileService      fileService;
 
     /**
      * 회원 생성
@@ -99,8 +95,14 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
 
-        File file = fileService.uploadBase64(UUID.randomUUID().toString(), dto.getContentType(), dto.getBase64Image());
-        member.updateProfile(file);
+        if (dto.hasBase64Image()) {
+            String uploadFileName = member.getNickName() + "님의 프로필" + "." + ContentType.getExtention(dto.getContentType());
+            File file = fileService.uploadBase64(uploadFileName, dto.getContentType(), dto.getBase64Image());
+            member.updateProfile(file);
+        } else {
+            member.getProfile()
+                    .ifPresent(file -> fileService.deleteFile(file.getId()));
+        }
     }
 
     /**

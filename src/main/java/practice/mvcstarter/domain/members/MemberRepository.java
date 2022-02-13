@@ -19,10 +19,4 @@ public interface MemberRepository extends CommonRepository<Member, Long> {
     <S extends Member> S save(S entity);
 
     void delete(Member entity);
-
-    /* For MVC Test Only */
-    List<Member> findAllByNameLike(String nameLike);
-
-    /* For MVC Test Only */
-    void deleteAll(Iterable<? extends Member> entities);
 }

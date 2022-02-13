@@ -13,4 +13,5 @@ public class ErrorConst {
     public static final String FILE_IS_EXPIRED   = "FileIsExpired";
     public static final String READ_FILE   = "ReadFile";
     public static final String STORE_FILE   = "StoreFile";
+    public static final String DELETE_FILE   = "DeleteFile";
 }

@@ -6,17 +6,15 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import practice.mvcstarter.exceptions.ExpiredFileException;
-import practice.mvcstarter.exceptions.ReadFileException;
-import practice.mvcstarter.exceptions.ResourceNotFoundException;
-import practice.mvcstarter.exceptions.StoreFileException;
+import practice.mvcstarter.exceptions.*;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
@@ -91,6 +89,29 @@ public class LocalFileService implements FileService {
             log.error(e.getMessage());
             throw new ReadFileException(file.getUploadFileName());
         }
+    }
+
+    /**
+     * 파일 제거
+     */
+    @Transactional
+    @Override
+    public void deleteFile(Long fileId) {
+        if (fileId == null) {
+            throw new IllegalArgumentException();
+        }
+
+        fileRepository.findById(fileId)
+                .ifPresent(file -> {
+                    java.io.File storedFile = new java.io.File(file.getStoreFilePath());
+                    if (storedFile.exists()) {
+                        boolean isDeleted = storedFile.delete();
+                        if (!isDeleted) {
+                            throw new DeleteFileException(file.getUploadFileName());
+                        }
+                    }
+                    fileRepository.delete(file);
+                });
     }
 
     private String createStoreFilename(String originalFilename) {

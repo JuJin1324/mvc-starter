@@ -17,4 +17,9 @@ public interface FileService {
      * 파일 조회 - 단건
      */
     FileDto getFile(Long fileId) throws ExpiredFileException, ReadFileException;
+
+    /**
+     * 파일 제거
+     */
+    void deleteFile(Long fileId);
 }

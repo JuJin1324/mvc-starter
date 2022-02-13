@@ -17,5 +17,6 @@ public class ErrorMessageConst {
     public static final String FILE_IS_EXPIRED = "요청한 파일의 다운로드 기한이 만료되었습니다.";
     public static final String READ_FILE = "요청한 파일 읽기에 실패하였습니다.";
     public static final String STORE_FILE = "요청한 파일 저장에 실패하였습니다.";
+    public static final String DELETE_FILE = "요청한 파일 삭제에 실패하였습니다.";
 
 }

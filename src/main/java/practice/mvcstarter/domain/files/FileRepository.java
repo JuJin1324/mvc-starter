@@ -1,6 +1,7 @@
 package practice.mvcstarter.domain.files;
 
 import practice.mvcstarter.domain.CommonRepository;
+import practice.mvcstarter.domain.members.Member;
 
 import java.util.Optional;
 
@@ -13,4 +14,6 @@ public interface FileRepository extends CommonRepository<File, Long> {
     Optional<File> findById(Long fileId);
 
     <S extends File> S save(S entity);
+
+    void delete(File entity);
 }
