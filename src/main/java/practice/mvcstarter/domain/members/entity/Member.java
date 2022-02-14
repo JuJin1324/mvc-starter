@@ -1,12 +1,12 @@
-package practice.mvcstarter.domain.members;
+package practice.mvcstarter.domain.members.entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import practice.mvcstarter.domain.boards.Board;
-import practice.mvcstarter.domain.boards.BoardComment;
-import practice.mvcstarter.domain.files.File;
+import practice.mvcstarter.domain.boards.entity.Board;
+import practice.mvcstarter.domain.boards.entity.BoardComment;
+import practice.mvcstarter.domain.files.entity.File;
 import practice.mvcstarter.exceptions.FileIsNotBase64Exception;
 
 import javax.persistence.*;

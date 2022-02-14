@@ -3,7 +3,7 @@ package practice.mvcstarter.domain.members.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
-import practice.mvcstarter.domain.files.ContentType;
+import practice.mvcstarter.domain.files.entity.ContentType;
 
 /**
  * Created by Yoo Ju Jin(jujin@100fac.com)

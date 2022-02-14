@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.members;
+package practice.mvcstarter.domain.members.service;
 
 import practice.mvcstarter.domain.members.dto.MemberCreateDto;
 import practice.mvcstarter.domain.members.dto.MemberReadDto;

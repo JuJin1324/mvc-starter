@@ -5,7 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import practice.mvcstarter.domain.members.MemberService;
+import practice.mvcstarter.domain.boards.dto.BoardReadDto;
+import practice.mvcstarter.domain.members.service.MemberService;
 import practice.mvcstarter.domain.members.dto.MemberCreateDto;
 import practice.mvcstarter.domain.members.dto.MemberReadDto;
 import practice.mvcstarter.domain.members.dto.MemberUpdateDto;
@@ -73,7 +74,7 @@ public class MemberApiController {
      * 관심 게시글 조회 - 페이지
      */
     @GetMapping("/{memberId}/boards/attractive")
-    public Page<BoardDto> getAttractiveBoards(@PathVariable("memberId") Long memberId) {
+    public Page<BoardReadDto> getAttractiveBoards(@PathVariable("memberId") Long memberId) {
         return null;
     }
 
@@ -81,7 +82,7 @@ public class MemberApiController {
      * 내가 쓴 게시글 조회 - 페이지
      */
     @GetMapping("/{memberId}/boards/mine")
-    public Page<BoardDto> getMineBoards(@PathVariable("memberId") Long memberId) {
+    public Page<BoardReadDto> getMineBoards(@PathVariable("memberId") Long memberId) {
         return null;
     }
 

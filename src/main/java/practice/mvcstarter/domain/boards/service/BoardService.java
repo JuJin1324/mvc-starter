@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.boards;
+package practice.mvcstarter.domain.boards.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

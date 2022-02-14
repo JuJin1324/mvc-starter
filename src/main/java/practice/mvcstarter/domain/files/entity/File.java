@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.files;
+package practice.mvcstarter.domain.files.entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

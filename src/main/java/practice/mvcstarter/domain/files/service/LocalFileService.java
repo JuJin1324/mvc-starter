@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.files;
+package practice.mvcstarter.domain.files.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,6 +6,12 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
+import practice.mvcstarter.domain.files.dto.FileReadDto;
+import practice.mvcstarter.domain.files.dto.FileResourceReadDto;
+import practice.mvcstarter.domain.files.entity.ContentType;
+import practice.mvcstarter.domain.files.entity.File;
+import practice.mvcstarter.domain.files.repository.FileRepository;
 import practice.mvcstarter.exceptions.*;
 
 import java.io.FileOutputStream;
@@ -63,10 +69,10 @@ public class LocalFileService implements FileService {
     }
 
     /**
-     * 파일 조회
+     * 파일 리소스 조회 - 단건
      */
     @Override
-    public FileReadDto getFile(Long fileId) {
+    public FileResourceReadDto getFileResource(Long fileId) {
         if (fileId == null) {
             throw new IllegalArgumentException();
         }
@@ -82,7 +88,9 @@ public class LocalFileService implements FileService {
             if (!urlResource.exists()) {
                 throw new ResourceNotFoundException(file.getUploadFileName());
             }
-            return new FileReadDto(file, urlResource);
+//            return new FileReadDto(file, urlResource);
+            // TODO: files
+            return null;
         } catch (MalformedURLException e) {
             log.error(e.getMessage());
             throw new ResourceNotFoundException(file.getUploadFileName());
@@ -90,6 +98,15 @@ public class LocalFileService implements FileService {
             log.error(e.getMessage());
             throw new ReadFileException(file.getUploadFileName());
         }
+    }
+
+    /**
+     * 파일 base64 조회 - 단건
+     */
+    @Override
+    public FileBase64ReadDto getFileBase64(Long fileId) throws ExpiredFileException, ReadFileException {
+        // TODO: files
+        return null;
     }
 
     /**

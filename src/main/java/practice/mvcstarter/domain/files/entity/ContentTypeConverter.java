@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.boards;
+package practice.mvcstarter.domain.files.entity;
 
 import org.springframework.util.StringUtils;
 
@@ -12,9 +12,9 @@ import java.util.stream.Stream;
  */
 
 @Converter
-public class BoardFileTypeConverter implements AttributeConverter<BoardFileType, String> {
+public class ContentTypeConverter implements AttributeConverter<ContentType, String> {
     @Override
-    public String convertToDatabaseColumn(BoardFileType attribute) {
+    public String convertToDatabaseColumn(ContentType attribute) {
         if (attribute == null) {
             return null;
         }
@@ -22,11 +22,11 @@ public class BoardFileTypeConverter implements AttributeConverter<BoardFileType,
     }
 
     @Override
-    public BoardFileType convertToEntityAttribute(String dbData) {
+    public ContentType convertToEntityAttribute(String dbData) {
         if (!StringUtils.hasText(dbData)) {
             return null;
         }
-        return Stream.of(BoardFileType.values())
+        return Stream.of(ContentType.values())
                 .filter(c -> c.getValue().equals(dbData))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);

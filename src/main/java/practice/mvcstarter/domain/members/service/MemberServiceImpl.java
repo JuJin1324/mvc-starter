@@ -1,16 +1,18 @@
-package practice.mvcstarter.domain.members;
+package practice.mvcstarter.domain.members.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import practice.mvcstarter.domain.files.ContentType;
-import practice.mvcstarter.domain.files.File;
-import practice.mvcstarter.domain.files.FileReadDto;
-import practice.mvcstarter.domain.files.FileService;
+import practice.mvcstarter.domain.files.entity.ContentType;
+import practice.mvcstarter.domain.files.entity.File;
+import practice.mvcstarter.domain.files.dto.FileReadDto;
+import practice.mvcstarter.domain.files.service.FileService;
 import practice.mvcstarter.domain.members.dto.MemberCreateDto;
 import practice.mvcstarter.domain.members.dto.MemberReadDto;
 import practice.mvcstarter.domain.members.dto.MemberUpdateDto;
 import practice.mvcstarter.domain.members.dto.MemberUpdateProfileDto;
+import practice.mvcstarter.domain.members.entity.Member;
+import practice.mvcstarter.domain.members.repository.MemberRepository;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
 
 import java.util.Optional;
@@ -59,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
 
         Optional<FileReadDto> fileDtoOptional = member.getProfile()
-                .map(file -> fileService.getFile(file.getId()));
+                .map(file -> fileService.getFileResource(file.getId()));
 
         return new MemberReadDto(member, fileDtoOptional);
     }

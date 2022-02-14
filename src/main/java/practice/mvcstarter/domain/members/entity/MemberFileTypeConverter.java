@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.members;
+package practice.mvcstarter.domain.members.entity;
 
 import org.springframework.util.StringUtils;
 

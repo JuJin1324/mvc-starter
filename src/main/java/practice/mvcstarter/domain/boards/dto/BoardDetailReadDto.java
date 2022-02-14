@@ -2,10 +2,9 @@ package practice.mvcstarter.domain.boards.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
-import practice.mvcstarter.domain.boards.Board;
-import practice.mvcstarter.domain.boards.BoardTopic;
-import practice.mvcstarter.domain.files.FileReadDto;
-import practice.mvcstarter.domain.members.Member;
+import practice.mvcstarter.domain.boards.entity.BoardTopic;
+import practice.mvcstarter.domain.files.dto.FileReadDto;
+import practice.mvcstarter.domain.members.entity.Member;
 import practice.mvcstarter.domain.members.dto.MemberReadDto;
 
 import java.util.Optional;

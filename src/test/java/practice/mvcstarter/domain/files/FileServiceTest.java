@@ -6,6 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import practice.mvcstarter.domain.files.dto.FileReadDto;
+import practice.mvcstarter.domain.files.entity.ContentType;
+import practice.mvcstarter.domain.files.entity.File;
+import practice.mvcstarter.domain.files.repository.FileRepository;
+import practice.mvcstarter.domain.files.service.FileService;
+import practice.mvcstarter.domain.files.service.LocalFileService;
 import practice.mvcstarter.exceptions.ExpiredFileException;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
 
@@ -71,7 +77,7 @@ class FileServiceTest {
     @Test
     @DisplayName("[파일 조회 - 단건] 1.유효하지 않은 매개변수")
     void getFile_whenInvalidParams_thenThrowException() {
-        assertThrows(IllegalArgumentException.class, () -> fileService.getFile(null));
+        assertThrows(IllegalArgumentException.class, () -> fileService.getFileResource(null));
     }
 
     @Test
@@ -82,7 +88,7 @@ class FileServiceTest {
                 .thenReturn(Optional.empty());
 
         /* when / then */
-        assertThrows(ResourceNotFoundException.class, () -> fileService.getFile(FILE_ID_VALID));
+        assertThrows(ResourceNotFoundException.class, () -> fileService.getFileResource(FILE_ID_VALID));
     }
 
     @Test
@@ -96,7 +102,7 @@ class FileServiceTest {
                 .thenReturn(Optional.of(notExistFile));
 
         /* when / then */
-        assertThrows(ResourceNotFoundException.class, () -> fileService.getFile(FILE_ID_VALID));
+        assertThrows(ResourceNotFoundException.class, () -> fileService.getFileResource(FILE_ID_VALID));
     }
 
     @Test
@@ -110,7 +116,7 @@ class FileServiceTest {
                 .thenReturn(Optional.of(expiredFile));
 
         /* when / then */
-        assertThrows(ExpiredFileException.class, () -> fileService.getFile(FILE_ID_VALID));
+        assertThrows(ExpiredFileException.class, () -> fileService.getFileResource(FILE_ID_VALID));
     }
 
     @Test
@@ -124,7 +130,7 @@ class FileServiceTest {
                 .thenReturn(Optional.of(textFile));
 
         /* when */
-        FileReadDto file = fileService.getFile(FILE_ID_VALID);
+        FileReadDto file = fileService.getFileResource(FILE_ID_VALID);
 
         /* then */
         assertThat(file.isImage()).isFalse();
@@ -141,7 +147,7 @@ class FileServiceTest {
                 .thenReturn(Optional.of(imageFile));
 
         /* when */
-        FileReadDto file = fileService.getFile(FILE_ID_VALID);
+        FileReadDto file = fileService.getFileResource(FILE_ID_VALID);
 
         /* then */
         assertThat(file.isImage()).isTrue();

@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.members;
+package practice.mvcstarter.domain.members.entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import practice.mvcstarter.domain.files.File;
+import practice.mvcstarter.domain.files.entity.File;
 
 import javax.persistence.*;
 

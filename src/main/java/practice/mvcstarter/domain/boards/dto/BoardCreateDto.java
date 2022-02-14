@@ -3,7 +3,7 @@ package practice.mvcstarter.domain.boards.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
-import practice.mvcstarter.domain.boards.BoardTopic;
+import practice.mvcstarter.domain.boards.entity.BoardTopic;
 
 /**
  * Created by Yoo Ju Jin(jujin@100fac.com)

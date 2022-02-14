@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.boards;
+package practice.mvcstarter.domain.boards.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

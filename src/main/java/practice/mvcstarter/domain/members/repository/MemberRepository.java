@@ -1,8 +1,9 @@
-package practice.mvcstarter.domain.members;
+package practice.mvcstarter.domain.members.repository;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import practice.mvcstarter.domain.CommonRepository;
+import practice.mvcstarter.domain.members.entity.Member;
 
 import java.util.Optional;
 

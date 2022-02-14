@@ -1,8 +1,9 @@
-package practice.mvcstarter.domain.files;
+package practice.mvcstarter.domain.files.dto;
 
-import lombok.Builder;
 import lombok.Getter;
 import org.springframework.core.io.Resource;
+import practice.mvcstarter.domain.files.entity.ContentType;
+import practice.mvcstarter.domain.files.entity.File;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -16,9 +17,9 @@ import java.util.Base64;
 @Getter
 public class FileReadDto {
     private final Long          fileId;
-    private final String        fileName;
-    private final ContentType   contentType;
-    private final Resource      resource;
+    private final String      fileName;
+    private final ContentType contentType;
+    private final Resource    resource;
     private       String        base64Image;
     private final LocalDateTime expiredTimeKST;
     private final boolean       isImage;

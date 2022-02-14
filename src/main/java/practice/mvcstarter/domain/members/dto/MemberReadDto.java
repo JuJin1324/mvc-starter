@@ -1,9 +1,9 @@
 package practice.mvcstarter.domain.members.dto;
 
 import lombok.Getter;
-import practice.mvcstarter.domain.files.ContentType;
-import practice.mvcstarter.domain.files.FileReadDto;
-import practice.mvcstarter.domain.members.Member;
+import practice.mvcstarter.domain.files.entity.ContentType;
+import practice.mvcstarter.domain.files.dto.FileReadDto;
+import practice.mvcstarter.domain.members.entity.Member;
 
 import java.util.Optional;
 

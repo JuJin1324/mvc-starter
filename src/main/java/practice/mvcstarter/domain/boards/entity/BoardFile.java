@@ -1,31 +1,30 @@
-package practice.mvcstarter.domain.boards;
+package practice.mvcstarter.domain.boards.entity;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import practice.mvcstarter.domain.members.Member;
+import practice.mvcstarter.domain.files.entity.File;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * Created by Yoo Ju Jin(jujin@100fac.com)
  * Created Date : 2022/02/14
  * Copyright (C) 2022, Centum Factorial all rights reserved.
  */
-
 @Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BoardComment {
+@Getter
+public class BoardFile {
     @Id
     @GeneratedValue
-    @Column(name = "board_comment_id")
+    @Column(name = "board_file_id")
     private Long id;
 
-    private String content;
+    @Convert(converter = BoardFileTypeConverter.class)
+    private BoardFileType fileType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
@@ -33,15 +32,7 @@ public class BoardComment {
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "file_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Member writer;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_board_comment_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private BoardComment parent;
-
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    private List<BoardComment> children;
+    private File file;
 }

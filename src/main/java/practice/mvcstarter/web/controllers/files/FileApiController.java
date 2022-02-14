@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriUtils;
-import practice.mvcstarter.domain.files.FileReadDto;
-import practice.mvcstarter.domain.files.FileService;
+import practice.mvcstarter.domain.files.dto.FileReadDto;
+import practice.mvcstarter.domain.files.service.FileService;
 import practice.mvcstarter.exceptions.FileIsNotBase64Exception;
 
 import java.io.IOException;
@@ -36,7 +36,8 @@ public class FileApiController {
      */
     @GetMapping("/{fileId}/download")
     public ResponseEntity<Resource> getFileDownload(@PathVariable("fileId") Long fileId) {
-        FileReadDto file = fileService.getFile(fileId);
+        // TODO: files
+        FileReadDto file = fileService.getFileResource(fileId);
 
         /* 한글 깨짐 처리 */
         String encodedFileName = UriUtils.encode(file.getFileName(), StandardCharsets.UTF_8);
@@ -51,7 +52,8 @@ public class FileApiController {
      */
     @GetMapping("/{fileId}/base64")
     public GetFileBase64ResBody getFileBase64(@PathVariable("fileId") Long fileId) throws IOException {
-        FileReadDto file = fileService.getFile(fileId);
+        // TODO: files
+        FileReadDto file = fileService.getFileResource(fileId);
         if (!file.isImage()) {
             throw new FileIsNotBase64Exception(file.getFileName());
         }

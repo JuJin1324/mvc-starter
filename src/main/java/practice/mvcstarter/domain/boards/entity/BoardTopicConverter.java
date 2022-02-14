@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.boards;
+package practice.mvcstarter.domain.boards.entity;
 
 import org.springframework.util.StringUtils;
 

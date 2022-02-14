@@ -1,9 +1,9 @@
-package practice.mvcstarter.domain.members;
+package practice.mvcstarter.domain.members.entity;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import practice.mvcstarter.domain.boards.Board;
+import practice.mvcstarter.domain.boards.entity.Board;
 
 import javax.persistence.*;
 

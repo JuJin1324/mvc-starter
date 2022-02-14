@@ -1,10 +1,9 @@
-package practice.mvcstarter.domain.boards;
+package practice.mvcstarter.domain.boards.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import practice.mvcstarter.domain.boards.repository.BoardRepository;
 
 /**
  * Created by Yoo Ju Jin(jujin@100fac.com)
