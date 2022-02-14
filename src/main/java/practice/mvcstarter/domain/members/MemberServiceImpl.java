@@ -5,8 +5,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.mvcstarter.domain.files.ContentType;
 import practice.mvcstarter.domain.files.File;
-import practice.mvcstarter.domain.files.FileDto;
+import practice.mvcstarter.domain.files.FileReadDto;
 import practice.mvcstarter.domain.files.FileService;
+import practice.mvcstarter.domain.members.dto.MemberCreateDto;
+import practice.mvcstarter.domain.members.dto.MemberReadDto;
+import practice.mvcstarter.domain.members.dto.MemberUpdateDto;
+import practice.mvcstarter.domain.members.dto.MemberUpdateProfileDto;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
 
 import java.util.Optional;
@@ -31,11 +35,11 @@ public class MemberServiceImpl implements MemberService {
      * @return memberId
      */
     @Transactional
-    public Long createMember(MemberDto dto) {
+    public Long createMember(MemberCreateDto dto) {
         if (dto == null) {
             throw new IllegalArgumentException("toCreate Dto is null.");
         }
-        dto.validateToCreate();
+        dto.validate();
 
         Member member = Member.createMember(dto.getName(), dto.getNickName(), dto.getAge());
         memberRepository.save(member);
@@ -46,7 +50,7 @@ public class MemberServiceImpl implements MemberService {
     /**
      * 회원 조회 - 단건
      */
-    public MemberDto getSingleMember(Long memberId) {
+    public MemberReadDto getSingleMember(Long memberId) {
         if (memberId == null) {
             throw new IllegalArgumentException("memberId is null.");
         }
@@ -54,10 +58,10 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findWithMemberFilesById(memberId)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
 
-        Optional<FileDto> fileDtoOptional = member.getProfile()
+        Optional<FileReadDto> fileDtoOptional = member.getProfile()
                 .map(file -> fileService.getFile(file.getId()));
 
-        return MemberDto.toRead(member, fileDtoOptional);
+        return new MemberReadDto(member, fileDtoOptional);
     }
 
     /**
@@ -72,14 +76,14 @@ public class MemberServiceImpl implements MemberService {
      * 회원 갱신
      */
     @Transactional
-    public void updateMember(Long memberId, MemberDto dto) {
+    public void updateMember(Long memberId, MemberUpdateDto dto) {
         if (memberId == null) {
             throw new IllegalArgumentException("memberId is null.");
         }
         if (dto == null) {
             throw new IllegalArgumentException("toUpdate Dto is null.");
         }
-        dto.validateToUpdate();
+        dto.validate();
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
@@ -91,14 +95,14 @@ public class MemberServiceImpl implements MemberService {
      */
     @Transactional
     @Override
-    public void updateMemberProfile(Long memberId, MemberDto dto) {
+    public void updateMemberProfile(Long memberId, MemberUpdateProfileDto dto) {
         if (memberId == null) {
             throw new IllegalArgumentException("memberId is null.");
         }
         if (dto == null) {
             throw new IllegalArgumentException("toUpdate Dto is null.");
         }
-        dto.validateToUpdateProfile();
+        dto.validate();
 
         Member member = memberRepository.findWithMemberFilesById(memberId)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));

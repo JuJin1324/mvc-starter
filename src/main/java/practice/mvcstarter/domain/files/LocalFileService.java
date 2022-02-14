@@ -28,7 +28,8 @@ import java.util.UUID;
 public class LocalFileService implements FileService {
     public static final String RESOURCE_NAME = "File";
 
-    private static final String STORE_DIR_PATH = "/Users/J.Reo/Documents/dev/workspace-git-spring/mvc-starter/src/test/resources/files";
+    //    private static final String STORE_DIR_PATH = "/Users/J.Reo/Documents/dev/workspace-git-spring/mvc-starter/src/test/resources/files";
+    private static final String STORE_DIR_PATH = "/Users/ju-jinyoo/Documents/dev/workspace-git-jujin/mvc-starter/src/test/resources/files";
 
     private final FileRepository fileRepository;
 
@@ -65,7 +66,7 @@ public class LocalFileService implements FileService {
      * 파일 조회
      */
     @Override
-    public FileDto getFile(Long fileId) {
+    public FileReadDto getFile(Long fileId) {
         if (fileId == null) {
             throw new IllegalArgumentException();
         }
@@ -81,7 +82,7 @@ public class LocalFileService implements FileService {
             if (!urlResource.exists()) {
                 throw new ResourceNotFoundException(file.getUploadFileName());
             }
-            return FileDto.toRead(file, urlResource);
+            return new FileReadDto(file, urlResource);
         } catch (MalformedURLException e) {
             log.error(e.getMessage());
             throw new ResourceNotFoundException(file.getUploadFileName());

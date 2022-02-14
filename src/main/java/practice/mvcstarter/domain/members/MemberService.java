@@ -1,8 +1,9 @@
 package practice.mvcstarter.domain.members;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import practice.mvcstarter.domain.boards.BoardDto;
+import practice.mvcstarter.domain.members.dto.MemberCreateDto;
+import practice.mvcstarter.domain.members.dto.MemberReadDto;
+import practice.mvcstarter.domain.members.dto.MemberUpdateDto;
+import practice.mvcstarter.domain.members.dto.MemberUpdateProfileDto;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
@@ -15,22 +16,22 @@ public interface MemberService {
      *
      * @return memberId
      */
-    Long createMember(MemberDto dto);
+    Long createMember(MemberCreateDto dto);
 
     /**
      * 회원 조회 - 단건
      */
-    MemberDto getSingleMember(Long memberId);
+    MemberReadDto getSingleMember(Long memberId);
 
     /**
      * 회원 갱신
      */
-    void updateMember(Long memberId, MemberDto dto);
+    void updateMember(Long memberId, MemberUpdateDto dto);
 
     /**
      * 회원 갱신 - 프로필
      */
-    void updateMemberProfile(Long memberId, MemberDto dto);
+    void updateMemberProfile(Long memberId, MemberUpdateProfileDto dto);
 
     /**
      * 회원 삭제

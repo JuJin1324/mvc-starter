@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriUtils;
-import practice.mvcstarter.domain.files.FileDto;
+import practice.mvcstarter.domain.files.FileReadDto;
 import practice.mvcstarter.domain.files.FileService;
 import practice.mvcstarter.exceptions.FileIsNotBase64Exception;
 
@@ -36,7 +36,7 @@ public class FileApiController {
      */
     @GetMapping("/{fileId}/download")
     public ResponseEntity<Resource> getFileDownload(@PathVariable("fileId") Long fileId) {
-        FileDto file = fileService.getFile(fileId);
+        FileReadDto file = fileService.getFile(fileId);
 
         /* 한글 깨짐 처리 */
         String encodedFileName = UriUtils.encode(file.getFileName(), StandardCharsets.UTF_8);
@@ -51,7 +51,7 @@ public class FileApiController {
      */
     @GetMapping("/{fileId}/base64")
     public GetFileBase64ResBody getFileBase64(@PathVariable("fileId") Long fileId) throws IOException {
-        FileDto file = fileService.getFile(fileId);
+        FileReadDto file = fileService.getFile(fileId);
         if (!file.isImage()) {
             throw new FileIsNotBase64Exception(file.getFileName());
         }
@@ -68,9 +68,9 @@ public class FileApiController {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime expiredTimeKST;
 
-        public static GetFileBase64ResBody createResBody(FileDto fileDto) {
-            return new GetFileBase64ResBody(fileDto.getFileName(), fileDto.getContentType().getValue(),
-                    fileDto.getBase64Image(), fileDto.getExpiredTimeKST());
+        public static GetFileBase64ResBody createResBody(FileReadDto fileReadDto) {
+            return new GetFileBase64ResBody(fileReadDto.getFileName(), fileReadDto.getContentType().getValue(),
+                    fileReadDto.getBase64Image(), fileReadDto.getExpiredTimeKST());
         }
     }
 }

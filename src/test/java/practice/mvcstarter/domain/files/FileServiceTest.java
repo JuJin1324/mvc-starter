@@ -11,7 +11,6 @@ import practice.mvcstarter.exceptions.ResourceNotFoundException;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -125,7 +124,7 @@ class FileServiceTest {
                 .thenReturn(Optional.of(textFile));
 
         /* when */
-        FileDto file = fileService.getFile(FILE_ID_VALID);
+        FileReadDto file = fileService.getFile(FILE_ID_VALID);
 
         /* then */
         assertThat(file.isImage()).isFalse();
@@ -142,7 +141,7 @@ class FileServiceTest {
                 .thenReturn(Optional.of(imageFile));
 
         /* when */
-        FileDto file = fileService.getFile(FILE_ID_VALID);
+        FileReadDto file = fileService.getFile(FILE_ID_VALID);
 
         /* then */
         assertThat(file.isImage()).isTrue();

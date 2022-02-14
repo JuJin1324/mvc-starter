@@ -15,10 +15,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import practice.mvcstarter.domain.files.ContentType;
+import practice.mvcstarter.domain.members.dto.MemberCreateDto;
+import practice.mvcstarter.domain.members.dto.MemberUpdateDto;
+import practice.mvcstarter.domain.members.dto.MemberUpdateProfileDto;
 import practice.mvcstarter.web.controllers.advice.ExceptionControllerAdvice;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -61,11 +61,11 @@ class MemberApiControllerTest {
     @Test
     @DisplayName("회원 생성")
     void createMember() throws Exception {
-        Map<String, Object> reqBody = givenCreateMemberReqBody("멤버 이름1", "멤버 닉네임1", "21");
+        MemberCreateDto dto = new MemberCreateDto("멤버 이름1", "멤버 닉네임1", 21);
         mockMvc.perform(
                         post("/api/v1.0/members")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(reqBody))
+                                .content(objectMapper.writeValueAsString(dto))
                 )
                 .andExpect(status().isCreated());
     }
@@ -80,11 +80,11 @@ class MemberApiControllerTest {
     @Test
     @DisplayName("회원 갱신")
     void updateMember() throws Exception {
-        Map<String, Object> reqBody = givenUpdateMemberReqBody("멤버 닉네임", "23");
+        MemberUpdateDto dto = new MemberUpdateDto("멤버 닉네임", 23);
         mockMvc.perform(
                         put("/api/v1.0/members/{memberId}", 1L)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(reqBody))
+                                .content(objectMapper.writeValueAsString(dto))
                 )
                 .andExpect(status().isNoContent());
     }
@@ -92,11 +92,11 @@ class MemberApiControllerTest {
     @Test
     @DisplayName("회원 갱신 - 프로필: reqBody 에 base64 image 가 있는 경우")
     void updateMemberProfile_whenReqBodyHasBase64Image() throws Exception {
-        Map<String, Object> reqBody = givenUpdateMemberProfileReqBody(BASE64_IMAGE, CONTENT_TYPE_PNG);
+        MemberUpdateProfileDto dto = new MemberUpdateProfileDto(BASE64_IMAGE, CONTENT_TYPE_PNG);
         mockMvc.perform(
                         put("/api/v1.0/members/{memberId}/profile", 1L)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(reqBody))
+                                .content(objectMapper.writeValueAsString(dto))
                 )
                 .andExpect(status().isNoContent());
     }
@@ -104,11 +104,11 @@ class MemberApiControllerTest {
     @Test
     @DisplayName("회원 갱신 - 프로필: reqBody 에 base64 image 가 없는 경우")
     void updateMemberProfile_whenReqBodyHasNoBase64Image() throws Exception {
-        Map<String, Object> reqBody = givenUpdateMemberProfileReqBody(null, null);
+        MemberUpdateProfileDto dto = new MemberUpdateProfileDto(null, null);
         mockMvc.perform(
                         put("/api/v1.0/members/{memberId}/profile", 1L)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(reqBody))
+                                .content(objectMapper.writeValueAsString(dto))
                 )
                 .andExpect(status().isNoContent());
     }
@@ -147,51 +147,4 @@ class MemberApiControllerTest {
 //                .andExpect(jsonPath("$.pageable.pageNumber").value(String.valueOf(givenPage)))
 //                .andExpect(jsonPath("$.pageable.pageSize").value(String.valueOf(givenSize)));
 //    }
-
-    private Map<String, Object> givenCreateMemberReqBody(String name, String nickName, String age) {
-        Map<String, Object> reqBody = new HashMap<>();
-        if (name != null) {
-            reqBody.put("name", name);
-        }
-        if (nickName != null) {
-            reqBody.put("nickName", nickName);
-        }
-        if (age != null) {
-            try {
-                reqBody.put("age", Long.valueOf(age));
-            } catch (NumberFormatException e) {
-                reqBody.put("age", age);
-            }
-        }
-
-        return reqBody;
-    }
-
-    private Map<String, Object> givenUpdateMemberReqBody(String nickName, String age) {
-        Map<String, Object> reqBody = new HashMap<>();
-        if (nickName != null) {
-            reqBody.put("nickName", nickName);
-        }
-        if (age != null) {
-            try {
-                reqBody.put("age", Long.valueOf(age));
-            } catch (NumberFormatException e) {
-                reqBody.put("age", age);
-            }
-        }
-
-        return reqBody;
-    }
-
-    private Map<String, Object> givenUpdateMemberProfileReqBody(String base64Image, ContentType contentType) {
-        Map<String, Object> reqBody = new HashMap<>();
-        if (base64Image != null) {
-            reqBody.put("base64Image", base64Image);
-        }
-        if (contentType != null) {
-            reqBody.put("contentType", contentType.name());
-        }
-
-        return reqBody;
-    }
 }
