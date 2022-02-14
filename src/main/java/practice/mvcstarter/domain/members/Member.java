@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import practice.mvcstarter.domain.boards.Board;
 import practice.mvcstarter.domain.files.File;
 import practice.mvcstarter.exceptions.FileIsNotBase64Exception;
 
@@ -23,6 +24,7 @@ import java.util.Optional;
 public class Member {
     @Id
     @GeneratedValue
+    @Column(name = "member_id")
     private Long id;
 
     private String name;
@@ -34,6 +36,14 @@ public class Member {
     @Getter(AccessLevel.PRIVATE)
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<MemberFile> memberFiles = new ArrayList<>();
+
+    @Getter(AccessLevel.PRIVATE)
+    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<Board> myBoards = new ArrayList<>();
+
+    @Getter(AccessLevel.PRIVATE)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<MemberLikeBoard> likeBoards = new ArrayList<>();
 
     @Builder
     public Member(Long id, String name, String nickName, Integer age) {
@@ -61,7 +71,7 @@ public class Member {
             throw new FileIsNotBase64Exception(file.getUploadFileName());
         }
 
-        Optional<MemberFile> optional = this.findMemberFile(FileType.PROFILE);
+        Optional<MemberFile> optional = this.findMemberFile(MemberFileType.PROFILE);
         if (optional.isPresent()) {
             MemberFile profile = optional.get();
             profile.updateFile(file);
@@ -72,11 +82,11 @@ public class Member {
     }
 
     public Optional<File> getProfile() {
-        return this.findMemberFile(FileType.PROFILE)
+        return this.findMemberFile(MemberFileType.PROFILE)
                 .map(MemberFile::getFile);
     }
 
-    private Optional<MemberFile> findMemberFile(FileType fileType) {
+    private Optional<MemberFile> findMemberFile(MemberFileType fileType) {
         if (this.getMemberFiles().isEmpty()) {
             return Optional.empty();
         }

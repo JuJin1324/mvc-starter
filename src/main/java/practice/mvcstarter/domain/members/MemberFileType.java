@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum FileType {
+public enum MemberFileType {
     PROFILE("P"),
     ;
 

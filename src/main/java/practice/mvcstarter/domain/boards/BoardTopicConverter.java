@@ -1,7 +1,6 @@
-package practice.mvcstarter.domain.members;
+package practice.mvcstarter.domain.boards;
 
 import org.springframework.util.StringUtils;
-import practice.mvcstarter.domain.files.ContentType;
 
 import javax.persistence.AttributeConverter;
 import java.util.stream.Stream;
@@ -10,9 +9,9 @@ import java.util.stream.Stream;
  * Created by Yoo Ju Jin(jujin1324@daum.net)
  * Created Date : 2022/02/13
  */
-public class FileTypeConverter implements AttributeConverter<FileType, String> {
+public class BoardTopicConverter implements AttributeConverter<BoardTopic, String> {
     @Override
-    public String convertToDatabaseColumn(FileType attribute) {
+    public String convertToDatabaseColumn(BoardTopic attribute) {
         if (attribute == null) {
             return null;
         }
@@ -20,11 +19,11 @@ public class FileTypeConverter implements AttributeConverter<FileType, String> {
     }
 
     @Override
-    public FileType convertToEntityAttribute(String dbData) {
+    public BoardTopic convertToEntityAttribute(String dbData) {
         if (!StringUtils.hasText(dbData)) {
             return null;
         }
-        return Stream.of(FileType.values())
+        return Stream.of(BoardTopic.values())
                 .filter(c -> c.getValue().equals(dbData))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);

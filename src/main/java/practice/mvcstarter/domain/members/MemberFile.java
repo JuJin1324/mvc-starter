@@ -23,21 +23,21 @@ public class MemberFile {
     @Column(name = "member_file_id")
     private Long id;
 
-    @Convert(converter = FileTypeConverter.class)
-    private FileType fileType;
+    @Convert(converter = MemberFileTypeConverter.class)
+    private MemberFileType fileType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FILE_ID")
+    @JoinColumn(name = "file_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private File file;
 
     @Builder
-    private MemberFile(FileType fileType, Member member, File file) {
+    private MemberFile(MemberFileType fileType, Member member, File file) {
         this.fileType = fileType;
         this.member = member;
         this.file = file;
@@ -45,7 +45,7 @@ public class MemberFile {
 
     public static MemberFile createProfile(Member member, File file) {
         return MemberFile.builder()
-                .fileType(FileType.PROFILE)
+                .fileType(MemberFileType.PROFILE)
                 .member(member)
                 .file(file)
                 .build();

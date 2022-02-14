@@ -3,10 +3,11 @@ package practice.mvcstarter.domain.boards;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import practice.mvcstarter.domain.members.Member;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Yoo Ju Jin(jujin@100fac.com)
@@ -20,11 +21,29 @@ import javax.persistence.Id;
 public class Board {
     @Id
     @GeneratedValue
+    @Column(name = "board_id")
     private Long id;
 
     private String title;
 
     private String content;
+
+    private long readCount;
+
+    @Convert(converter = BoardTopicConverter.class)
+    private BoardTopic boardTopic;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member writer;
+
+    @Getter(AccessLevel.PRIVATE)
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<BoardComment> comments = new ArrayList<>();
+
+    @Getter(AccessLevel.PRIVATE)
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<BoardFile> attachedFiles = new ArrayList<>();
 
 
 }
