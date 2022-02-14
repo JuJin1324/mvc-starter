@@ -23,10 +23,10 @@ public class MemberUpdateDto {
 
     public void validate() {
         if (!StringUtils.hasText(nickName)) {
-            throw new IllegalArgumentException("[MemberDto] nickName is blank.");
+            throw new IllegalArgumentException("[MemberUpdateDto] nickName is blank.");
         }
         if (age == null) {
-            throw new IllegalArgumentException("[MemberDto] age is null.");
+            throw new IllegalArgumentException("[MemberUpdateDto] age is null.");
         }
     }
 }

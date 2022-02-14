@@ -37,13 +37,17 @@ public class Board {
     @JoinColumn(name = "member_id")
     private Member writer;
 
-    @Getter(AccessLevel.PRIVATE)
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<BoardComment> comments = new ArrayList<>();
 
-    @Getter(AccessLevel.PRIVATE)
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<BoardFile> attachedFiles = new ArrayList<>();
 
-
+    public Board(String title, String content, BoardTopic boardTopic, Member writer) {
+        this.title = title;
+        this.content = content;
+        this.readCount = 0;
+        this.boardTopic = boardTopic;
+        this.writer = writer;
+    }
 }

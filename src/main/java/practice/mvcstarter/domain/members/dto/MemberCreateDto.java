@@ -25,13 +25,13 @@ public class MemberCreateDto {
 
     public void validate() {
         if (!StringUtils.hasText(name)) {
-            throw new IllegalArgumentException("[MemberDto] name is blank.");
+            throw new IllegalArgumentException("[MemberCreateDto] name is blank.");
         }
         if (!StringUtils.hasText(nickName)) {
-            throw new IllegalArgumentException("[MemberDto] nickName is blank.");
+            throw new IllegalArgumentException("[MemberCreateDto] nickName is blank.");
         }
         if (age == null) {
-            throw new IllegalArgumentException("[MemberDto] age is null.");
+            throw new IllegalArgumentException("[MemberCreateDto] age is null.");
         }
     }
 }

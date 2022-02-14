@@ -1,23 +1,15 @@
 package practice.mvcstarter.web.controllers.members;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import practice.mvcstarter.domain.boards.BoardDto;
-import practice.mvcstarter.domain.files.ContentType;
 import practice.mvcstarter.domain.members.MemberService;
 import practice.mvcstarter.domain.members.dto.MemberCreateDto;
 import practice.mvcstarter.domain.members.dto.MemberReadDto;
 import practice.mvcstarter.domain.members.dto.MemberUpdateDto;
 import practice.mvcstarter.domain.members.dto.MemberUpdateProfileDto;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)

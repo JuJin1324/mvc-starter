@@ -26,7 +26,7 @@ public class MemberUpdateProfileDto {
         /* base64Image 은 null 일 수 있음.
          * 하지만 base64Image 가 null 이 아닌 경우 contentType 이 무조건 있어야 함. */
         if (StringUtils.hasText(base64Image) && contentType == null) {
-            throw new IllegalArgumentException("[MemberDto] contentType is null.");
+            throw new IllegalArgumentException("[MemberUpdateProfileDto] contentType is null.");
         }
     }
 

@@ -14,20 +14,24 @@ import java.util.Optional;
  */
 
 @Getter
-public class MemberReadDto {
+public class MemberDetailReadDto {
     private final Long        memberId;
+    private final String      name;
     private final String      nickName;
+    private final Integer     age;
     private       ContentType contentType;
     private       String      base64Image;
 
-    public MemberReadDto(Member member, Optional<FileReadDto> profileOptional) {
+    public MemberDetailReadDto(Member member, Optional<FileReadDto> fileDtoOptional) {
         this.memberId = member.getId();
+        this.name = member.getName();
         this.nickName = member.getNickName();
+        this.age = member.getAge();
 
-        if (profileOptional.isPresent()) {
-            FileReadDto profile = profileOptional.get();
-            this.contentType = profile.getContentType();
-            this.base64Image = profile.getBase64Image();
+        if (fileDtoOptional.isPresent()) {
+            FileReadDto fileReadDto = fileDtoOptional.get();
+            this.contentType = fileReadDto.getContentType();
+            this.base64Image = fileReadDto.getBase64Image();
         }
     }
 }
