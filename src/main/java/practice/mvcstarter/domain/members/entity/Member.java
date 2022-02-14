@@ -34,19 +34,15 @@ public class Member {
 
     private Integer age;
 
-    @Getter(AccessLevel.PRIVATE)
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<MemberFile> memberFiles = new ArrayList<>();
 
-    @Getter(AccessLevel.PRIVATE)
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<Board> myBoards = new ArrayList<>();
 
-    @Getter(AccessLevel.PRIVATE)
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<BoardComment> myComments = new ArrayList<>();
 
-    @Getter(AccessLevel.PRIVATE)
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<MemberLikeBoard> likeBoards = new ArrayList<>();
 
