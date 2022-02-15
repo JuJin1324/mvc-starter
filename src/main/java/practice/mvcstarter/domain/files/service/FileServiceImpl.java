@@ -12,16 +12,14 @@ import practice.mvcstarter.domain.files.dto.FileResourceReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
 import practice.mvcstarter.domain.files.entity.File;
 import practice.mvcstarter.domain.files.repository.FileRepository;
+import practice.mvcstarter.domain.files.store.FileStoreService;
 import practice.mvcstarter.exceptions.*;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.time.temporal.ChronoUnit;
-import java.util.Base64;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
@@ -32,13 +30,11 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class LocalFileService implements FileService {
+public class FileServiceImpl implements FileService {
     public static final String RESOURCE_NAME = "File";
 
-    //    private static final String STORE_DIR_PATH = "/Users/J.Reo/Documents/dev/workspace-git-spring/mvc-starter/src/test/resources/files";
-    private static final String STORE_DIR_PATH = "/Users/ju-jinyoo/Documents/dev/workspace-git-jujin/mvc-starter/src/test/resources/files";
-
-    private final FileRepository fileRepository;
+    private final FileStoreService fileStoreService;
+    private final FileRepository   fileRepository;
 
     @Transactional
     @Override
@@ -53,36 +49,36 @@ public class LocalFileService implements FileService {
             throw new IllegalArgumentException();
         }
 
-        String storeFilePath = createStoreFilename(fileName);
         try {
-            OutputStream outputStream = new FileOutputStream(storeFilePath);
-            outputStream.write(Base64.getDecoder().decode(base64Image));
+            String storeFilePath = fileStoreService.uploadBase64(contentType, base64Image, null);
+            File newFile = File.createFile(contentType, storeFilePath, fileName, (long) base64Image.getBytes().length);
+            newFile.expireAfter(2, ChronoUnit.WEEKS);
+            fileRepository.save(newFile);
+            return newFile;
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new StoreFileException(fileName);
         }
-
-        File newFile = File.createFile(contentType, storeFilePath, fileName, (long) base64Image.getBytes().length);
-        newFile.expireAfter(2, ChronoUnit.WEEKS);
-        fileRepository.save(newFile);
-
-        return newFile;
     }
 
     /**
-     * 파일 업로드 Multipart - 여러건
+     * 파일 업로드 Multipart
      */
-    @Override
-    public List<File> uploadFiles(List<MultipartFile> multipartFiles) {
-        return null;
-    }
-
-    /**
-     * 파일 업로드 Multipart - 단건
-     */
+    @Transactional
     @Override
     public File uploadFile(MultipartFile multipartFile) {
-        return null;
+        String uploadFileName = multipartFile.getOriginalFilename();
+        try {
+            String storedFilePath = fileStoreService.uploadFile(multipartFile, null);
+            ContentType contentType = ContentType.getValueOf(multipartFile.getContentType());
+            File newFile = File.createFile(contentType, storedFilePath, uploadFileName, multipartFile.getSize());
+            newFile.expireAfter(2, ChronoUnit.WEEKS);
+            fileRepository.save(newFile);
+            return newFile;
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            throw new StoreFileException(uploadFileName);
+        }
     }
 
     /**
@@ -138,25 +134,11 @@ public class LocalFileService implements FileService {
 
         fileRepository.findById(fileId)
                 .ifPresent(file -> {
-                    java.io.File storedFile = new java.io.File(file.getStoreFilePath());
-                    if (storedFile.exists()) {
-                        boolean isDeleted = storedFile.delete();
-                        if (!isDeleted) {
-                            throw new DeleteFileException(file.getUploadFileName());
-                        }
+                    boolean isDeleted = fileStoreService.deleteFile(file.getStoreFilePath());
+                    if (!isDeleted) {
+                        throw new DeleteFileException(file.getUploadFileName());
                     }
                     fileRepository.delete(file);
                 });
-    }
-
-    private String createStoreFilename(String originalFilename) {
-        String ext = extractExt(originalFilename);
-        String uuid = UUID.randomUUID().toString();
-        return STORE_DIR_PATH + "/" + uuid + "." + ext;
-    }
-
-    private String extractExt(String originalFilename) {
-        int pos = originalFilename.lastIndexOf(".");
-        return originalFilename.substring(pos + 1);
     }
 }

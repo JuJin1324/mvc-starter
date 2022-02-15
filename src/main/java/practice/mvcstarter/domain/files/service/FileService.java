@@ -21,12 +21,7 @@ public interface FileService {
     File uploadBase64(String fileName, ContentType contentType, String base64Image);
 
     /**
-     * 파일 업로드 Multipart - 여러건
-     */
-    List<File> uploadFiles(List<MultipartFile> multipartFiles);
-
-    /**
-     * 파일 업로드 Multipart - 단건
+     * 파일 업로드 Multipart
      */
     File uploadFile(MultipartFile multipartFile);
 
