@@ -3,7 +3,7 @@ package practice.mvcstarter.domain.boards.dto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import practice.mvcstarter.domain.boards.entity.BoardTopic;
-import practice.mvcstarter.domain.files.dto.FileReadDto;
+import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
 import practice.mvcstarter.domain.members.entity.Member;
 import practice.mvcstarter.domain.members.dto.MemberReadDto;
 
@@ -38,7 +38,7 @@ public class BoardDetailReadDto {
         this.commentCount = commentCount;
     }
 
-    public void setMember(Member member, Optional<FileReadDto> profileOptional) {
+    public void setMember(Member member, Optional<FileBase64ReadDto> profileOptional) {
         this.member = new MemberReadDto(member, profileOptional);
     }
 }

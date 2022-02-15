@@ -1,8 +1,8 @@
 package practice.mvcstarter.domain.members.dto;
 
 import lombok.Getter;
+import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
-import practice.mvcstarter.domain.files.dto.FileReadDto;
 import practice.mvcstarter.domain.members.entity.Member;
 
 import java.util.Optional;
@@ -22,16 +22,16 @@ public class MemberDetailReadDto {
     private       ContentType contentType;
     private       String      base64Image;
 
-    public MemberDetailReadDto(Member member, Optional<FileReadDto> fileDtoOptional) {
+    public MemberDetailReadDto(Member member, Optional<FileBase64ReadDto> profileOptional) {
         this.memberId = member.getId();
         this.name = member.getName();
         this.nickName = member.getNickName();
         this.age = member.getAge();
 
-        if (fileDtoOptional.isPresent()) {
-            FileReadDto fileReadDto = fileDtoOptional.get();
-            this.contentType = fileReadDto.getContentType();
-            this.base64Image = fileReadDto.getBase64Image();
+        if (profileOptional.isPresent()) {
+            FileBase64ReadDto profile = profileOptional.get();
+            this.contentType = profile.getContentType();
+            this.base64Image = profile.getBase64Image();
         }
     }
 }

@@ -1,5 +1,6 @@
 package practice.mvcstarter.domain.files.entity;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ public enum ContentType {
     PLAIN_TEXT("plain/text"),
     ETC("*/*");
 
+    @JsonValue
     private final String value;
 
     public static String getExtension(ContentType contentType) {

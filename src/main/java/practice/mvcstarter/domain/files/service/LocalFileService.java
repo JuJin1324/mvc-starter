@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
-import practice.mvcstarter.domain.files.dto.FileReadDto;
 import practice.mvcstarter.domain.files.dto.FileResourceReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
 import practice.mvcstarter.domain.files.entity.File;
@@ -72,7 +71,7 @@ public class LocalFileService implements FileService {
      * 파일 리소스 조회 - 단건
      */
     @Override
-    public FileResourceReadDto getFileResource(Long fileId) {
+    public FileResourceReadDto getFileResource(Long fileId) throws ExpiredFileException, ReadFileException {
         if (fileId == null) {
             throw new IllegalArgumentException();
         }
@@ -88,15 +87,10 @@ public class LocalFileService implements FileService {
             if (!urlResource.exists()) {
                 throw new ResourceNotFoundException(file.getUploadFileName());
             }
-//            return new FileReadDto(file, urlResource);
-            // TODO: files
-            return null;
+            return new FileResourceReadDto(file, urlResource);
         } catch (MalformedURLException e) {
             log.error(e.getMessage());
             throw new ResourceNotFoundException(file.getUploadFileName());
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            throw new ReadFileException(file.getUploadFileName());
         }
     }
 
@@ -105,8 +99,13 @@ public class LocalFileService implements FileService {
      */
     @Override
     public FileBase64ReadDto getFileBase64(Long fileId) throws ExpiredFileException, ReadFileException {
-        // TODO: files
-        return null;
+        FileResourceReadDto fileResource = getFileResource(fileId);
+        try {
+            return new FileBase64ReadDto(fileResource);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            throw new ReadFileException(fileResource.getFileName());
+        }
     }
 
     /**

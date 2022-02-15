@@ -1,7 +1,6 @@
 package practice.mvcstarter.domain.files.service;
 
 import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
-import practice.mvcstarter.domain.files.dto.FileReadDto;
 import practice.mvcstarter.domain.files.dto.FileResourceReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
 import practice.mvcstarter.domain.files.entity.File;

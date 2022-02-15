@@ -3,9 +3,9 @@ package practice.mvcstarter.domain.members.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
 import practice.mvcstarter.domain.files.entity.File;
-import practice.mvcstarter.domain.files.dto.FileReadDto;
 import practice.mvcstarter.domain.files.service.FileService;
 import practice.mvcstarter.domain.members.dto.MemberCreateDto;
 import practice.mvcstarter.domain.members.dto.MemberReadDto;
@@ -60,10 +60,10 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findWithMemberFilesById(memberId)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
 
-        Optional<FileReadDto> fileDtoOptional = member.getProfile()
-                .map(file -> fileService.getFileResource(file.getId()));
+        Optional<FileBase64ReadDto> profileOptional = member.getProfile()
+                .map(file -> fileService.getFileBase64(file.getId()));
 
-        return new MemberReadDto(member, fileDtoOptional);
+        return new MemberReadDto(member, profileOptional);
     }
 
     /**

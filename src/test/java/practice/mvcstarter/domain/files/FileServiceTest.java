@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import practice.mvcstarter.domain.files.dto.FileReadDto;
+import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
+import practice.mvcstarter.domain.files.dto.FileResourceReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
 import practice.mvcstarter.domain.files.entity.File;
 import practice.mvcstarter.domain.files.repository.FileRepository;
@@ -31,10 +32,13 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FileServiceTest {
+    //    private static final String STORE_DIR_PATH = "/Users/J.Reo/Documents/dev/workspace-git-spring/mvc-starter/src/test/resources/files";
+    private static final String STORE_DIR_PATH = "/Users/ju-jinyoo/Documents/dev/workspace-git-jujin/mvc-starter/src/test/resources/files";
+
     private static final Long   FILE_ID_VALID       = 1L;
-    private static final String FILE_PATH_TEXT      = "/Users/J.Reo/Documents/dev/workspace-git-spring/mvc-starter/src/test/resources/files/plainText.txt";
-    private static final String FILE_PATH_IMAGE     = "/Users/J.Reo/Documents/dev/workspace-git-spring/mvc-starter/src/test/resources/files/image.png";
-    private static final String FILE_PATH_NOT_EXIST = "/Users/J.Reo/Documents/dev/workspace-git-spring/mvc-starter/src/test/resources/files/notExistFile.txt";
+    private static final String FILE_PATH_TEXT      = STORE_DIR_PATH + "/plainText.txt";
+    private static final String FILE_PATH_IMAGE     = STORE_DIR_PATH + "/image.png";
+    private static final String FILE_PATH_NOT_EXIST = STORE_DIR_PATH + "/notExistFile.txt";
 
     private static final String      FILE_NAME_VALID  = "파일 이름.png";
     private static final ContentType CONTENT_TYPE_PNG = ContentType.IMAGE_PNG;
@@ -75,14 +79,14 @@ class FileServiceTest {
     }
 
     @Test
-    @DisplayName("[파일 조회 - 단건] 1.유효하지 않은 매개변수")
-    void getFile_whenInvalidParams_thenThrowException() {
+    @DisplayName("[파일 리소스 조회 - 단건] 1.유효하지 않은 매개변수")
+    void getFileResource_whenInvalidParams_thenThrowException() {
         assertThrows(IllegalArgumentException.class, () -> fileService.getFileResource(null));
     }
 
     @Test
-    @DisplayName("[파일 조회 - 단건] 2.파일이 DB에 없는 경우")
-    void getFile_whenFileIsNotExistInDB_thenThrowException() throws Exception {
+    @DisplayName("[파일 리소스 조회 - 단건] 2.파일이 DB에 없는 경우")
+    void getFileResource_whenFileIsNotExistInDB_thenThrowException() throws Exception {
         /* given */
         when(fileRepository.findById(FILE_ID_VALID))
                 .thenReturn(Optional.empty());
@@ -92,8 +96,8 @@ class FileServiceTest {
     }
 
     @Test
-    @DisplayName("[파일 조회 - 단건] 3.파일이 디렉터리에 없는 경우")
-    void getFile_whenFileIsNotExistInDirectory_thenThrowException() throws Exception {
+    @DisplayName("[파일 리소스 조회 - 단건] 3.파일이 디렉터리에 없는 경우")
+    void getFileResource_whenFileIsNotExistInDirectory_thenThrowException() throws Exception {
         /* given */
         File notExistFile = givenFile(ContentType.PLAIN_TEXT, FILE_PATH_NOT_EXIST,
                 "plain.txt", 25L,
@@ -106,8 +110,8 @@ class FileServiceTest {
     }
 
     @Test
-    @DisplayName("[파일 조회 - 단건] 4.파일의 유효기간이 지난 경우")
-    void getFile_whenFileIsExpired_thenThrowException() throws Exception {
+    @DisplayName("[파일 리소스 조회 - 단건] 4.파일의 유효기간이 지난 경우")
+    void getFileResource_whenFileIsExpired_thenThrowException() throws Exception {
         /* given */
         File expiredFile = givenFile(ContentType.PLAIN_TEXT, FILE_PATH_TEXT,
                 "plain.txt", 25L,
@@ -120,8 +124,8 @@ class FileServiceTest {
     }
 
     @Test
-    @DisplayName("[파일 조회 - 단건] 5.텍스트 파일인 경우")
-    void getFile_whenFileIsText_then() throws Exception {
+    @DisplayName("[파일 리소스 조회 - 단건] 5.텍스트 파일인 경우")
+    void getFileResource_whenFileIsText_thenReturnFileResource() throws Exception {
         /* given */
         File textFile = givenFile(ContentType.PLAIN_TEXT, FILE_PATH_TEXT,
                 "plain.txt", 25L,
@@ -130,16 +134,16 @@ class FileServiceTest {
                 .thenReturn(Optional.of(textFile));
 
         /* when */
-        FileReadDto file = fileService.getFileResource(FILE_ID_VALID);
+        FileResourceReadDto fileResource = fileService.getFileResource(FILE_ID_VALID);
 
         /* then */
-        assertThat(file.isImage()).isFalse();
-        assertThat(file.getBase64Image()).isNull();
+        assertThat(fileResource.isImage()).isFalse();
+        assertThat(fileResource.getContentType()).isEqualTo(ContentType.PLAIN_TEXT);
     }
 
     @Test
-    @DisplayName("[파일 조회 - 단건] 6.이미지 파일인 경우")
-    void getFile_whenFileIsImage_then() throws Exception {
+    @DisplayName("[파일 리소스 조회 - 단건] 6.이미지 파일인 경우")
+    void getFileResource_whenFileIsImage_thenReturnFileResource() throws Exception {
         File imageFile = givenFile(ContentType.IMAGE_PNG, FILE_PATH_IMAGE,
                 "image.png", 25L,
                 LocalDateTime.now(ZoneId.of("UTC")).plusWeeks(2));
@@ -147,11 +151,33 @@ class FileServiceTest {
                 .thenReturn(Optional.of(imageFile));
 
         /* when */
-        FileReadDto file = fileService.getFileResource(FILE_ID_VALID);
+        FileResourceReadDto file = fileService.getFileResource(FILE_ID_VALID);
 
         /* then */
         assertThat(file.isImage()).isTrue();
-        assertThat(file.getBase64Image()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("[파일 base64 조회 - 단건] 1.유효하지 않은 매개변수")
+    void getFileBase64_whenInvalidParams_thenThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> fileService.getFileBase64(null));
+    }
+
+    @Test
+    @DisplayName("[파일 base64 조회 - 단건] 2.이미지 파일인 경우")
+    void getFileBase64_whenFileIsImage_thenReturnFileBase64() {
+        File imageFile = givenFile(ContentType.IMAGE_PNG, FILE_PATH_IMAGE,
+                "image.png", 25L,
+                LocalDateTime.now(ZoneId.of("UTC")).plusWeeks(2));
+        when(fileRepository.findById(FILE_ID_VALID))
+                .thenReturn(Optional.of(imageFile));
+
+        /* when */
+        FileBase64ReadDto file = fileService.getFileBase64(FILE_ID_VALID);
+
+        /* then */
+        assertThat(file.getContentType()).isEqualTo(ContentType.IMAGE_PNG);
+        assertThat(file.getBase64Image()).isEqualTo(BASE64_IMAGE);
     }
 
     @Test
