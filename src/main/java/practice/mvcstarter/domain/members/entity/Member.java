@@ -47,7 +47,7 @@ public class Member {
     private final List<MemberLikeBoard> likeBoards = new ArrayList<>();
 
     @Builder
-    public Member(Long id, String name, String nickName, Integer age) {
+    private Member(Long id, String name, String nickName, Integer age) {
         this.id = id;
         this.name = name;
         this.nickName = nickName;

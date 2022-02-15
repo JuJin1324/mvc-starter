@@ -190,7 +190,7 @@ class MemberServiceTest {
     @DisplayName("[회원 갱신 - 프로필] 3.input dto 에 base64 image 가 있는 경우")
     void updateMemberProfile_whenDtoHasBase64_thenMemberHasNewProfileFile() throws Exception {
         /* given */
-        Member givenMember = givenMember(MEMBER_NAME, MEMBER_AGE, MEMBER_NICK_NAME);
+        Member givenMember = Member.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
         when(memberRepository.findWithMemberFilesById(MEMBER_ID_VALID))
                 .thenReturn(Optional.of(givenMember));
 
@@ -210,7 +210,7 @@ class MemberServiceTest {
     @DisplayName("[회원 갱신 - 프로필] 4.input dto 에 base64 image 가 없는 경우")
     void updateMemberProfile_whenDtoHasNoBase64_thenMemberHasNoProfile() throws Exception {
         /* given */
-        Member givenMember = givenMember(MEMBER_NAME, MEMBER_AGE, MEMBER_NICK_NAME);
+        Member givenMember = Member.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
         when(memberRepository.findWithMemberFilesById(MEMBER_ID_VALID))
                 .thenReturn(Optional.of(givenMember));
 
@@ -219,7 +219,7 @@ class MemberServiceTest {
         memberService.updateMemberProfile(MEMBER_ID_VALID, givenDto);
 
         /* then */
-        assertThat(givenMember.getProfile().isEmpty()).isTrue();
+        assertThat(givenMember.getProfile()).isEmpty();
     }
 
     @Test
@@ -254,14 +254,5 @@ class MemberServiceTest {
 
         /* then */
         verify(memberRepository, times(1)).delete(givenMember);
-    }
-
-    private Member givenMember(String name, int age, String nickName) {
-        return Member.builder()
-                .id(MEMBER_ID_VALID)
-                .name(name)
-                .age(age)
-                .nickName(nickName)
-                .build();
     }
 }
