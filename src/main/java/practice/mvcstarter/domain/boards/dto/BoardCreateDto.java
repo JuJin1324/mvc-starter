@@ -3,7 +3,11 @@ package practice.mvcstarter.domain.boards.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import practice.mvcstarter.domain.boards.entity.BoardTopic;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Yoo Ju Jin(jujin@100fac.com)
@@ -14,18 +18,18 @@ import practice.mvcstarter.domain.boards.entity.BoardTopic;
 @NoArgsConstructor
 @Getter
 public class BoardCreateDto {
-    private BoardTopic topic;
-    private String     title;
-    private String     content;
-    private Long       memberId;
+    private BoardTopic          topic;
+    private String              title;
+    private String              content;
+    private Long                memberId;
+    private List<MultipartFile> files;
 
-    // TODO: File 추가
-
-    public BoardCreateDto(BoardTopic topic, String title, String content, Long memberId) {
+    public BoardCreateDto(BoardTopic topic, String title, String content, Long memberId, MultipartFile[] files) {
         this.topic = topic;
         this.title = title;
         this.content = content;
         this.memberId = memberId;
+        this.files = Arrays.asList(files);
     }
 
     public void validate() {

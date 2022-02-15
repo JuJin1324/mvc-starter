@@ -6,6 +6,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
 import practice.mvcstarter.domain.files.dto.FileResourceReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
@@ -19,6 +20,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -65,6 +67,22 @@ public class LocalFileService implements FileService {
         fileRepository.save(newFile);
 
         return newFile;
+    }
+
+    /**
+     * 파일 업로드 Multipart - 여러건
+     */
+    @Override
+    public List<File> uploadFiles(List<MultipartFile> multipartFiles) {
+        return null;
+    }
+
+    /**
+     * 파일 업로드 Multipart - 단건
+     */
+    @Override
+    public File uploadFile(MultipartFile multipartFile) {
+        return null;
     }
 
     /**

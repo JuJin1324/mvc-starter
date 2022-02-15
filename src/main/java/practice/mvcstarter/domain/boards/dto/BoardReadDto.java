@@ -22,12 +22,13 @@ public class BoardReadDto {
     private final Long       likeCount;
     private final Long       readCount;
     private final Long       commentCount;
+    private final boolean    isLiked;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy.MM.dd HH:mm:ss", locale = "Asia/Seoul")
     private final LocalDateTime createdDateKST;
 
     @QueryProjection
-    public BoardReadDto(Long boardId, BoardTopic topic, String title, String writerName, Long likeCount, Long readCount, Long commentCount, LocalDateTime createdDateKST) {
+    public BoardReadDto(Long boardId, BoardTopic topic, String title, String writerName, Long likeCount, Long readCount, Long commentCount, boolean isLiked, LocalDateTime createdDateKST) {
         this.boardId = boardId;
         this.topic = topic;
         this.title = title;
@@ -35,6 +36,7 @@ public class BoardReadDto {
         this.likeCount = likeCount;
         this.readCount = readCount;
         this.commentCount = commentCount;
+        this.isLiked = isLiked;
         this.createdDateKST = createdDateKST;
     }
 }
