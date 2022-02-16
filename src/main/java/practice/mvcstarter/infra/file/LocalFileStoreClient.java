@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.files.service;
+package practice.mvcstarter.infra.file;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-class LocalFileStoreService implements FileStoreService {
+public class LocalFileStoreClient implements FileStoreClient {
     private static final String STORE_DIR_PATH = "/Users/J.Reo/Documents/dev/workspace-git-spring/mvc-starter/src/test/resources/files";
 //    private static final String STORE_DIR_PATH = "/Users/ju-jinyoo/Documents/dev/workspace-git-jujin/mvc-starter/src/test/resources/files";
 

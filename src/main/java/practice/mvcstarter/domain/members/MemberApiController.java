@@ -1,4 +1,4 @@
-package practice.mvcstarter.web.controllers.members;
+package practice.mvcstarter.domain.members;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

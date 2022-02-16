@@ -1,4 +1,4 @@
-package practice.mvcstarter.web.controllers.advice;
+package practice.mvcstarter.global.error;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

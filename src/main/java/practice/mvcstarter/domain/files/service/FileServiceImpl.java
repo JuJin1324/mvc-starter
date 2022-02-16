@@ -13,6 +13,7 @@ import practice.mvcstarter.domain.files.entity.ContentType;
 import practice.mvcstarter.domain.files.entity.File;
 import practice.mvcstarter.domain.files.repository.FileRepository;
 import practice.mvcstarter.exceptions.*;
+import practice.mvcstarter.infra.file.FileStoreClient;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -30,8 +31,8 @@ import java.time.temporal.ChronoUnit;
 public class FileServiceImpl implements FileService {
     public static final String RESOURCE_NAME = "File";
 
-    private final FileStoreService fileStoreService;
-    private final FileRepository   fileRepository;
+    private final FileStoreClient fileStoreClient;
+    private final FileRepository  fileRepository;
 
     @Transactional
     @Override
@@ -47,7 +48,7 @@ public class FileServiceImpl implements FileService {
         }
 
         try {
-            String storeFilePath = fileStoreService.uploadBase64(contentType, base64Image, null);
+            String storeFilePath = fileStoreClient.uploadBase64(contentType, base64Image, null);
             File newFile = File.createFile(contentType, storeFilePath, fileName, (long) base64Image.getBytes().length);
             newFile.expireAfter(2, ChronoUnit.WEEKS);
             fileRepository.save(newFile);
@@ -66,7 +67,7 @@ public class FileServiceImpl implements FileService {
     public File uploadFile(MultipartFile multipartFile) {
         String uploadFileName = multipartFile.getOriginalFilename();
         try {
-            String storedFilePath = fileStoreService.uploadFile(multipartFile, null);
+            String storedFilePath = fileStoreClient.uploadFile(multipartFile, null);
             ContentType contentType = ContentType.getValueOf(multipartFile.getContentType());
             File newFile = File.createFile(contentType, storedFilePath, uploadFileName, multipartFile.getSize());
             newFile.expireAfter(2, ChronoUnit.WEEKS);
@@ -131,7 +132,7 @@ public class FileServiceImpl implements FileService {
 
         fileRepository.findById(fileId)
                 .ifPresent(file -> {
-                    boolean isDeleted = fileStoreService.deleteFile(file.getStoreFilePath());
+                    boolean isDeleted = fileStoreClient.deleteFile(file.getStoreFilePath());
                     if (!isDeleted) {
                         throw new DeleteFileException(file.getUploadFileName());
                     }

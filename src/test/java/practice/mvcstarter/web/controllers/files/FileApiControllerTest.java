@@ -12,7 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import practice.mvcstarter.web.controllers.advice.ExceptionControllerAdvice;
+import practice.mvcstarter.domain.files.FileApiController;
+import practice.mvcstarter.global.error.ExceptionControllerAdvice;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
