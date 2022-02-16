@@ -11,8 +11,13 @@ import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
 import practice.mvcstarter.domain.files.dto.FileResourceReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
 import practice.mvcstarter.domain.files.entity.File;
+import practice.mvcstarter.domain.files.exception.DeleteFileException;
+import practice.mvcstarter.domain.files.exception.ExpiredFileException;
+import practice.mvcstarter.domain.files.exception.FileNotFoundException;
+import practice.mvcstarter.domain.files.exception.ReadFileException;
 import practice.mvcstarter.domain.files.repository.FileRepository;
-import practice.mvcstarter.exceptions.*;
+import practice.mvcstarter.exceptions.ResourceNotFoundException;
+import practice.mvcstarter.domain.files.exception.StoreFileException;
 import practice.mvcstarter.infra.file.FileStoreClient;
 
 import java.io.IOException;
@@ -29,8 +34,6 @@ import java.time.temporal.ChronoUnit;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class FileServiceImpl implements FileService {
-    public static final String RESOURCE_NAME = "File";
-
     private final FileStoreClient fileStoreClient;
     private final FileRepository  fileRepository;
 
@@ -89,7 +92,7 @@ public class FileServiceImpl implements FileService {
         }
 
         File file = fileRepository.findById(fileId)
-                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
+                .orElseThrow(() -> new FileNotFoundException(fileId.toString()));
         if (file.isExpired()) {
             throw new ExpiredFileException(file.getUploadFileName());
         }

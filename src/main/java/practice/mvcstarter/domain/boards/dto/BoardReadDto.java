@@ -15,22 +15,21 @@ import java.time.LocalDateTime;
 
 @Getter
 public class BoardReadDto {
-    private final Long       boardId;
-    private final BoardTopic topic;
-    private final String     title;
-    private final String     writerName;
-    private final Long       likeCount;
-    private final Long       readCount;
-    private final Long       commentCount;
-    private final boolean    isLiked;
+    private final Long    boardId;
+    //    private final BoardTopic topic;
+    private final String  title;
+    private final String  writerName;
+    private final Long    likeCount;
+    private final Long    readCount;
+    private final Long    commentCount;
+    private final boolean isLiked;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy.MM.dd HH:mm:ss", locale = "Asia/Seoul")
     private final LocalDateTime createdDateKST;
 
-    @QueryProjection
-    public BoardReadDto(Long boardId, BoardTopic topic, String title, String writerName, Long likeCount, Long readCount, Long commentCount, boolean isLiked, LocalDateTime createdDateKST) {
+//    @QueryProjection
+    public BoardReadDto(Long boardId, String title, String writerName, Long likeCount, Long readCount, Long commentCount, boolean isLiked, LocalDateTime createdDateKST) {
         this.boardId = boardId;
-        this.topic = topic;
         this.title = title;
         this.writerName = writerName;
         this.likeCount = likeCount;

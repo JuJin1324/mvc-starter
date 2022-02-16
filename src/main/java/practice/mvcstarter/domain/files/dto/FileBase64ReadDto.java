@@ -3,7 +3,7 @@ package practice.mvcstarter.domain.files.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import practice.mvcstarter.domain.files.entity.ContentType;
-import practice.mvcstarter.exceptions.FileIsNotBase64Exception;
+import practice.mvcstarter.domain.files.exception.FileIsNotBase64Exception;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

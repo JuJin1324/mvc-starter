@@ -10,13 +10,13 @@ import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
 import practice.mvcstarter.domain.files.dto.FileResourceReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
 import practice.mvcstarter.domain.files.entity.File;
+import practice.mvcstarter.domain.files.exception.ExpiredFileException;
 import practice.mvcstarter.domain.files.repository.FileRepository;
 import practice.mvcstarter.domain.files.service.FileService;
 import practice.mvcstarter.domain.files.service.FileServiceImpl;
-import practice.mvcstarter.domain.files.service.FileStoreService;
-import practice.mvcstarter.domain.files.service.LocalFileStoreService;
-import practice.mvcstarter.exceptions.ExpiredFileException;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
+import practice.mvcstarter.infra.file.FileStoreClient;
+import practice.mvcstarter.infra.file.LocalFileStoreClient;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FileServiceTest {
-        private static final String STORE_DIR_PATH = "/Users/J.Reo/Documents/dev/workspace-git-spring/mvc-starter/src/test/resources/files";
+    private static final String STORE_DIR_PATH = "/Users/J.Reo/Documents/dev/workspace-git-spring/mvc-starter/src/test/resources/files";
 //    private static final String STORE_DIR_PATH = "/Users/ju-jinyoo/Documents/dev/workspace-git-jujin/mvc-starter/src/test/resources/files";
 
     private static final Long   FILE_ID_VALID       = 1L;
@@ -49,13 +49,13 @@ class FileServiceTest {
     @Mock
     FileRepository fileRepository;
 
-    FileStoreService fileStoreService;
-    FileService fileService;
+    FileStoreClient fileStoreClient;
+    FileService     fileService;
 
     @BeforeEach
     void setUp() {
-        fileStoreService = new LocalFileStoreService();
-        fileService = new FileServiceImpl(fileStoreService, fileRepository);
+        fileStoreClient = new LocalFileStoreClient();
+        fileService = new FileServiceImpl(fileStoreClient, fileRepository);
     }
 
     @Test

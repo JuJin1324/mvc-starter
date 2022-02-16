@@ -5,10 +5,8 @@ import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
 import practice.mvcstarter.domain.files.dto.FileResourceReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
 import practice.mvcstarter.domain.files.entity.File;
-import practice.mvcstarter.exceptions.ExpiredFileException;
-import practice.mvcstarter.exceptions.ReadFileException;
-
-import java.util.List;
+import practice.mvcstarter.domain.files.exception.ExpiredFileException;
+import practice.mvcstarter.domain.files.exception.ReadFileException;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)

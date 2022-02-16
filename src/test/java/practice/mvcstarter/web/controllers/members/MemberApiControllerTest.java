@@ -19,7 +19,7 @@ import practice.mvcstarter.domain.members.controller.MemberApiController;
 import practice.mvcstarter.domain.members.dto.MemberCreateDto;
 import practice.mvcstarter.domain.members.dto.MemberUpdateDto;
 import practice.mvcstarter.domain.members.dto.MemberUpdateProfileDto;
-import practice.mvcstarter.global.error.ExceptionControllerAdvice;
+import practice.mvcstarter.global.error.GlobalExceptionHandler;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -39,9 +39,9 @@ class MemberApiControllerTest {
     private static final ContentType CONTENT_TYPE_PNG = ContentType.IMAGE_PNG;
 
     @Autowired
-    MemberApiController       memberApiController;
+    MemberApiController    memberApiController;
     @Autowired
-    ExceptionControllerAdvice exceptionControllerAdvice;
+    GlobalExceptionHandler globalExceptionHandler;
 
     MockMvc mockMvc;
 
@@ -51,7 +51,7 @@ class MemberApiControllerTest {
     void setUp() {
         // 한글 깨짐 처리
         mockMvc = MockMvcBuilders.standaloneSetup(memberApiController)
-                .setControllerAdvice(exceptionControllerAdvice)
+                .setControllerAdvice(globalExceptionHandler)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))  // 한글 깨짐 처리
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .alwaysDo(print())

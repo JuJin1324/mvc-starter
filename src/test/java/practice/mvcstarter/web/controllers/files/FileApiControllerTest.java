@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import practice.mvcstarter.domain.files.controller.FileApiController;
-import practice.mvcstarter.global.error.ExceptionControllerAdvice;
+import practice.mvcstarter.global.error.GlobalExceptionHandler;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -32,7 +32,7 @@ class FileApiControllerTest {
     FileApiController fileApiController;
 
     @Autowired
-    ExceptionControllerAdvice exceptionControllerAdvice;
+    GlobalExceptionHandler globalExceptionHandler;
 
     MockMvc mockMvc;
 
@@ -42,7 +42,7 @@ class FileApiControllerTest {
     void setUp() {
         // 한글 깨짐 처리
         mockMvc = MockMvcBuilders.standaloneSetup(fileApiController)
-                .setControllerAdvice(exceptionControllerAdvice)
+                .setControllerAdvice(globalExceptionHandler)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))  // 한글 깨짐 처리
                 .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .alwaysDo(print())

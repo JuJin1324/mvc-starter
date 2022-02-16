@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import practice.mvcstarter.domain.boards.entity.Board;
 import practice.mvcstarter.domain.boards.entity.BoardComment;
 import practice.mvcstarter.domain.files.entity.File;
-import practice.mvcstarter.exceptions.FileIsNotBase64Exception;
+import practice.mvcstarter.domain.files.exception.FileIsNotBase64Exception;
 
 import javax.persistence.*;
 import java.util.ArrayList;

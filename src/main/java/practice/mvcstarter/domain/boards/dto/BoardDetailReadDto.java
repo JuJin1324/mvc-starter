@@ -26,7 +26,7 @@ public class BoardDetailReadDto {
     private final Long          commentCount;
     private       MemberReadDto member;
 
-    @QueryProjection
+//    @QueryProjection
     public BoardDetailReadDto(Long boardId, BoardTopic topic, String title, String content,
                               Long likeCount, Long readCount, Long commentCount) {
         this.boardId = boardId;
