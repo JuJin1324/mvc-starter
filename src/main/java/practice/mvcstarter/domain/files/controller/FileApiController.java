@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.files;
+package practice.mvcstarter.domain.files.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;

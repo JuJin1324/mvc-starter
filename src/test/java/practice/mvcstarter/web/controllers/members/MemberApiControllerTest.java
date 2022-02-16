@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import practice.mvcstarter.domain.files.entity.ContentType;
-import practice.mvcstarter.domain.members.MemberApiController;
+import practice.mvcstarter.domain.members.controller.MemberApiController;
 import practice.mvcstarter.domain.members.dto.MemberCreateDto;
 import practice.mvcstarter.domain.members.dto.MemberUpdateDto;
 import practice.mvcstarter.domain.members.dto.MemberUpdateProfileDto;
