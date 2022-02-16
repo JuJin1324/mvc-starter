@@ -13,7 +13,7 @@ import practice.mvcstarter.domain.files.entity.File;
 import practice.mvcstarter.domain.files.exception.ExpiredFileException;
 import practice.mvcstarter.domain.files.repository.FileRepository;
 import practice.mvcstarter.domain.files.service.FileService;
-import practice.mvcstarter.domain.files.service.FileServiceImpl;
+import practice.mvcstarter.domain.files.service.JpaFileService;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
 import practice.mvcstarter.infra.file.FileStoreClient;
 import practice.mvcstarter.infra.file.LocalFileStoreClient;
@@ -55,7 +55,7 @@ class FileServiceTest {
     @BeforeEach
     void setUp() {
         fileStoreClient = new LocalFileStoreClient();
-        fileService = new FileServiceImpl(fileStoreClient, fileRepository);
+        fileService = new JpaFileService(fileStoreClient, fileRepository);
     }
 
     @Test

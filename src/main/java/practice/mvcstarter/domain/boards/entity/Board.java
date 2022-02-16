@@ -24,30 +24,21 @@ public class Board {
     @Column(name = "board_id")
     private Long id;
 
-    private String title;
-
-    private String content;
-
-    private long readCount;
+    private String name;
 
     @Convert(converter = BoardTopicConverter.class)
-    private BoardTopic boardTopic;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member writer;
+    private BoardType boardType;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<BoardComment> comments = new ArrayList<>();
+    private final List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<BoardFile> attachedFiles = new ArrayList<>();
+    public Board(Long id, String name, BoardType boardType) {
+        this.id = id;
+        this.name = name;
+        this.boardType = boardType;
+    }
 
-    public Board(String title, String content, BoardTopic boardTopic, Member writer) {
-        this.title = title;
-        this.content = content;
-        this.readCount = 0;
-        this.boardTopic = boardTopic;
-        this.writer = writer;
+    public void addPost(String title, String content, Member writer) {
+        posts.add(new Post(title, content, this, writer));
     }
 }

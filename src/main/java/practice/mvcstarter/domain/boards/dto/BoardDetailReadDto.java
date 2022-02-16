@@ -1,8 +1,7 @@
 package practice.mvcstarter.domain.boards.dto;
 
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
-import practice.mvcstarter.domain.boards.entity.BoardTopic;
+import practice.mvcstarter.domain.boards.entity.BoardType;
 import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
 import practice.mvcstarter.domain.members.entity.Member;
 import practice.mvcstarter.domain.members.dto.MemberReadDto;
@@ -17,9 +16,9 @@ import java.util.Optional;
 
 @Getter
 public class BoardDetailReadDto {
-    private final Long          boardId;
-    private final BoardTopic    topic;
-    private final String        title;
+    private final Long      boardId;
+    private final BoardType topic;
+    private final String    title;
     private final String        content;
     private final Long          likeCount;
     private final Long          readCount;
@@ -27,7 +26,7 @@ public class BoardDetailReadDto {
     private       MemberReadDto member;
 
 //    @QueryProjection
-    public BoardDetailReadDto(Long boardId, BoardTopic topic, String title, String content,
+    public BoardDetailReadDto(Long boardId, BoardType topic, String title, String content,
                               Long likeCount, Long readCount, Long commentCount) {
         this.boardId = boardId;
         this.topic = topic;

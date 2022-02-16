@@ -15,7 +15,7 @@ import practice.mvcstarter.domain.boards.repository.BoardRepository;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 //public class BoardServiceImpl implements BoardService {
-public class BoardServiceImpl {
+public class JpaBoardService {
     public static final String RESOURCE_NAME = "Board";
 
     private final BoardRepository boardRepository;

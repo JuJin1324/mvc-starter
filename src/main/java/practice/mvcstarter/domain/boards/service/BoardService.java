@@ -3,8 +3,7 @@ package practice.mvcstarter.domain.boards.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import practice.mvcstarter.domain.boards.dto.*;
-import practice.mvcstarter.domain.boards.entity.BoardComment;
-import practice.mvcstarter.domain.boards.entity.BoardTopic;
+import practice.mvcstarter.domain.boards.entity.BoardType;
 
 /**
  * Created by Yoo Ju Jin(jujin@100fac.com)
@@ -29,7 +28,7 @@ public interface BoardService {
     /**
      * 토픽 게시글 조회 - 페이지
      */
-    Page<BoardReadDto> getTopicBoardPage(BoardTopic topic, Pageable pageable);
+    Page<BoardReadDto> getTopicBoardPage(BoardType topic, Pageable pageable);
 
     /**
      * 게시글 상세 조회 - 단건

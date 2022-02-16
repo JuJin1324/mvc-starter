@@ -1,9 +1,7 @@
 package practice.mvcstarter.domain.boards.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
-import practice.mvcstarter.domain.boards.entity.BoardTopic;
 
 import java.time.LocalDateTime;
 

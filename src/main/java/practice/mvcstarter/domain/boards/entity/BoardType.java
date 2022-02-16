@@ -11,7 +11,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum BoardTopic {
+public enum BoardType {
     FREE("FR"),
     AFTER_MARKET("AM"),
     STOCK_MARKET("SM"),

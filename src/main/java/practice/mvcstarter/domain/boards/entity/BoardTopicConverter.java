@@ -9,9 +9,9 @@ import java.util.stream.Stream;
  * Created by Yoo Ju Jin(jujin1324@daum.net)
  * Created Date : 2022/02/13
  */
-public class BoardTopicConverter implements AttributeConverter<BoardTopic, String> {
+public class BoardTopicConverter implements AttributeConverter<BoardType, String> {
     @Override
-    public String convertToDatabaseColumn(BoardTopic attribute) {
+    public String convertToDatabaseColumn(BoardType attribute) {
         if (attribute == null) {
             return null;
         }
@@ -19,11 +19,11 @@ public class BoardTopicConverter implements AttributeConverter<BoardTopic, Strin
     }
 
     @Override
-    public BoardTopic convertToEntityAttribute(String dbData) {
+    public BoardType convertToEntityAttribute(String dbData) {
         if (!StringUtils.hasText(dbData)) {
             return null;
         }
-        return Stream.of(BoardTopic.values())
+        return Stream.of(BoardType.values())
                 .filter(c -> c.getValue().equals(dbData))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);

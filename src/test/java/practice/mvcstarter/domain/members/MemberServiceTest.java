@@ -15,7 +15,7 @@ import practice.mvcstarter.domain.members.dto.MemberUpdateProfileDto;
 import practice.mvcstarter.domain.members.entity.Member;
 import practice.mvcstarter.domain.members.repository.MemberRepository;
 import practice.mvcstarter.domain.members.service.MemberService;
-import practice.mvcstarter.domain.members.service.MemberServiceImpl;
+import practice.mvcstarter.domain.members.service.JpaMemberService;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
 
 import java.util.Optional;
@@ -53,7 +53,7 @@ class MemberServiceTest {
 
     @BeforeEach
     void setUp() {
-        memberService = new MemberServiceImpl(memberRepository, fileService);
+        memberService = new JpaMemberService(memberRepository, fileService);
     }
 
     @Test

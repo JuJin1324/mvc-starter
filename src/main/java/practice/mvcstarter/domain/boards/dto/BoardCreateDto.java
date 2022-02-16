@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import practice.mvcstarter.domain.boards.entity.BoardTopic;
+import practice.mvcstarter.domain.boards.entity.BoardType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,13 +18,13 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 public class BoardCreateDto {
-    private BoardTopic          topic;
-    private String              title;
+    private BoardType topic;
+    private String    title;
     private String              content;
     private Long                memberId;
     private List<MultipartFile> files;
 
-    public BoardCreateDto(BoardTopic topic, String title, String content, Long memberId, MultipartFile[] files) {
+    public BoardCreateDto(BoardType topic, String title, String content, Long memberId, MultipartFile[] files) {
         this.topic = topic;
         this.title = title;
         this.content = content;

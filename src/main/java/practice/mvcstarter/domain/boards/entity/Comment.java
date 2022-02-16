@@ -19,10 +19,10 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BoardComment {
+public class Comment {
     @Id
     @GeneratedValue
-    @Column(name = "board_comment_id")
+    @Column(name = "comment_id")
     private Long id;
 
     private String content;
@@ -40,8 +40,8 @@ public class BoardComment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_board_comment_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private BoardComment parent;
+    private Comment parent;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    private List<BoardComment> children;
+    private List<Comment> children;
 }

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import practice.mvcstarter.domain.boards.entity.Board;
-import practice.mvcstarter.domain.boards.entity.BoardComment;
+import practice.mvcstarter.domain.boards.entity.Comment;
 import practice.mvcstarter.domain.files.entity.File;
 import practice.mvcstarter.domain.files.exception.FileIsNotBase64Exception;
 
@@ -41,7 +41,7 @@ public class Member {
     private final List<Board> myBoards = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<BoardComment> myComments = new ArrayList<>();
+    private final List<Comment> myComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<MemberLikeBoard> likeBoards = new ArrayList<>();
