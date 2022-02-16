@@ -13,8 +13,8 @@ import practice.mvcstarter.domain.files.entity.File;
 import practice.mvcstarter.domain.files.repository.FileRepository;
 import practice.mvcstarter.domain.files.service.FileService;
 import practice.mvcstarter.domain.files.service.FileServiceImpl;
-import practice.mvcstarter.domain.files.store.FileStoreService;
-import practice.mvcstarter.domain.files.store.LocalFileStoreService;
+import practice.mvcstarter.domain.files.service.FileStoreService;
+import practice.mvcstarter.domain.files.service.LocalFileStoreService;
 import practice.mvcstarter.exceptions.ExpiredFileException;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
 

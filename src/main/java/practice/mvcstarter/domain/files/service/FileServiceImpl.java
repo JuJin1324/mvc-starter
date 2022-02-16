@@ -12,14 +12,11 @@ import practice.mvcstarter.domain.files.dto.FileResourceReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
 import practice.mvcstarter.domain.files.entity.File;
 import practice.mvcstarter.domain.files.repository.FileRepository;
-import practice.mvcstarter.domain.files.store.FileStoreService;
 import practice.mvcstarter.exceptions.*;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)

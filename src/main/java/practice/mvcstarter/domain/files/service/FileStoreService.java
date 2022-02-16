@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.files.store;
+package practice.mvcstarter.domain.files.service;
 
 import org.springframework.web.multipart.MultipartFile;
 import practice.mvcstarter.domain.files.entity.ContentType;
@@ -10,7 +10,7 @@ import java.io.IOException;
  * Created by Yoo Ju Jin(jujin1324@daum.net)
  * Created Date : 2022/02/15
  */
-public interface FileStoreService {
+interface FileStoreService {
 
     /**
      * 파일 업로드 - base64
