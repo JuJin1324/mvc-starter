@@ -9,7 +9,7 @@ import practice.mvcstarter.global.error.exception.EntityNotFoundException;
  */
 public class FileNotFoundException extends EntityNotFoundException {
 
-    public FileNotFoundException(String target) {
+    public FileNotFoundException(Long target) {
         super(target + " is not found");
     }
 }

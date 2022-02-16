@@ -12,8 +12,8 @@ import practice.mvcstarter.domain.members.dto.MemberReadDto;
 import practice.mvcstarter.domain.members.dto.MemberUpdateDto;
 import practice.mvcstarter.domain.members.dto.MemberUpdateProfileDto;
 import practice.mvcstarter.domain.members.entity.Member;
+import practice.mvcstarter.domain.members.exception.MemberNotFoundException;
 import practice.mvcstarter.domain.members.repository.MemberRepository;
-import practice.mvcstarter.exceptions.ResourceNotFoundException;
 
 import java.util.Optional;
 
@@ -26,8 +26,6 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
-    public static final String RESOURCE_NAME = "Member";
-
     private final MemberRepository memberRepository;
     private final FileService      fileService;
 
@@ -58,7 +56,7 @@ public class MemberServiceImpl implements MemberService {
         }
 
         Member member = memberRepository.findWithMemberFilesById(memberId)
-                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
 
         Optional<FileBase64ReadDto> profileOptional = member.getProfile()
                 .map(file -> fileService.getFileBase64(file.getId()));
@@ -88,7 +86,7 @@ public class MemberServiceImpl implements MemberService {
         dto.validate();
 
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
         member.update(dto.getNickName(), dto.getAge());
     }
 
@@ -107,7 +105,7 @@ public class MemberServiceImpl implements MemberService {
         dto.validate();
 
         Member member = memberRepository.findWithMemberFilesById(memberId)
-                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
         member.getProfile()
                 .ifPresent(file -> fileService.deleteFile(file.getId()));
 
@@ -128,7 +126,7 @@ public class MemberServiceImpl implements MemberService {
         }
 
         Member member = memberRepository.findWithMemberFilesById(memberId)
-                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME));
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
         member.getProfile()
                 .ifPresent(file -> fileService.deleteFile(file.getId()));
         memberRepository.delete(member);

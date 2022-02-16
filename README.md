@@ -25,3 +25,7 @@
 
 ### Validation 처리
 > [validation-starter](https://github.com/JuJin1324/validation-starter.git)
+
+## 구조
+### 도메인형 패키지 구조
+> [Spring Guide - Directory 패키지 구조 가이드](https://cheese10yun.github.io/spring-guide-directory/)

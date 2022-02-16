@@ -92,7 +92,7 @@ public class FileServiceImpl implements FileService {
         }
 
         File file = fileRepository.findById(fileId)
-                .orElseThrow(() -> new FileNotFoundException(fileId.toString()));
+                .orElseThrow(() -> new FileNotFoundException(fileId));
         if (file.isExpired()) {
             throw new ExpiredFileException(file.getUploadFileName());
         }

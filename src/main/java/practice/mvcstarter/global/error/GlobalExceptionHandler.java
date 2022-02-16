@@ -3,18 +3,15 @@ package practice.mvcstarter.global.error;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import practice.mvcstarter.exceptions.*;
 import practice.mvcstarter.global.error.exception.BusinessException;
 import practice.mvcstarter.global.error.exception.ErrorCode;
 
-import javax.servlet.http.HttpServletRequest;
 import java.nio.file.AccessDeniedException;
 
 /**
@@ -27,9 +24,9 @@ import java.nio.file.AccessDeniedException;
 public class GlobalExceptionHandler {
 
     /**
-     *  javax.validation.Valid or @Validated 으로 binding error 발생시 발생한다.
-     *  HttpMessageConverter 에서 등록한 HttpMessageConverter binding 못할경우 발생
-     *  주로 @RequestBody, @RequestPart 어노테이션에서 발생
+     * javax.validation.Valid or @Validated 으로 binding error 발생시 발생한다.
+     * HttpMessageConverter 에서 등록한 HttpMessageConverter binding 못할경우 발생
+     * 주로 @RequestBody, @RequestPart 어노테이션에서 발생
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {

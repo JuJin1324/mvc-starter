@@ -1,6 +1,6 @@
 package practice.mvcstarter.domain.files.repository;
 
-import practice.mvcstarter.domain.CommonRepository;
+import practice.mvcstarter.global.repository.CommonRepository;
 import practice.mvcstarter.domain.files.entity.File;
 
 import java.util.Optional;
