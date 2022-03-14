@@ -12,7 +12,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum BoardType {
-    FREE("FR"),
+    FREE_BOARD("FR"),
     AFTER_MARKET("AM"),
     STOCK_MARKET("SM"),
     ;

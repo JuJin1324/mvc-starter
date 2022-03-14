@@ -1,6 +1,6 @@
 package practice.mvcstarter.domain.boards.repository;
 
-import practice.mvcstarter.global.repository.CommonRepository;
+import practice.mvcstarter.domain.base.repository.CommonRepository;
 import practice.mvcstarter.domain.boards.entity.Board;
 
 import java.util.List;

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import practice.mvcstarter.domain.members.entity.Member;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post {
+public class BoardPost {
     @Id
     @GeneratedValue
     @Column(name = "post_id")
@@ -38,17 +39,21 @@ public class Post {
     @JoinColumn(name = "member_id")
     private Member writer;
 
+    private LocalDateTime lastModifiedDateUTC;
+
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<BoardFile> attachedFiles = new ArrayList<>();
 
-    public Post(String title, String content, Board board, Member writer) {
+    public BoardPost(String title, String content, Board board, Member writer) {
         this.title = title;
         this.content = content;
         this.readCount = 0;
         this.board = board;
         this.writer = writer;
     }
+
+
 }

@@ -30,7 +30,7 @@ public class Board {
     private BoardType boardType;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<Post> posts = new ArrayList<>();
+    private final List<BoardPost> boardPosts = new ArrayList<>();
 
     public Board(Long id, String name, BoardType boardType) {
         this.id = id;
@@ -39,6 +39,6 @@ public class Board {
     }
 
     public void addPost(String title, String content, Member writer) {
-        posts.add(new Post(title, content, this, writer));
+        boardPosts.add(new BoardPost(title, content, this, writer));
     }
 }

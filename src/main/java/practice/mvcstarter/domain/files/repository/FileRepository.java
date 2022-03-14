@@ -1,7 +1,7 @@
 package practice.mvcstarter.domain.files.repository;
 
 import practice.mvcstarter.domain.files.entity.FileStore;
-import practice.mvcstarter.global.repository.CommonRepository;
+import practice.mvcstarter.domain.base.repository.CommonRepository;
 
 import java.util.Optional;
 

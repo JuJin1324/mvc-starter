@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.members;
+package practice.mvcstarter.domain.members.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,10 +13,8 @@ import practice.mvcstarter.domain.members.dto.MemberCreateDto;
 import practice.mvcstarter.domain.members.dto.MemberUpdateDto;
 import practice.mvcstarter.domain.members.dto.MemberUpdateProfileDto;
 import practice.mvcstarter.domain.members.entity.Member;
+import practice.mvcstarter.domain.members.exception.MemberNotFoundException;
 import practice.mvcstarter.domain.members.repository.MemberRepository;
-import practice.mvcstarter.domain.members.service.MemberService;
-import practice.mvcstarter.domain.members.service.RdbMemberService;
-import practice.mvcstarter.exceptions.ResourceNotFoundException;
 
 import java.util.Optional;
 
@@ -111,7 +109,7 @@ class MemberServiceTest {
                 .thenReturn(Optional.empty());
 
         /* when, then */
-        assertThrows(ResourceNotFoundException.class, () ->
+        assertThrows(MemberNotFoundException.class, () ->
                 memberService.getSingleMember(MEMBER_ID_NOT_EXIST));
     }
 
@@ -139,7 +137,7 @@ class MemberServiceTest {
                 .thenReturn(Optional.empty());
 
         /* when, then */
-        assertThrows(ResourceNotFoundException.class, () -> {
+        assertThrows(MemberNotFoundException.class, () -> {
             MemberUpdateDto givenDto = new MemberUpdateDto(MEMBER_NICK_NAME_NEW, MEMBER_AGE_NEW);
             memberService.updateMember(MEMBER_ID_NOT_EXIST, givenDto);
         });
@@ -182,13 +180,13 @@ class MemberServiceTest {
                 .thenReturn(Optional.empty());
 
         /* when, then */
-        assertThrows(ResourceNotFoundException.class, () ->
+        assertThrows(MemberNotFoundException.class, () ->
                 memberService.updateMemberProfile(MEMBER_ID_NOT_EXIST, givenDto));
     }
 
     @Test
     @DisplayName("[회원 갱신 - 프로필] 3.input dto 에 base64 image 가 있는 경우")
-    void updateMemberProfile_whenDtoHasBase64_thenMemberHasNewProfileFile() throws Exception {
+    void updateMemberProfile_whenDtoHasBase64_thenMemberHasNewProfileFile() {
         /* given */
         Member givenMember = Member.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
         when(memberRepository.findWithMemberFilesById(MEMBER_ID_VALID))
@@ -208,7 +206,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("[회원 갱신 - 프로필] 4.input dto 에 base64 image 가 없는 경우")
-    void updateMemberProfile_whenDtoHasNoBase64_thenMemberHasNoProfile() throws Exception {
+    void updateMemberProfile_whenDtoHasNoBase64_thenMemberHasNoProfile() {
         /* given */
         Member givenMember = Member.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
         when(memberRepository.findWithMemberFilesById(MEMBER_ID_VALID))
@@ -237,7 +235,7 @@ class MemberServiceTest {
                 .thenReturn(Optional.empty());
 
         /* when, then */
-        assertThrows(ResourceNotFoundException.class, () ->
+        assertThrows(MemberNotFoundException.class, () ->
                 memberService.deleteMember(MEMBER_ID_NOT_EXIST));
     }
 
