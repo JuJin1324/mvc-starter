@@ -3,15 +3,18 @@ package practice.mvcstarter.domain.boards.entity;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 import java.util.stream.Stream;
 
 /**
  * Created by Yoo Ju Jin(jujin1324@daum.net)
  * Created Date : 2022/02/13
  */
-public class BoardTopicConverter implements AttributeConverter<BoardType, String> {
+
+@Converter
+public class PostFileTypeConverter implements AttributeConverter<PostFileType, String> {
     @Override
-    public String convertToDatabaseColumn(BoardType attribute) {
+    public String convertToDatabaseColumn(PostFileType attribute) {
         if (attribute == null) {
             return null;
         }
@@ -19,11 +22,11 @@ public class BoardTopicConverter implements AttributeConverter<BoardType, String
     }
 
     @Override
-    public BoardType convertToEntityAttribute(String dbData) {
+    public PostFileType convertToEntityAttribute(String dbData) {
         if (!StringUtils.hasText(dbData)) {
             return null;
         }
-        return Stream.of(BoardType.values())
+        return Stream.of(PostFileType.values())
                 .filter(c -> c.getValue().equals(dbData))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);

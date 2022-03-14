@@ -17,14 +17,14 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter
-public class BoardCreateDto {
+public class BoardPostCreateDto {
     private BoardType topic;
     private String    title;
     private String              content;
     private Long                memberId;
     private List<MultipartFile> files;
 
-    public BoardCreateDto(BoardType topic, String title, String content, Long memberId, MultipartFile[] files) {
+    public BoardPostCreateDto(BoardType topic, String title, String content, Long memberId, MultipartFile[] files) {
         this.topic = topic;
         this.title = title;
         this.content = content;

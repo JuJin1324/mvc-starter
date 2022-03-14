@@ -3,6 +3,7 @@ package practice.mvcstarter.domain.boards.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import practice.mvcstarter.domain.base.entity.TimeBaseEntity;
 import practice.mvcstarter.domain.members.entity.Member;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Board {
+public class Board extends TimeBaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "board_id")
@@ -26,7 +27,7 @@ public class Board {
 
     private String name;
 
-    @Convert(converter = BoardTopicConverter.class)
+    @Convert(converter = BoardTypeConverter.class)
     private BoardType boardType;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

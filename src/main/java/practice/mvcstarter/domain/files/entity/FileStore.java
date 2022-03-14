@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import practice.mvcstarter.domain.base.entity.TimeBaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ import java.time.temporal.ChronoUnit;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class FileStore {
+public class FileStore extends TimeBaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "file_store_id")

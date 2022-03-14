@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import practice.mvcstarter.domain.base.entity.TimeBaseEntity;
 import practice.mvcstarter.domain.files.entity.FileStore;
 
 import javax.persistence.*;
@@ -17,7 +18,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class MemberFile {
+public class MemberFile extends TimeBaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "member_file_id")
@@ -47,7 +48,7 @@ public class MemberFile {
         return MemberFile.builder()
                 .fileType(MemberFileType.PROFILE)
                 .member(member)
-                .file(fileStore)
+                .fileStore(fileStore)
                 .build();
     }
 

@@ -4,8 +4,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import practice.mvcstarter.domain.base.entity.TimeBaseEntity;
 import practice.mvcstarter.domain.boards.entity.Board;
-import practice.mvcstarter.domain.boards.entity.Comment;
+import practice.mvcstarter.domain.boards.entity.PostComment;
 import practice.mvcstarter.domain.files.entity.FileStore;
 import practice.mvcstarter.domain.files.exception.FileIsNotBase64Exception;
 
@@ -22,7 +23,7 @@ import java.util.Optional;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends TimeBaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "member_id")
@@ -41,7 +42,7 @@ public class Member {
     private final List<Board> myBoards = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<Comment> myComments = new ArrayList<>();
+    private final List<PostComment> myPostComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<MemberLikeBoard> likeBoards = new ArrayList<>();

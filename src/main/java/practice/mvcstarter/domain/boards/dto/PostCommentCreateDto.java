@@ -5,5 +5,5 @@ package practice.mvcstarter.domain.boards.dto;
  * Created Date : 2022/02/15
  * Copyright (C) 2022, Centum Factorial all rights reserved.
  */
-public class BoardCommentCreateDto {
+public class PostCommentCreateDto {
 }

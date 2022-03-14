@@ -18,7 +18,7 @@ public interface BoardService {
      *
      * @return memberId
      */
-    Long createBoard(BoardCreateDto dto);
+    Long createBoard(BoardPostCreateDto dto);
 
     /**
      * 전체 게시글 조회 - 페이지
@@ -33,12 +33,12 @@ public interface BoardService {
     /**
      * 게시글 상세 조회 - 단건
      */
-    BoardDetailReadDto getBoardDetail(Long boardId);
+    BoardPostReadDto getBoardDetail(Long boardId);
 
     /**
      * 게시글 갱신
      */
-    void updateBoard(Long boardId, BoardUpdateDto dto);
+    void updateBoard(Long boardId, BoardPostUpdateDto dto);
 
     /**
      * 게시글 삭제
@@ -58,17 +58,17 @@ public interface BoardService {
     /**
      * 게시글 댓글 조회 - 페이지
      */
-    Page<BoardCommentReadDto> getBoardCommentPage(Long boardId, Pageable pageable);
+    Page<PostCommentReadDto> getBoardCommentPage(Long boardId, Pageable pageable);
 
     /**
      * 게시글 댓글 저장
      */
-    void createBoardComment(Long boardId, Long parentCommentId, BoardCommentCreateDto dto);
+    void createBoardComment(Long boardId, Long parentCommentId, PostCommentCreateDto dto);
 
     /**
      * 게시글 댓글 수정
      */
-    void updateBoardComment(Long boardId, Long commentId, BoardCommentUpdateDto dto);
+    void updateBoardComment(Long boardId, Long commentId, PostCommentUpdateDto dto);
 
     /**
      * 게시글 댓글 삭제

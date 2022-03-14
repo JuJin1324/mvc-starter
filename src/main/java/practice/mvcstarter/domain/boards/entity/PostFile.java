@@ -5,27 +5,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import practice.mvcstarter.domain.members.entity.Member;
+import practice.mvcstarter.domain.base.entity.TimeBaseEntity;
+import practice.mvcstarter.domain.files.entity.FileStore;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * Created by Yoo Ju Jin(jujin@100fac.com)
  * Created Date : 2022/02/14
  * Copyright (C) 2022, Centum Factorial all rights reserved.
  */
-
 @Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment {
+@Getter
+public class PostFile extends TimeBaseEntity {
     @Id
     @GeneratedValue
-    @Column(name = "comment_id")
+    @Column(name = "board_file_id")
     private Long id;
 
-    private String content;
+    @Convert(converter = PostFileTypeConverter.class)
+    private PostFileType fileType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
@@ -33,15 +33,7 @@ public class Comment {
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "file_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Member writer;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_board_comment_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Comment parent;
-
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    private List<Comment> children;
+    private FileStore fileStore;
 }

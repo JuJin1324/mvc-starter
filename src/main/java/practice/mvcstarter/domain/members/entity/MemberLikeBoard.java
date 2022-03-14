@@ -3,6 +3,7 @@ package practice.mvcstarter.domain.members.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import practice.mvcstarter.domain.base.entity.TimeBaseEntity;
 import practice.mvcstarter.domain.boards.entity.Board;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberLikeBoard {
+public class MemberLikeBoard extends TimeBaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "member_like_board_id")

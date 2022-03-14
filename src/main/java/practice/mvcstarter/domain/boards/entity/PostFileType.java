@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum BoardFileType {
+public enum PostFileType {
     IMAGE("I"),
     ETC("E")
     ;

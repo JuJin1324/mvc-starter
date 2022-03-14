@@ -10,11 +10,10 @@ import java.util.stream.Stream;
  * Created by Yoo Ju Jin(jujin1324@daum.net)
  * Created Date : 2022/02/13
  */
-
 @Converter
-public class BoardFileTypeConverter implements AttributeConverter<BoardFileType, String> {
+public class BoardTypeConverter implements AttributeConverter<BoardType, String> {
     @Override
-    public String convertToDatabaseColumn(BoardFileType attribute) {
+    public String convertToDatabaseColumn(BoardType attribute) {
         if (attribute == null) {
             return null;
         }
@@ -22,11 +21,11 @@ public class BoardFileTypeConverter implements AttributeConverter<BoardFileType,
     }
 
     @Override
-    public BoardFileType convertToEntityAttribute(String dbData) {
+    public BoardType convertToEntityAttribute(String dbData) {
         if (!StringUtils.hasText(dbData)) {
             return null;
         }
-        return Stream.of(BoardFileType.values())
+        return Stream.of(BoardType.values())
                 .filter(c -> c.getValue().equals(dbData))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);

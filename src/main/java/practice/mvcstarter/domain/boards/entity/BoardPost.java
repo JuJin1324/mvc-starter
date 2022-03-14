@@ -3,10 +3,10 @@ package practice.mvcstarter.domain.boards.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import practice.mvcstarter.domain.base.entity.TimeBaseEntity;
 import practice.mvcstarter.domain.members.entity.Member;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +19,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BoardPost {
+public class BoardPost extends TimeBaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "post_id")
@@ -39,13 +39,11 @@ public class BoardPost {
     @JoinColumn(name = "member_id")
     private Member writer;
 
-    private LocalDateTime lastModifiedDateUTC;
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<PostComment> postComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<BoardFile> attachedFiles = new ArrayList<>();
+    private final List<PostFile> attachedFiles = new ArrayList<>();
 
     public BoardPost(String title, String content, Board board, Member writer) {
         this.title = title;

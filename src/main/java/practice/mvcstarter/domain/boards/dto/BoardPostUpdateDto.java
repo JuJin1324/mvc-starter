@@ -12,13 +12,13 @@ import org.springframework.util.StringUtils;
 
 @NoArgsConstructor
 @Getter
-public class BoardUpdateDto {
+public class BoardPostUpdateDto {
     private String     title;
     private String     content;
 
     // TODO : File 추가
 
-    public BoardUpdateDto(String title, String content) {
+    public BoardPostUpdateDto(String title, String content) {
         this.title = title;
         this.content = content;
     }
