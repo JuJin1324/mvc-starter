@@ -3,7 +3,7 @@ package practice.mvcstarter.domain.files.dto;
 import lombok.Getter;
 import org.springframework.core.io.Resource;
 import practice.mvcstarter.domain.files.entity.ContentType;
-import practice.mvcstarter.domain.files.entity.File;
+import practice.mvcstarter.domain.files.entity.FileStore;
 
 import java.time.LocalDateTime;
 
@@ -22,12 +22,12 @@ public class FileResourceReadDto {
     private final LocalDateTime expiredTimeKST;
     private final boolean       isImage;
 
-    public FileResourceReadDto(File file, Resource resource) {
-        this.fileId = file.getId();
-        this.fileName = file.getUploadFileName();
-        this.contentType = file.getContentType();
+    public FileResourceReadDto(FileStore fileStore, Resource resource) {
+        this.fileId = fileStore.getId();
+        this.fileName = fileStore.getUploadFileName();
+        this.contentType = fileStore.getContentType();
         this.resource = resource;
-        this.expiredTimeKST = file.getExpiredTimeKST();
-        this.isImage = file.isImage();
+        this.expiredTimeKST = fileStore.getExpiredTimeKST();
+        this.isImage = fileStore.isImage();
     }
 }

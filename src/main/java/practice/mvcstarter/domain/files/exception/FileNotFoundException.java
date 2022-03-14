@@ -12,4 +12,8 @@ public class FileNotFoundException extends EntityNotFoundException {
     public FileNotFoundException(Long target) {
         super(target + " is not found");
     }
+
+    public FileNotFoundException(String target) {
+        super(target + " is not found");
+    }
 }

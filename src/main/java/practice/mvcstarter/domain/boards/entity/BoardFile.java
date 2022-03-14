@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import practice.mvcstarter.domain.files.entity.File;
+import practice.mvcstarter.domain.files.entity.FileStore;
 
 import javax.persistence.*;
 
@@ -34,5 +34,5 @@ public class BoardFile {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private File file;
+    private FileStore fileStore;
 }

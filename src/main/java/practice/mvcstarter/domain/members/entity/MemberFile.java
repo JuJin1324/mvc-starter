@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import practice.mvcstarter.domain.files.entity.File;
+import practice.mvcstarter.domain.files.entity.FileStore;
 
 import javax.persistence.*;
 
@@ -34,24 +34,24 @@ public class MemberFile {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private File file;
+    private FileStore fileStore;
 
     @Builder
-    private MemberFile(MemberFileType fileType, Member member, File file) {
+    private MemberFile(MemberFileType fileType, Member member, FileStore fileStore) {
         this.fileType = fileType;
         this.member = member;
-        this.file = file;
+        this.fileStore = fileStore;
     }
 
-    public static MemberFile createProfile(Member member, File file) {
+    public static MemberFile createProfile(Member member, FileStore fileStore) {
         return MemberFile.builder()
                 .fileType(MemberFileType.PROFILE)
                 .member(member)
-                .file(file)
+                .file(fileStore)
                 .build();
     }
 
-    public void updateFile(File file) {
-        this.file = file;
+    public void updateFile(FileStore fileStore) {
+        this.fileStore = fileStore;
     }
 }

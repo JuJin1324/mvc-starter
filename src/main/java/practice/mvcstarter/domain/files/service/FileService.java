@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
 import practice.mvcstarter.domain.files.dto.FileResourceReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
-import practice.mvcstarter.domain.files.entity.File;
+import practice.mvcstarter.domain.files.entity.FileStore;
 import practice.mvcstarter.domain.files.exception.ExpiredFileException;
 import practice.mvcstarter.domain.files.exception.ReadFileException;
 
@@ -16,12 +16,12 @@ public interface FileService {
     /**
      * 파일 업로드 - base64
      */
-    File uploadBase64(String fileName, ContentType contentType, String base64Image);
+    FileStore uploadBase64(String fileName, ContentType contentType, String base64Image);
 
     /**
      * 파일 업로드 Multipart
      */
-    File uploadFile(MultipartFile multipartFile);
+    FileStore uploadFile(MultipartFile multipartFile);
 
     /**
      * 파일 리소스 조회 - 단건

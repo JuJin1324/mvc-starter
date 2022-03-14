@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
-import practice.mvcstarter.domain.files.entity.File;
+import practice.mvcstarter.domain.files.entity.FileStore;
 import practice.mvcstarter.domain.files.service.FileService;
 import practice.mvcstarter.domain.members.dto.MemberCreateDto;
 import practice.mvcstarter.domain.members.dto.MemberReadDto;
@@ -25,7 +25,7 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class JpaMemberService implements MemberService {
+public class RdbMemberService implements MemberService {
     private final MemberRepository memberRepository;
     private final FileService      fileService;
 
@@ -111,8 +111,8 @@ public class JpaMemberService implements MemberService {
 
         if (dto.hasBase64Image()) {
             String uploadFileName = member.getNickName() + "님의 프로필" + "." + ContentType.getExtension(dto.getContentType());
-            File file = fileService.uploadBase64(uploadFileName, dto.getContentType(), dto.getBase64Image());
-            member.updateProfile(file);
+            FileStore fileStore = fileService.uploadBase64(uploadFileName, dto.getContentType(), dto.getBase64Image());
+            member.updateProfile(fileStore);
         }
     }
 

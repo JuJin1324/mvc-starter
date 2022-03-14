@@ -19,10 +19,10 @@ import java.time.temporal.ChronoUnit;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class File {
+public class FileStore {
     @Id
     @GeneratedValue
-    @Column(name = "file_id")
+    @Column(name = "file_store_id")
     private Long id;
 
     @Convert(converter = ContentTypeConverter.class)
@@ -37,7 +37,7 @@ public class File {
     private LocalDateTime expiredTimeUTC;
 
     @Builder
-    private File(Long id, ContentType contentType, String storeFilePath, String uploadFileName, Long fileSize, LocalDateTime expiredTimeUTC) {
+    private FileStore(Long id, ContentType contentType, String storeFilePath, String uploadFileName, Long fileSize, LocalDateTime expiredTimeUTC) {
         this.id = id;
         this.contentType = contentType;
         this.storeFilePath = storeFilePath;
@@ -46,8 +46,8 @@ public class File {
         this.expiredTimeUTC = expiredTimeUTC;
     }
 
-    public static File createFile(ContentType contentType, String storeFilePath, String uploadFileName, Long fileSize) {
-        return File.builder()
+    public static FileStore createFile(ContentType contentType, String storeFilePath, String uploadFileName, Long fileSize) {
+        return FileStore.builder()
                 .contentType(contentType)
                 .storeFilePath(storeFilePath)
                 .uploadFileName(uploadFileName)

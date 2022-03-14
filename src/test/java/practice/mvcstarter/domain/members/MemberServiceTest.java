@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import practice.mvcstarter.domain.files.entity.ContentType;
-import practice.mvcstarter.domain.files.entity.File;
+import practice.mvcstarter.domain.files.entity.FileStore;
 import practice.mvcstarter.domain.files.service.FileService;
 import practice.mvcstarter.domain.members.dto.MemberCreateDto;
 import practice.mvcstarter.domain.members.dto.MemberUpdateDto;
@@ -15,7 +15,7 @@ import practice.mvcstarter.domain.members.dto.MemberUpdateProfileDto;
 import practice.mvcstarter.domain.members.entity.Member;
 import practice.mvcstarter.domain.members.repository.MemberRepository;
 import practice.mvcstarter.domain.members.service.MemberService;
-import practice.mvcstarter.domain.members.service.JpaMemberService;
+import practice.mvcstarter.domain.members.service.RdbMemberService;
 import practice.mvcstarter.exceptions.ResourceNotFoundException;
 
 import java.util.Optional;
@@ -53,7 +53,7 @@ class MemberServiceTest {
 
     @BeforeEach
     void setUp() {
-        memberService = new JpaMemberService(memberRepository, fileService);
+        memberService = new RdbMemberService(memberRepository, fileService);
     }
 
     @Test
@@ -194,16 +194,16 @@ class MemberServiceTest {
         when(memberRepository.findWithMemberFilesById(MEMBER_ID_VALID))
                 .thenReturn(Optional.of(givenMember));
 
-        File givenFile = File.createFile(ContentType.IMAGE_PNG, "/home/files/image.png", "image.png", 10L);
+        FileStore givenFileStore = FileStore.createFile(ContentType.IMAGE_PNG, "/home/files/image.png", "image.png", 10L);
         when(fileService.uploadBase64(any(), any(), any()))
-                .thenReturn(givenFile);
+                .thenReturn(givenFileStore);
 
         /* when */
         MemberUpdateProfileDto givenDto = new MemberUpdateProfileDto(BASE64_IMAGE, CONTENT_TYPE_PNG);
         memberService.updateMemberProfile(MEMBER_ID_VALID, givenDto);
 
         /* then */
-        assertThat(givenMember.getProfile().get()).isEqualTo(givenFile);
+        assertThat(givenMember.getProfile().get()).isEqualTo(givenFileStore);
     }
 
     @Test

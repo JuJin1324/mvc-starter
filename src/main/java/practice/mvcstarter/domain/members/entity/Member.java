@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import practice.mvcstarter.domain.boards.entity.Board;
 import practice.mvcstarter.domain.boards.entity.Comment;
-import practice.mvcstarter.domain.files.entity.File;
+import practice.mvcstarter.domain.files.entity.FileStore;
 import practice.mvcstarter.domain.files.exception.FileIsNotBase64Exception;
 
 import javax.persistence.*;
@@ -67,24 +67,24 @@ public class Member {
         this.age = age;
     }
 
-    public void updateProfile(File file) {
-        if (!file.isImage()) {
-            throw new FileIsNotBase64Exception(file.getUploadFileName());
+    public void updateProfile(FileStore fileStore) {
+        if (!fileStore.isImage()) {
+            throw new FileIsNotBase64Exception(fileStore.getUploadFileName());
         }
 
         Optional<MemberFile> optional = this.findMemberFile(MemberFileType.PROFILE);
         if (optional.isPresent()) {
             MemberFile profile = optional.get();
-            profile.updateFile(file);
+            profile.updateFile(fileStore);
         } else {
-            MemberFile newProfile = MemberFile.createProfile(this, file);
+            MemberFile newProfile = MemberFile.createProfile(this, fileStore);
             memberFiles.add(newProfile);
         }
     }
 
-    public Optional<File> getProfile() {
+    public Optional<FileStore> getProfile() {
         return this.findMemberFile(MemberFileType.PROFILE)
-                .map(MemberFile::getFile);
+                .map(MemberFile::getFileStore);
     }
 
     private Optional<MemberFile> findMemberFile(MemberFileType fileType) {
