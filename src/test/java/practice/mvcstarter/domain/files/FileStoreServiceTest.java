@@ -15,8 +15,8 @@ import practice.mvcstarter.domain.files.exception.FileNotFoundException;
 import practice.mvcstarter.domain.files.repository.FileRepository;
 import practice.mvcstarter.domain.files.service.FileService;
 import practice.mvcstarter.domain.files.service.RdbFileService;
-import practice.mvcstarter.infra.file.FileStoreClient;
-import practice.mvcstarter.infra.file.LocalFileStoreClient;
+import practice.mvcstarter.external.service.file.FileStoreClient;
+import practice.mvcstarter.external.service.file.LocalFileStoreClient;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

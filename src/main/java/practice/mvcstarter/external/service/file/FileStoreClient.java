@@ -1,4 +1,4 @@
-package practice.mvcstarter.infra.file;
+package practice.mvcstarter.external.service.file;
 
 import org.springframework.web.multipart.MultipartFile;
 import practice.mvcstarter.domain.files.entity.ContentType;

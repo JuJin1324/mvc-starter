@@ -13,7 +13,7 @@ import practice.mvcstarter.domain.files.entity.ContentType;
 import practice.mvcstarter.domain.files.entity.FileStore;
 import practice.mvcstarter.domain.files.exception.*;
 import practice.mvcstarter.domain.files.repository.FileRepository;
-import practice.mvcstarter.infra.file.FileStoreClient;
+import practice.mvcstarter.external.service.file.FileStoreClient;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
