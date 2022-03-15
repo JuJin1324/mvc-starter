@@ -112,7 +112,7 @@ public class BoardApiController {
     }
 
     /**
-     * 게시글 댓글 및 대댓글 조회	GET	/api/v1.0/boards
+     * 게시글 댓글 및 대댓글 조회
      */
     @GetMapping("/{boardId}/posts/{postId}/comments")
     public Page<PostCommentReadDto> getCommentPage(@PathVariable("boardId") Long boardId,
@@ -135,7 +135,7 @@ public class BoardApiController {
     }
 
     /**
-     * 게시글 댓글 삭제	DELETE	/api/v1.0/boards
+     * 게시글 댓글 삭제
      */
     @DeleteMapping("/{boardId}/posts/{postId}/comments/{commentId}")
     public void deleteComment(@PathVariable("boardId") Long boardId,

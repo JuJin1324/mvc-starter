@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.files;
+package practice.mvcstarter.domain.files.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
