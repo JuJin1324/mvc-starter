@@ -27,34 +27,34 @@ class MemberBoardServiceTest {
 
     @BeforeEach
     void setUp() {
-        // TODO
+        // TODO: init MemberBoardService
     }
 
     @Test
     @DisplayName("[관심 게시판 조회] 1.유효하지 않은 매개변수")
     void getLikedBoardList_whenInvalidParam_thenThrowException() {
         assertThrows(IllegalArgumentException.class, () ->
-                memberBoardService.getLikedBoardList(null, null));
+                memberBoardService.getLikedBoardPage(null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                memberBoardService.getLikedBoardList(MEMBER_ID_VALID, null));
+                memberBoardService.getLikedBoardPage(MEMBER_ID_VALID, null));
     }
 
     @Test
     @DisplayName("[관심 게시글 조회] 1.유효하지 않은 매개변수")
     void getLikedPostList_whenInvalidParam_thenThrowException() {
         assertThrows(IllegalArgumentException.class, () ->
-                memberBoardService.getLikedPostList(null, null));
+                memberBoardService.getLikedPostPage(null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                memberBoardService.getLikedPostList(MEMBER_ID_VALID, null));
+                memberBoardService.getLikedPostPage(MEMBER_ID_VALID, null));
     }
 
     @Test
     @DisplayName("[내가 쓴 게시글 조회] 1.유효하지 않은 매개변수")
     void getWrittenByMePostList_whenInvalidParam_thenThrowException() {
         assertThrows(IllegalArgumentException.class, () ->
-                memberBoardService.getWrittenByMePostList(null, null));
+                memberBoardService.getWrittenByMePostPage(null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                memberBoardService.getWrittenByMePostList(MEMBER_ID_VALID, null));
+                memberBoardService.getWrittenByMePostPage(MEMBER_ID_VALID, null));
     }
 
     @Test
@@ -98,8 +98,8 @@ class MemberBoardServiceTest {
     @DisplayName("[내가 쓴 게시글의 댓글 조회] 1.유효하지 않은 매개변수")
     void getWrittenByMeCommentList_whenInvalidParam_thenThrowException() {
         assertThrows(IllegalArgumentException.class, () ->
-                memberBoardService.getWrittenByMeCommentList(null, null));
+                memberBoardService.getWrittenByMeCommentPage(null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                memberBoardService.getWrittenByMeCommentList(MEMBER_ID_VALID, null));
+                memberBoardService.getWrittenByMeCommentPage(MEMBER_ID_VALID, null));
     }
 }

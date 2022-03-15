@@ -15,9 +15,7 @@ import practice.mvcstarter.domain.boards.repository.BoardRepository;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 //public class BoardServiceImpl implements BoardService {
-public class RdbBoardService {
-    public static final String RESOURCE_NAME = "Board";
-
+public class BoardServiceImpl {
     private final BoardRepository boardRepository;
 
 }

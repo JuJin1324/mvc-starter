@@ -28,7 +28,7 @@ import java.time.temporal.ChronoUnit;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class RdbFileService implements FileService {
+public class FileServiceImpl implements FileService {
     private final FileStoreClient fileStoreClient;
     private final FileRepository  fileRepository;
 

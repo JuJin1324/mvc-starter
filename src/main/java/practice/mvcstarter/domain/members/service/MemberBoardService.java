@@ -14,17 +14,17 @@ public interface MemberBoardService {
     /**
      * 관심 게시판 조회
      */
-    Page<BoardReadDto> getLikedBoardList(Long memberId, Pageable pageable);
+    Page<BoardReadDto> getLikedBoardPage(Long memberId, Pageable pageable);
 
     /**
      * 관심 게시글 조회
      */
-    Page<BoardPostReadDto> getLikedPostList(Long memberId, Pageable pageable);
+    Page<BoardPostReadDto> getLikedPostPage(Long memberId, Pageable pageable);
 
     /**
      * 내가 쓴 게시글 조회
      */
-    Page<BoardPostReadDto> getWrittenByMePostList(Long memberId, Pageable pageable);
+    Page<BoardPostReadDto> getWrittenByMePostPage(Long memberId, Pageable pageable);
 
     /**
      * 관심 게시글 체크 저장
@@ -34,5 +34,5 @@ public interface MemberBoardService {
     /**
      * 내가 쓴 게시글의 댓글 조회
      */
-    Page<PostCommentReadDto> getWrittenByMeCommentList(Long memberId, Pageable pageable);
+    Page<PostCommentReadDto> getWrittenByMeCommentPage(Long memberId, Pageable pageable);
 }

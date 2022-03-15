@@ -14,7 +14,7 @@ import practice.mvcstarter.domain.files.exception.ExpiredFileException;
 import practice.mvcstarter.domain.files.exception.FileNotFoundException;
 import practice.mvcstarter.domain.files.repository.FileRepository;
 import practice.mvcstarter.domain.files.service.FileService;
-import practice.mvcstarter.domain.files.service.RdbFileService;
+import practice.mvcstarter.domain.files.service.FileServiceImpl;
 import practice.mvcstarter.external.service.file.FileStoreClient;
 import practice.mvcstarter.external.service.file.LocalFileStoreClient;
 
@@ -55,7 +55,7 @@ class FileStoreServiceTest {
     @BeforeEach
     void setUp() {
         fileStoreClient = new LocalFileStoreClient();
-        fileService = new RdbFileService(fileStoreClient, fileRepository);
+        fileService = new FileServiceImpl(fileStoreClient, fileRepository);
     }
 
     @Test

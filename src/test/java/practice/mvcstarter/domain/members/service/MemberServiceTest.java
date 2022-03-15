@@ -51,7 +51,7 @@ class MemberServiceTest {
 
     @BeforeEach
     void setUp() {
-        memberService = new RdbMemberService(memberRepository, fileService);
+        memberService = new MemberServiceImpl(memberRepository, fileService);
     }
 
     @Test

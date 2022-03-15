@@ -79,7 +79,7 @@ public class MemberApiController {
     @GetMapping("/{memberId}/boards/like")
     public Page<BoardReadDto> getLikedBoardList(@PathVariable("memberId") Long memberId,
                                                 @PageableDefault(size = 30, sort = "lastModifiedDate", direction = Sort.Direction.DESC) Pageable pageable) {
-        return memberBoardService.getLikedBoardList(memberId, pageable);
+        return memberBoardService.getLikedBoardPage(memberId, pageable);
     }
 
     /**
@@ -88,7 +88,7 @@ public class MemberApiController {
     @GetMapping("/{memberId}/boards/posts/like")
     public Page<BoardPostReadDto> getLikedPostList(@PathVariable("memberId") Long memberId,
                                                    @PageableDefault(size = 30, sort = "lastModifiedDate", direction = Sort.Direction.DESC) Pageable pageable) {
-        return memberBoardService.getLikedPostList(memberId, pageable);
+        return memberBoardService.getLikedPostPage(memberId, pageable);
     }
 
     /**
@@ -97,7 +97,7 @@ public class MemberApiController {
     @GetMapping("/{memberId}/boards/posts/mine")
     public Page<BoardPostReadDto> getWrittenByMePostList(@PathVariable("memberId") Long memberId,
                                                          @PageableDefault(size = 30, sort = "lastModifiedDate", direction = Sort.Direction.DESC) Pageable pageable) {
-        return memberBoardService.getWrittenByMePostList(memberId, pageable);
+        return memberBoardService.getWrittenByMePostPage(memberId, pageable);
     }
 
     /**
@@ -117,6 +117,6 @@ public class MemberApiController {
     @GetMapping("/{memberId}/boards/posts/comments/mine")
     public Page<PostCommentReadDto> getWrittenByMeCommentList(@PathVariable("memberId") Long memberId,
                                                               @PageableDefault(size = 30, sort = "lastModifiedDate", direction = Sort.Direction.DESC) Pageable pageable) {
-        return memberBoardService.getWrittenByMeCommentList(memberId, pageable);
+        return memberBoardService.getWrittenByMeCommentPage(memberId, pageable);
     }
 }

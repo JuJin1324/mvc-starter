@@ -25,7 +25,7 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class RdbMemberService implements MemberService {
+public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final FileService      fileService;
 
