@@ -1,4 +1,4 @@
-package practice.mvcstarter.web.controllers.files;
+package practice.mvcstarter.domain.files.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
