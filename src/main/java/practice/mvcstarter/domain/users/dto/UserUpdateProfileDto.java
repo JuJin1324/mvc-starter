@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.members.dto;
+package practice.mvcstarter.domain.users.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +13,11 @@ import practice.mvcstarter.domain.files.entity.ContentType;
 
 @NoArgsConstructor
 @Getter
-public class MemberUpdateProfileDto {
+public class UserUpdateProfileDto {
     private String      base64Image;
     private ContentType contentType;
 
-    public MemberUpdateProfileDto(String base64Image, ContentType contentType) {
+    public UserUpdateProfileDto(String base64Image, ContentType contentType) {
         this.base64Image = base64Image;
         this.contentType = contentType;
     }

@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.members.dto;
+package practice.mvcstarter.domain.users.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,26 +12,21 @@ import org.springframework.util.StringUtils;
 
 @NoArgsConstructor
 @Getter
-public class MemberCreateDto {
-    private String  name;
+public class UserUpdateDto {
     private String  nickName;
     private Integer age;
 
-    public MemberCreateDto(String name, String nickName, Integer age) {
-        this.name = name;
+    public UserUpdateDto(String nickName, Integer age) {
         this.nickName = nickName;
         this.age = age;
     }
 
     public void validate() {
-        if (!StringUtils.hasText(name)) {
-            throw new IllegalArgumentException("[MemberCreateDto] name is blank.");
-        }
         if (!StringUtils.hasText(nickName)) {
-            throw new IllegalArgumentException("[MemberCreateDto] nickName is blank.");
+            throw new IllegalArgumentException("[MemberUpdateDto] nickName is blank.");
         }
         if (age == null) {
-            throw new IllegalArgumentException("[MemberCreateDto] age is null.");
+            throw new IllegalArgumentException("[MemberUpdateDto] age is null.");
         }
     }
 }

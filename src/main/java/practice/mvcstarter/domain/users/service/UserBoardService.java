@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.members.service;
+package practice.mvcstarter.domain.users.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +10,7 @@ import practice.mvcstarter.domain.boards.dto.PostCommentReadDto;
  * Created by Yoo Ju Jin(jujin1324@daum.net)
  * Created Date : 2022/03/14
  */
-public interface MemberBoardService {
+public interface UserBoardService {
     /**
      * 관심 게시판 조회
      */

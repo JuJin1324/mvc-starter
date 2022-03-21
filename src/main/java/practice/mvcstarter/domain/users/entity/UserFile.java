@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.members.entity;
+package practice.mvcstarter.domain.users.entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,19 +18,19 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class MemberFile extends TimeBaseEntity {
+public class UserFile extends TimeBaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "member_file_id")
     private Long id;
 
-    @Convert(converter = MemberFileTypeConverter.class)
-    private MemberFileType fileType;
+    @Convert(converter = UserFileTypeConverter.class)
+    private UserFileType fileType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Member member;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
@@ -38,16 +38,16 @@ public class MemberFile extends TimeBaseEntity {
     private FileStore fileStore;
 
     @Builder
-    private MemberFile(MemberFileType fileType, Member member, FileStore fileStore) {
+    private UserFile(UserFileType fileType, User user, FileStore fileStore) {
         this.fileType = fileType;
-        this.member = member;
+        this.user = user;
         this.fileStore = fileStore;
     }
 
-    public static MemberFile createProfile(Member member, FileStore fileStore) {
-        return MemberFile.builder()
-                .fileType(MemberFileType.PROFILE)
-                .member(member)
+    public static UserFile createProfile(User user, FileStore fileStore) {
+        return UserFile.builder()
+                .fileType(UserFileType.PROFILE)
+                .member(user)
                 .fileStore(fileStore)
                 .build();
     }

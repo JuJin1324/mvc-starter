@@ -3,8 +3,8 @@ package practice.mvcstarter.domain.boards.dto;
 import lombok.Getter;
 import practice.mvcstarter.domain.boards.entity.BoardType;
 import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
-import practice.mvcstarter.domain.members.dto.MemberReadDto;
-import practice.mvcstarter.domain.members.entity.Member;
+import practice.mvcstarter.domain.users.dto.UserReadDto;
+import practice.mvcstarter.domain.users.entity.User;
 
 import java.util.Optional;
 
@@ -22,8 +22,8 @@ public class BoardPostReadDto {
     private final String        content;
     private final Long          likeCount;
     private final Long          readCount;
-    private final Long          commentCount;
-    private       MemberReadDto member;
+    private final Long        commentCount;
+    private       UserReadDto member;
 
     //    @QueryProjection
     public BoardPostReadDto(Long boardId, BoardType topic, String title, String content,
@@ -37,7 +37,7 @@ public class BoardPostReadDto {
         this.commentCount = commentCount;
     }
 
-    public void setMember(Member member, Optional<FileBase64ReadDto> profileOptional) {
-        this.member = new MemberReadDto(member, profileOptional);
+    public void setMember(User user, Optional<FileBase64ReadDto> profileOptional) {
+        this.member = new UserReadDto(user, profileOptional);
     }
 }

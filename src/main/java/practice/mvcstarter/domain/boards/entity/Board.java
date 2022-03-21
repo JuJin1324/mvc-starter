@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import practice.mvcstarter.domain.base.entity.TimeBaseEntity;
-import practice.mvcstarter.domain.members.entity.Member;
+import practice.mvcstarter.domain.users.entity.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class Board extends TimeBaseEntity {
         this.boardType = boardType;
     }
 
-    public void addPost(String title, String content, Member writer) {
+    public void addPost(String title, String content, User writer) {
         boardPosts.add(new BoardPost(title, content, this, writer));
     }
 }

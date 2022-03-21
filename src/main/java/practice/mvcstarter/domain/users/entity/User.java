@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.members.entity;
+package practice.mvcstarter.domain.users.entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,10 +23,10 @@ import java.util.Optional;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends TimeBaseEntity {
+public class User extends TimeBaseEntity {
     @Id
     @GeneratedValue
-    @Column(name = "member_id")
+    @Column(name = "user_id")
     private Long id;
 
     private String name;
@@ -35,8 +35,8 @@ public class Member extends TimeBaseEntity {
 
     private Integer age;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<MemberFile> memberFiles = new ArrayList<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<UserFile> userFiles = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<Board> myBoards = new ArrayList<>();
@@ -44,19 +44,19 @@ public class Member extends TimeBaseEntity {
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<PostComment> myPostComments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<MemberLikeBoard> likeBoards = new ArrayList<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<UserLikeBoard> likeBoards = new ArrayList<>();
 
     @Builder
-    private Member(Long id, String name, String nickName, Integer age) {
+    private User(Long id, String name, String nickName, Integer age) {
         this.id = id;
         this.name = name;
         this.nickName = nickName;
         this.age = age;
     }
 
-    public static Member createMember(String name, String nickName, Integer age) {
-        return Member.builder()
+    public static User createMember(String name, String nickName, Integer age) {
+        return User.builder()
                 .name(name)
                 .nickName(nickName)
                 .age(age)
@@ -73,27 +73,27 @@ public class Member extends TimeBaseEntity {
             throw new FileIsNotBase64Exception(fileStore.getUploadFileName());
         }
 
-        Optional<MemberFile> optional = this.findMemberFile(MemberFileType.PROFILE);
+        Optional<UserFile> optional = this.findMemberFile(UserFileType.PROFILE);
         if (optional.isPresent()) {
-            MemberFile profile = optional.get();
+            UserFile profile = optional.get();
             profile.updateFile(fileStore);
         } else {
-            MemberFile newProfile = MemberFile.createProfile(this, fileStore);
-            memberFiles.add(newProfile);
+            UserFile newProfile = UserFile.createProfile(this, fileStore);
+            userFiles.add(newProfile);
         }
     }
 
     public Optional<FileStore> getProfile() {
-        return this.findMemberFile(MemberFileType.PROFILE)
-                .map(MemberFile::getFileStore);
+        return this.findMemberFile(UserFileType.PROFILE)
+                .map(UserFile::getFileStore);
     }
 
-    private Optional<MemberFile> findMemberFile(MemberFileType fileType) {
-        if (this.getMemberFiles().isEmpty()) {
+    private Optional<UserFile> findMemberFile(UserFileType fileType) {
+        if (this.getUserFiles().isEmpty()) {
             return Optional.empty();
         }
-        return this.getMemberFiles().stream()
-                .filter(memberFile -> memberFile.getFileType() == fileType)
+        return this.getUserFiles().stream()
+                .filter(userFile -> userFile.getFileType() == fileType)
                 .findAny();
     }
 }

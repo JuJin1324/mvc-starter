@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.members.entity;
+package practice.mvcstarter.domain.users.entity;
 
 import org.springframework.util.StringUtils;
 
@@ -11,9 +11,9 @@ import java.util.stream.Stream;
  * Created Date : 2022/02/13
  */
 @Converter
-public class MemberFileTypeConverter implements AttributeConverter<MemberFileType, String> {
+public class UserFileTypeConverter implements AttributeConverter<UserFileType, String> {
     @Override
-    public String convertToDatabaseColumn(MemberFileType attribute) {
+    public String convertToDatabaseColumn(UserFileType attribute) {
         if (attribute == null) {
             return null;
         }
@@ -21,11 +21,11 @@ public class MemberFileTypeConverter implements AttributeConverter<MemberFileTyp
     }
 
     @Override
-    public MemberFileType convertToEntityAttribute(String dbData) {
+    public UserFileType convertToEntityAttribute(String dbData) {
         if (!StringUtils.hasText(dbData)) {
             return null;
         }
-        return Stream.of(MemberFileType.values())
+        return Stream.of(UserFileType.values())
                 .filter(c -> c.getValue().equals(dbData))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);

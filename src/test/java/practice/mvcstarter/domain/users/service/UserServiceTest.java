@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.members.service;
+package practice.mvcstarter.domain.users.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,12 +9,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import practice.mvcstarter.domain.files.entity.ContentType;
 import practice.mvcstarter.domain.files.entity.FileStore;
 import practice.mvcstarter.domain.files.service.FileService;
-import practice.mvcstarter.domain.members.dto.MemberCreateDto;
-import practice.mvcstarter.domain.members.dto.MemberUpdateDto;
-import practice.mvcstarter.domain.members.dto.MemberUpdateProfileDto;
-import practice.mvcstarter.domain.members.entity.Member;
-import practice.mvcstarter.domain.members.exception.MemberNotFoundException;
-import practice.mvcstarter.domain.members.repository.MemberRepository;
+import practice.mvcstarter.domain.users.dto.UserCreateDto;
+import practice.mvcstarter.domain.users.dto.UserUpdateDto;
+import practice.mvcstarter.domain.users.dto.UserUpdateProfileDto;
+import practice.mvcstarter.domain.users.entity.User;
+import practice.mvcstarter.domain.users.exception.UserNotFoundException;
+import practice.mvcstarter.domain.users.repository.UserRepository;
 
 import java.util.Optional;
 
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
  */
 
 @ExtendWith(MockitoExtension.class)
-class MemberServiceTest {
+class UserServiceTest {
     private static final Long   MEMBER_ID_VALID     = 1L;
     private static final Long   MEMBER_ID_NOT_EXIST = 999999999L;
     private static final String MEMBER_NAME         = "회원 이름";
@@ -43,103 +43,103 @@ class MemberServiceTest {
     private static final ContentType CONTENT_TYPE_PNG = ContentType.IMAGE_PNG;
 
     @Mock
-    private MemberRepository memberRepository;
+    private UserRepository userRepository;
     @Mock
-    private FileService      fileService;
+    private FileService    fileService;
 
-    private MemberService memberService;
+    private UserService userService;
 
     @BeforeEach
     void setUp() {
-        memberService = new MemberServiceImpl(memberRepository, fileService);
+        userService = new UserServiceImpl(userRepository, fileService);
     }
 
     @Test
     @DisplayName("[회원 생성] 1.유효하지 않은 매개변수")
     void createMember_whenInvalidParam_thenThrowException() {
-        assertThrows(IllegalArgumentException.class, () -> memberService.createMember(null));
+        assertThrows(IllegalArgumentException.class, () -> userService.createMember(null));
 
         /* 이름 blank */
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.createMember(new MemberCreateDto(null, null, null)));
+                userService.createMember(new UserCreateDto(null, null, null)));
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.createMember(new MemberCreateDto("", null, null)));
+                userService.createMember(new UserCreateDto("", null, null)));
 
         /* Name 이 blank */
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.createMember(new MemberCreateDto(null, null, null)));
+                userService.createMember(new UserCreateDto(null, null, null)));
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.createMember(new MemberCreateDto("", null, null)));
+                userService.createMember(new UserCreateDto("", null, null)));
 
         /* NickName 이 blank */
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.createMember(new MemberCreateDto(MEMBER_NAME, null, null)));
+                userService.createMember(new UserCreateDto(MEMBER_NAME, null, null)));
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.createMember(new MemberCreateDto(MEMBER_NAME, "", null)));
+                userService.createMember(new UserCreateDto(MEMBER_NAME, "", null)));
 
         /* age 가 null */
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.createMember(new MemberCreateDto(MEMBER_NAME, MEMBER_NICK_NAME, null)));
+                userService.createMember(new UserCreateDto(MEMBER_NAME, MEMBER_NICK_NAME, null)));
     }
 
     @Test
     @DisplayName("[회원 생성] 2.정상 생성")
     void createMember_whenNormal_thenReturnMemberId() {
         /* given */
-        MemberCreateDto givenDto = new MemberCreateDto(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
+        UserCreateDto givenDto = new UserCreateDto(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
 
         /* when */
-        memberService.createMember(givenDto);
+        userService.createMember(givenDto);
 
         /* then */
-        verify(memberRepository, times(1)).save(any());
+        verify(userRepository, times(1)).save(any());
     }
 
     @Test
     @DisplayName("[회원 조회 - 단건] 1.유효하지 않은 매개변수")
     void getSingleMember_whenInvalidParam_thenThrowException() {
-        assertThrows(IllegalArgumentException.class, () -> memberService.getSingleMember(null));
+        assertThrows(IllegalArgumentException.class, () -> userService.getSingleUser(null));
     }
 
     @Test
     @DisplayName("[회원 조회 - 단건] 2.존재하지 않는 memberId")
     void getSingleMember_whenNotExistMemberId_thenThrowException() {
         /* given */
-        when(memberRepository.findWithMemberFilesById(MEMBER_ID_NOT_EXIST))
+        when(userRepository.findWithMemberFilesById(MEMBER_ID_NOT_EXIST))
                 .thenReturn(Optional.empty());
 
         /* when, then */
-        assertThrows(MemberNotFoundException.class, () ->
-                memberService.getSingleMember(MEMBER_ID_NOT_EXIST));
+        assertThrows(UserNotFoundException.class, () ->
+                userService.getSingleUser(MEMBER_ID_NOT_EXIST));
     }
 
     @Test
     @DisplayName("[회원 갱신] 1.유효하지 않은 매개변수")
     void updateMember_whenInvalidParam_thenThrowException() {
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.updateMember(null, null));
+                userService.updateUser(null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.updateMember(MEMBER_ID_VALID, null));
+                userService.updateUser(MEMBER_ID_VALID, null));
 
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.updateMember(MEMBER_ID_VALID, new MemberUpdateDto(null, null)));
+                userService.updateUser(MEMBER_ID_VALID, new UserUpdateDto(null, null)));
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.updateMember(MEMBER_ID_VALID, new MemberUpdateDto("", null)));
+                userService.updateUser(MEMBER_ID_VALID, new UserUpdateDto("", null)));
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.updateMember(MEMBER_ID_VALID, new MemberUpdateDto(MEMBER_NICK_NAME_NEW, null)));
+                userService.updateUser(MEMBER_ID_VALID, new UserUpdateDto(MEMBER_NICK_NAME_NEW, null)));
     }
 
     @Test
     @DisplayName("[회원 갱신] 2.존재하지 않는 memberId")
     void updateMember_whenNotExistMemberId_thenThrowException() {
         /* given */
-        when(memberRepository.findById(MEMBER_ID_NOT_EXIST))
+        when(userRepository.findById(MEMBER_ID_NOT_EXIST))
                 .thenReturn(Optional.empty());
 
         /* when, then */
-        assertThrows(MemberNotFoundException.class, () -> {
-            MemberUpdateDto givenDto = new MemberUpdateDto(MEMBER_NICK_NAME_NEW, MEMBER_AGE_NEW);
-            memberService.updateMember(MEMBER_ID_NOT_EXIST, givenDto);
+        assertThrows(UserNotFoundException.class, () -> {
+            UserUpdateDto givenDto = new UserUpdateDto(MEMBER_NICK_NAME_NEW, MEMBER_AGE_NEW);
+            userService.updateUser(MEMBER_ID_NOT_EXIST, givenDto);
         });
     }
 
@@ -147,110 +147,110 @@ class MemberServiceTest {
     @DisplayName("[회원 갱신] 3.정상 갱신")
     void updateMember_whenNormal_thenUpdateTeam() {
         /* given */
-        Member givenMember = Member.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
-        when(memberRepository.findById(MEMBER_ID_VALID))
-                .thenReturn(Optional.of(givenMember));
+        User givenUser = User.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
+        when(userRepository.findById(MEMBER_ID_VALID))
+                .thenReturn(Optional.of(givenUser));
 
         /* when */
-        MemberUpdateDto givenDto = new MemberUpdateDto(MEMBER_NICK_NAME_NEW, MEMBER_AGE_NEW);
-        memberService.updateMember(MEMBER_ID_VALID, givenDto);
+        UserUpdateDto givenDto = new UserUpdateDto(MEMBER_NICK_NAME_NEW, MEMBER_AGE_NEW);
+        userService.updateUser(MEMBER_ID_VALID, givenDto);
 
         /* then */
-        assertThat(givenMember.getNickName()).isEqualTo(MEMBER_NICK_NAME_NEW);
-        assertThat(givenMember.getAge()).isEqualTo(MEMBER_AGE_NEW);
+        assertThat(givenUser.getNickName()).isEqualTo(MEMBER_NICK_NAME_NEW);
+        assertThat(givenUser.getAge()).isEqualTo(MEMBER_AGE_NEW);
     }
 
     @Test
     @DisplayName("[회원 갱신 - 프로필] 1.유효하지 않은 매개변수")
     void updateMemberProfile_whenInvalidParam_thenThrowException() {
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.updateMemberProfile(null, null));
+                userService.updateProfile(null, null));
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.updateMemberProfile(MEMBER_ID_VALID, null));
+                userService.updateProfile(MEMBER_ID_VALID, null));
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.updateMemberProfile(MEMBER_ID_VALID, new MemberUpdateProfileDto(BASE64_IMAGE, null)));
+                userService.updateProfile(MEMBER_ID_VALID, new UserUpdateProfileDto(BASE64_IMAGE, null)));
     }
 
     @Test
     @DisplayName("[회원 갱신 - 프로필] 2.존재하지 않는 memberId")
     void updateMemberProfile_whenNotExistMemberId_thenThrowException() {
         /* given */
-        MemberUpdateProfileDto givenDto = new MemberUpdateProfileDto(BASE64_IMAGE, CONTENT_TYPE_PNG);
-        when(memberRepository.findWithMemberFilesById(MEMBER_ID_NOT_EXIST))
+        UserUpdateProfileDto givenDto = new UserUpdateProfileDto(BASE64_IMAGE, CONTENT_TYPE_PNG);
+        when(userRepository.findWithMemberFilesById(MEMBER_ID_NOT_EXIST))
                 .thenReturn(Optional.empty());
 
         /* when, then */
-        assertThrows(MemberNotFoundException.class, () ->
-                memberService.updateMemberProfile(MEMBER_ID_NOT_EXIST, givenDto));
+        assertThrows(UserNotFoundException.class, () ->
+                userService.updateProfile(MEMBER_ID_NOT_EXIST, givenDto));
     }
 
     @Test
     @DisplayName("[회원 갱신 - 프로필] 3.input dto 에 base64 image 가 있는 경우")
     void updateMemberProfile_whenDtoHasBase64_thenMemberHasNewProfileFile() {
         /* given */
-        Member givenMember = Member.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
-        when(memberRepository.findWithMemberFilesById(MEMBER_ID_VALID))
-                .thenReturn(Optional.of(givenMember));
+        User givenUser = User.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
+        when(userRepository.findWithMemberFilesById(MEMBER_ID_VALID))
+                .thenReturn(Optional.of(givenUser));
 
         FileStore givenFileStore = FileStore.createFile(ContentType.IMAGE_PNG, "/home/files/image.png", "image.png", 10L);
         when(fileService.uploadBase64(any(), any(), any()))
                 .thenReturn(givenFileStore);
 
         /* when */
-        MemberUpdateProfileDto givenDto = new MemberUpdateProfileDto(BASE64_IMAGE, CONTENT_TYPE_PNG);
-        memberService.updateMemberProfile(MEMBER_ID_VALID, givenDto);
+        UserUpdateProfileDto givenDto = new UserUpdateProfileDto(BASE64_IMAGE, CONTENT_TYPE_PNG);
+        userService.updateProfile(MEMBER_ID_VALID, givenDto);
 
         /* then */
-        assertThat(givenMember.getProfile().get()).isEqualTo(givenFileStore);
+        assertThat(givenUser.getProfile().get()).isEqualTo(givenFileStore);
     }
 
     @Test
     @DisplayName("[회원 갱신 - 프로필] 4.input dto 에 base64 image 가 없는 경우")
     void updateMemberProfile_whenDtoHasNoBase64_thenMemberHasNoProfile() {
         /* given */
-        Member givenMember = Member.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
-        when(memberRepository.findWithMemberFilesById(MEMBER_ID_VALID))
-                .thenReturn(Optional.of(givenMember));
+        User givenUser = User.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
+        when(userRepository.findWithMemberFilesById(MEMBER_ID_VALID))
+                .thenReturn(Optional.of(givenUser));
 
         /* when */
-        MemberUpdateProfileDto givenDto = new MemberUpdateProfileDto(null, null);
-        memberService.updateMemberProfile(MEMBER_ID_VALID, givenDto);
+        UserUpdateProfileDto givenDto = new UserUpdateProfileDto(null, null);
+        userService.updateProfile(MEMBER_ID_VALID, givenDto);
 
         /* then */
-        assertThat(givenMember.getProfile()).isEmpty();
+        assertThat(givenUser.getProfile()).isEmpty();
     }
 
     @Test
     @DisplayName("[회원 삭제] 1.유효하지 않은 매개변수")
     void deleteMember_whenInvalidParam_thenThrowException() {
         assertThrows(IllegalArgumentException.class, () ->
-                memberService.deleteMember(null));
+                userService.deleteUser(null));
     }
 
     @Test
     @DisplayName("[회원 삭제] 2.존재하지 않는 memberId")
     void deleteMember_whenNotExistMemberId_thenThrowException() {
         /* given */
-        when(memberRepository.findWithMemberFilesById(MEMBER_ID_NOT_EXIST))
+        when(userRepository.findWithMemberFilesById(MEMBER_ID_NOT_EXIST))
                 .thenReturn(Optional.empty());
 
         /* when, then */
-        assertThrows(MemberNotFoundException.class, () ->
-                memberService.deleteMember(MEMBER_ID_NOT_EXIST));
+        assertThrows(UserNotFoundException.class, () ->
+                userService.deleteUser(MEMBER_ID_NOT_EXIST));
     }
 
     @Test
     @DisplayName("[회원 삭제] 3.정상 삭제")
     void deleteMember_whenNormal_thenUpdateTeam() {
         /* given */
-        Member givenMember = Member.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
-        when(memberRepository.findWithMemberFilesById(MEMBER_ID_VALID))
-                .thenReturn(Optional.of(givenMember));
+        User givenUser = User.createMember(MEMBER_NAME, MEMBER_NICK_NAME, MEMBER_AGE);
+        when(userRepository.findWithMemberFilesById(MEMBER_ID_VALID))
+                .thenReturn(Optional.of(givenUser));
 
         /* when */
-        memberService.deleteMember(MEMBER_ID_VALID);
+        userService.deleteUser(MEMBER_ID_VALID);
 
         /* then */
-        verify(memberRepository, times(1)).delete(givenMember);
+        verify(userRepository, times(1)).delete(givenUser);
     }
 }

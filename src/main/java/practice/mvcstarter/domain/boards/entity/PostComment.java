@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import practice.mvcstarter.domain.members.entity.Member;
+import practice.mvcstarter.domain.users.entity.User;
 
 import javax.persistence.*;
 import java.util.List;
@@ -35,7 +35,7 @@ public class PostComment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Member writer;
+    private User writer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_board_comment_id")

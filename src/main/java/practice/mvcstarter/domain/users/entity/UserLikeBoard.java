@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.members.entity;
+package practice.mvcstarter.domain.users.entity;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,15 +17,15 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberLikeBoard extends TimeBaseEntity {
+public class UserLikeBoard extends TimeBaseEntity {
     @Id
     @GeneratedValue
-    @Column(name = "member_like_board_id")
+    @Column(name = "user_like_board_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")

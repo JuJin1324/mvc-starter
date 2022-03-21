@@ -1,9 +1,9 @@
-package practice.mvcstarter.domain.members.dto;
+package practice.mvcstarter.domain.users.dto;
 
 import lombok.Getter;
 import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
-import practice.mvcstarter.domain.members.entity.Member;
+import practice.mvcstarter.domain.users.entity.User;
 
 import java.util.Optional;
 
@@ -14,7 +14,7 @@ import java.util.Optional;
  */
 
 @Getter
-public class MemberDetailReadDto {
+public class UserDetailReadDto {
     private final Long        memberId;
     private final String      name;
     private final String      nickName;
@@ -22,11 +22,11 @@ public class MemberDetailReadDto {
     private       ContentType contentType;
     private       String      base64Image;
 
-    public MemberDetailReadDto(Member member, Optional<FileBase64ReadDto> profileOptional) {
-        this.memberId = member.getId();
-        this.name = member.getName();
-        this.nickName = member.getNickName();
-        this.age = member.getAge();
+    public UserDetailReadDto(User user, Optional<FileBase64ReadDto> profileOptional) {
+        this.memberId = user.getId();
+        this.name = user.getName();
+        this.nickName = user.getNickName();
+        this.age = user.getAge();
 
         if (profileOptional.isPresent()) {
             FileBase64ReadDto profile = profileOptional.get();

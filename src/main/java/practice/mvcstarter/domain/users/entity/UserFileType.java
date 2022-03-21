@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.members.entity;
+package practice.mvcstarter.domain.users.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum MemberFileType {
+public enum UserFileType {
     PROFILE("P"),
     ;
 

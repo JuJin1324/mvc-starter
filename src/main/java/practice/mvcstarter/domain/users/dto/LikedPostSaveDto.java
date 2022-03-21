@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.members.dto;
+package practice.mvcstarter.domain.users.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

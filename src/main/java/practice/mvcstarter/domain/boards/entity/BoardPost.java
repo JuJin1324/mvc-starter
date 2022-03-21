@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import practice.mvcstarter.domain.base.entity.TimeBaseEntity;
-import practice.mvcstarter.domain.members.entity.Member;
+import practice.mvcstarter.domain.users.entity.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class BoardPost extends TimeBaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member writer;
+    private User writer;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<PostComment> postComments = new ArrayList<>();
@@ -45,7 +45,7 @@ public class BoardPost extends TimeBaseEntity {
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<PostFile> attachedFiles = new ArrayList<>();
 
-    public BoardPost(String title, String content, Board board, Member writer) {
+    public BoardPost(String title, String content, Board board, User writer) {
         this.title = title;
         this.content = content;
         this.readCount = 0;
