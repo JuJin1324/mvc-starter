@@ -8,6 +8,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import practice.mvcstarter.domain.auth.argument.resolver.Authenticated;
 import practice.mvcstarter.domain.boards.dto.*;
 import practice.mvcstarter.domain.boards.service.BoardPostService;
 import practice.mvcstarter.domain.boards.service.BoardService;
@@ -40,9 +41,9 @@ public class BoardApiController {
     @PostMapping("/{boardId}/posts")
     @ResponseStatus(HttpStatus.CREATED)
     public void createPost(@PathVariable("boardId") Long boardId,
+                           @Authenticated Long userId,
                            @Validated @RequestBody BoardPostCreateDto dto) {
-        // TODO: Member ID
-        boardPostService.createPost(1L, boardId, dto);
+        boardPostService.createPost(userId, boardId, dto);
     }
 
     /**
@@ -70,9 +71,9 @@ public class BoardApiController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updatePost(@PathVariable("boardId") String boardId,
                            @PathVariable("postId") Long postId,
+                           @Authenticated Long userId,
                            @Validated @RequestBody BoardPostUpdateDto dto) {
-        // TODO: Member ID
-        boardPostService.updatePost(1L, postId, dto);
+        boardPostService.updatePost(userId, postId, dto);
     }
 
     /**
@@ -81,9 +82,9 @@ public class BoardApiController {
     @DeleteMapping("/{boardId}/posts/{postId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable("boardId") String boardId,
+                           @Authenticated Long userId,
                            @PathVariable("postId") Long postId) {
-        // TODO: Member ID
-        boardPostService.deletePost(1L, postId);
+        boardPostService.deletePost(userId, postId);
     }
 
     /**
@@ -93,9 +94,9 @@ public class BoardApiController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createComment(@PathVariable("boardId") Long boardId,
                               @PathVariable("postId") Long postId,
+                              @Authenticated Long userId,
                               @Validated @RequestBody PostCommentCreateDto dto) {
-        // TODO: Member ID
-        postCommentService.createComment(1L, postId, dto);
+        postCommentService.createComment(userId, postId, dto);
     }
 
     /**
@@ -106,9 +107,9 @@ public class BoardApiController {
     public void createChildComment(@PathVariable("boardId") Long boardId,
                                    @PathVariable("postId") Long postId,
                                    @PathVariable("commentId") Long commentId,
+                                   @Authenticated Long userId,
                                    @Validated @RequestBody PostCommentCreateDto dto) {
-        // TODO: Member ID
-        postCommentService.createChildComment(1L, postId, commentId, dto);
+        postCommentService.createChildComment(userId, postId, commentId, dto);
     }
 
     /**
@@ -129,9 +130,9 @@ public class BoardApiController {
     public void updateComment(@PathVariable("boardId") Long boardId,
                               @PathVariable("postId") Long postId,
                               @PathVariable("commentId") Long commentId,
+                              @Authenticated Long userId,
                               @Validated @RequestBody PostCommentUpdateDto dto) {
-        // TODO: Member ID
-        postCommentService.updateComment(1L, commentId, dto);
+        postCommentService.updateComment(userId, commentId, dto);
     }
 
     /**
@@ -140,8 +141,8 @@ public class BoardApiController {
     @DeleteMapping("/{boardId}/posts/{postId}/comments/{commentId}")
     public void deleteComment(@PathVariable("boardId") Long boardId,
                               @PathVariable("postId") Long postId,
+                              @Authenticated Long userId,
                               @PathVariable("commentId") Long commentId) {
-        // TODO: Member ID
-        postCommentService.deleteComment(1L, commentId);
+        postCommentService.deleteComment(userId, commentId);
     }
 }
