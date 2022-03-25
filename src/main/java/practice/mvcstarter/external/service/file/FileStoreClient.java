@@ -20,7 +20,7 @@ public interface FileStoreClient {
     String uploadBase64(ContentType contentType, String base64Image, @Nullable String storeDirPath) throws IOException;
 
     /**
-     * 파일 업로드 Multipart - 단건
+     * 파일 업로드 Multipart
      *
      * @return storedFilePath
      */

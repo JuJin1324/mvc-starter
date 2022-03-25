@@ -25,7 +25,7 @@ public class AuthLogin extends TimeBaseEntity {
     @Column(name = "login_id")
     private Long id;
 
-    private String loginName;
+    private String loginID;
 
     private String password;
 
@@ -33,5 +33,5 @@ public class AuthLogin extends TimeBaseEntity {
 
     private String loginToken;
 
-    private LocalDateTime expireDateUTC;
+    private LocalDateTime tokenExpireDateUTC;
 }
