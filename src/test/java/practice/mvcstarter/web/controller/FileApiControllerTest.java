@@ -1,4 +1,4 @@
-package practice.mvcstarter.domain.file.controller;
+package practice.mvcstarter.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import practice.mvcstarter.global.error.GlobalExceptionHandler;
-import practice.mvcstarter.web.controller.FileApiController;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -27,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class FileUploadApiControllerTest {
+class FileApiControllerTest {
     @Autowired
     FileApiController fileApiController;
 
@@ -54,7 +53,7 @@ class FileUploadApiControllerTest {
     @DisplayName("파일 조회 - 다운로드")
     void getFileDownload() throws Exception {
         Long fileId = 2L;
-        mockMvc.perform(get("/api/v1.0/files/{fileId}/download", fileId))
+        mockMvc.perform(get("/api/files/{fileId}/download", fileId))
                 .andExpect(status().isOk());
     }
 
@@ -62,7 +61,7 @@ class FileUploadApiControllerTest {
     @DisplayName("파일 조회 - base64 image")
     void getFileBase64() throws Exception {
         Long fileId = 2L;
-        mockMvc.perform(get("/api/v1.0/files/{fileId}/base64", fileId))
+        mockMvc.perform(get("/api/files/{fileId}/base64", fileId))
                 .andExpect(status().isOk());
     }
 }
