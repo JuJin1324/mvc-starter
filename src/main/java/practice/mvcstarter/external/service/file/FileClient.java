@@ -1,7 +1,7 @@
 package practice.mvcstarter.external.service.file;
 
 import org.springframework.web.multipart.MultipartFile;
-import practice.mvcstarter.domain.files.entity.ContentType;
+import practice.mvcstarter.domain.file.entity.ContentType;
 
 import javax.annotation.Nullable;
 import java.io.IOException;

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import practice.mvcstarter.domain.files.entity.ContentType;
+import practice.mvcstarter.domain.file.entity.ContentType;
 
 import javax.annotation.Nullable;
 import java.io.File;
