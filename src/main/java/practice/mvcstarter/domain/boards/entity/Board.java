@@ -22,10 +22,9 @@ import java.util.List;
 public class Board extends TimeBaseEntity {
     @Id
     @GeneratedValue
-    @Column(name = "board_id")
     private Long id;
 
-    private String name;
+    private String title;
 
     @Convert(converter = BoardTypeConverter.class)
     private BoardType boardType;
@@ -33,9 +32,9 @@ public class Board extends TimeBaseEntity {
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<BoardPost> boardPosts = new ArrayList<>();
 
-    public Board(Long id, String name, BoardType boardType) {
+    public Board(Long id, String title, BoardType boardType) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.boardType = boardType;
     }
 

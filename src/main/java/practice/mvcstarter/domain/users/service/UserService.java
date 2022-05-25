@@ -14,9 +14,9 @@ public interface UserService {
     /**
      * 회원 생성
      *
-     * @return memberId
+     * @return userId
      */
-    Long createMember(UserCreateDto dto);
+    Long createUser(UserCreateDto dto);
 
     /**
      * 회원 조회 - 단건

@@ -15,10 +15,10 @@ public interface UserRepository extends CommonRepository<User, Long> {
 
     Optional<User> findById(Long id);
 
-    @Query("select m from User m " +
-            "left join fetch m.memberFiles mf " +
-            "left join fetch mf.file " +
-            "where m.id = :id")
+    @Query("select u from User u " +
+            "left join fetch u.userFileUploads uf " +
+            "left join fetch uf.fileUpload " +
+            "where u.id = :id")
     Optional<User> findWithMemberFilesById(@Param("id") Long id);
 
     <S extends User> S save(S entity);

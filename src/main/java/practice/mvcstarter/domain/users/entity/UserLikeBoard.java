@@ -20,7 +20,6 @@ import javax.persistence.*;
 public class UserLikeBoard extends TimeBaseEntity {
     @Id
     @GeneratedValue
-    @Column(name = "user_like_board_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

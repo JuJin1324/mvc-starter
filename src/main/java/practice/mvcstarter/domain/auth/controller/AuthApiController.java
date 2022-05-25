@@ -15,7 +15,7 @@ import practice.mvcstarter.domain.auth.service.LoginService;
  */
 
 @RestController
-@RequestMapping("/api/v1.0/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthApiController {
 

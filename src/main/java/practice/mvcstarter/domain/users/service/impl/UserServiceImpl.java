@@ -1,11 +1,11 @@
-package practice.mvcstarter.domain.users.service;
+package practice.mvcstarter.domain.users.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
-import practice.mvcstarter.domain.files.entity.FileStore;
+import practice.mvcstarter.domain.files.entity.FileUpload;
 import practice.mvcstarter.domain.files.service.FileService;
 import practice.mvcstarter.domain.users.dto.UserCreateDto;
 import practice.mvcstarter.domain.users.dto.UserReadDto;
@@ -14,6 +14,7 @@ import practice.mvcstarter.domain.users.dto.UserUpdateProfileDto;
 import practice.mvcstarter.domain.users.entity.User;
 import practice.mvcstarter.domain.users.exception.UserNotFoundException;
 import practice.mvcstarter.domain.users.repository.UserRepository;
+import practice.mvcstarter.domain.users.service.UserService;
 
 import java.util.Optional;
 
@@ -35,13 +36,13 @@ public class UserServiceImpl implements UserService {
      * @return memberId
      */
     @Transactional
-    public Long createMember(UserCreateDto dto) {
+    public Long createUser(UserCreateDto dto) {
         if (dto == null) {
             throw new IllegalArgumentException("toCreate Dto is null.");
         }
         dto.validate();
 
-        User user = User.createMember(dto.getName(), dto.getNickName(), dto.getAge());
+        User user = new User(dto.getNickname());
         userRepository.save(user);
 
         return user.getId();
@@ -87,7 +88,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findById(memberId)
                 .orElseThrow(() -> new UserNotFoundException(memberId));
-        user.update(dto.getNickName(), dto.getAge());
+        user.updateNickname(dto.getNickName());
     }
 
     /**
@@ -110,9 +111,9 @@ public class UserServiceImpl implements UserService {
                 .ifPresent(file -> fileService.deleteFile(file.getId()));
 
         if (dto.hasBase64Image()) {
-            String uploadFileName = user.getNickName() + "님의 프로필" + "." + ContentType.getExtension(dto.getContentType());
-            FileStore fileStore = fileService.uploadBase64(uploadFileName, dto.getContentType(), dto.getBase64Image());
-            user.updateProfile(fileStore);
+            String uploadFileName = user.getNickname() + "님의 프로필" + "." + ContentType.getExtension(dto.getContentType());
+            FileUpload fileUpload = fileService.uploadBase64(uploadFileName, dto.getContentType(), dto.getBase64Image());
+            user.updateProfilePhoto(fileUpload);
         }
     }
 

@@ -9,14 +9,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
 import practice.mvcstarter.domain.files.dto.FileResourceReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
-import practice.mvcstarter.domain.files.entity.FileStore;
+import practice.mvcstarter.domain.files.entity.FileUpload;
 import practice.mvcstarter.domain.files.exception.ExpiredFileException;
 import practice.mvcstarter.domain.files.exception.FileNotFoundException;
-import practice.mvcstarter.domain.files.repository.FileRepository;
-import practice.mvcstarter.domain.files.service.FileService;
-import practice.mvcstarter.domain.files.service.FileServiceImpl;
-import practice.mvcstarter.external.service.file.FileStoreClient;
-import practice.mvcstarter.external.service.file.LocalFileStoreClient;
+import practice.mvcstarter.domain.files.repository.FileUploadRepository;
+import practice.mvcstarter.external.service.file.FileClient;
+import practice.mvcstarter.external.service.file.LocalFileClient;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -33,7 +31,7 @@ import static org.mockito.Mockito.when;
  */
 
 @ExtendWith(MockitoExtension.class)
-class FileStoreServiceTest {
+class FileUploadServiceTest {
     private static final String STORE_DIR_PATH = "/Users/J.Reo/Documents/dev/workspace-git-spring/mvc-starter/src/test/resources/files";
 //    private static final String STORE_DIR_PATH = "/Users/ju-jinyoo/Documents/dev/workspace-git-jujin/mvc-starter/src/test/resources/files";
 
@@ -47,15 +45,15 @@ class FileStoreServiceTest {
     private static final String      BASE64_IMAGE     = "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAKCAYAAACJxx+AAAABYWlDQ1BrQ0dDb2xvclNwYWNlRGlzcGxheVAzAAAokWNgYFJJLCjIYWFgYMjNKykKcndSiIiMUmB/yMAOhLwMYgwKicnFBY4BAT5AJQwwGhV8u8bACKIv64LMOiU1tUm1XsDXYqbw1YuvRJsw1aMArpTU4mQg/QeIU5MLikoYGBhTgGzl8pICELsDyBYpAjoKyJ4DYqdD2BtA7CQI+whYTUiQM5B9A8hWSM5IBJrB+API1klCEk9HYkPtBQFul8zigpzESoUAYwKuJQOUpFaUgGjn/ILKosz0jBIFR2AopSp45iXr6SgYGRiaMzCAwhyi+nMgOCwZxc4gxJrvMzDY7v////9uhJjXfgaGjUCdXDsRYhoWDAyC3AwMJ3YWJBYlgoWYgZgpLY2B4dNyBgbeSAYG4QtAPdHFacZGYHlGHicGBtZ7//9/VmNgYJ/MwPB3wv//vxf9//93MVDzHQaGA3kAFSFl7jXH0fsAAACKZVhJZk1NACoAAAAIAAQBGgAFAAAAAQAAAD4BGwAFAAAAAQAAAEYBKAADAAAAAQACAACHaQAEAAAAAQAAAE4AAAAAAAAAkAAAAAEAAACQAAAAAQADkoYABwAAABIAAAB4oAIABAAAAAEAAAAIoAMABAAAAAEAAAAKAAAAAEFTQ0lJAAAAU2NyZWVuc2hvdPoE6XgAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAHTaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA2LjAuMCI+CiAgIDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+CiAgICAgIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICAgICAgICAgIHhtbG5zOmV4aWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vZXhpZi8xLjAvIj4KICAgICAgICAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjEwPC9leGlmOlBpeGVsWURpbWVuc2lvbj4KICAgICAgICAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjg8L2V4aWY6UGl4ZWxYRGltZW5zaW9uPgogICAgICAgICA8ZXhpZjpVc2VyQ29tbWVudD5TY3JlZW5zaG90PC9leGlmOlVzZXJDb21tZW50PgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KbJxrmQAAABxpRE9UAAAAAgAAAAAAAAAFAAAAKAAAAAUAAAAFAAAAStvdOSgAAAAWSURBVCgVYmRgYPgPxDgBI1BmoBUAAAAA//8vs7vuAAAAFElEQVRjZGBg+A/EOAEjUGagFQAA8MwKAQlk/YkAAAAASUVORK5CYII=";
 
     @Mock
-    FileRepository fileRepository;
+    FileUploadRepository fileUploadRepository;
 
-    FileStoreClient fileStoreClient;
-    FileService     fileService;
+    FileClient  fileClient;
+    FileService fileService;
 
     @BeforeEach
     void setUp() {
-        fileStoreClient = new LocalFileStoreClient();
-        fileService = new FileServiceImpl(fileStoreClient, fileRepository);
+        fileClient = new LocalFileClient();
+        fileService = new FileServiceImpl(fileClient, fileUploadRepository);
     }
 
     @Test
@@ -73,13 +71,13 @@ class FileStoreServiceTest {
     @DisplayName("[파일 업로드 - base64] 2.정상 처리")
     void uploadBase64_whenNormal_thenReturnFile() {
         /* when */
-        FileStore fileStore = fileService.uploadBase64(FILE_NAME_VALID, CONTENT_TYPE_PNG, BASE64_IMAGE);
+        FileUpload fileUpload = fileService.uploadBase64(FILE_NAME_VALID, CONTENT_TYPE_PNG, BASE64_IMAGE);
 
         /* then */
-        assertThat(fileStore.getUploadFileName()).isEqualTo(FILE_NAME_VALID);
-        assertThat(fileStore.getContentType()).isEqualTo(CONTENT_TYPE_PNG);
-        assertThat(fileStore.getFileSize()).isEqualTo(BASE64_IMAGE.length());
-        assertThat(fileStore.getExpiredTimeUTC()).isNotNull();
+        assertThat(fileUpload.getUploadFileName()).isEqualTo(FILE_NAME_VALID);
+        assertThat(fileUpload.getContentType()).isEqualTo(CONTENT_TYPE_PNG);
+        assertThat(fileUpload.getFileSize()).isEqualTo(BASE64_IMAGE.length());
+        assertThat(fileUpload.getExpiredTimeUTC()).isNotNull();
     }
 
     @Test
@@ -92,7 +90,7 @@ class FileStoreServiceTest {
     @DisplayName("[파일 리소스 조회 - 단건] 2.파일이 DB에 없는 경우")
     void getFileResource_whenFileIsNotExistInDB_thenThrowException() throws Exception {
         /* given */
-        when(fileRepository.findById(FILE_ID_VALID))
+        when(fileUploadRepository.findById(FILE_ID_VALID))
                 .thenReturn(Optional.empty());
 
         /* when / then */
@@ -103,11 +101,11 @@ class FileStoreServiceTest {
     @DisplayName("[파일 리소스 조회 - 단건] 3.파일이 디렉터리에 없는 경우")
     void getFileResource_whenFileIsNotExistInDirectory_thenThrowException() throws Exception {
         /* given */
-        FileStore notExistFileStore = givenFile(ContentType.PLAIN_TEXT, FILE_PATH_NOT_EXIST,
+        FileUpload notExistFileUpload = givenFile(ContentType.PLAIN_TEXT, FILE_PATH_NOT_EXIST,
                 "plain.txt", 25L,
                 LocalDateTime.now(ZoneId.of("UTC")).plusWeeks(2));
-        when(fileRepository.findById(FILE_ID_VALID))
-                .thenReturn(Optional.of(notExistFileStore));
+        when(fileUploadRepository.findById(FILE_ID_VALID))
+                .thenReturn(Optional.of(notExistFileUpload));
 
         /* when / then */
         assertThrows(FileNotFoundException.class, () -> fileService.getFileResource(FILE_ID_VALID));
@@ -117,11 +115,11 @@ class FileStoreServiceTest {
     @DisplayName("[파일 리소스 조회 - 단건] 4.파일의 유효기간이 지난 경우")
     void getFileResource_whenFileIsExpired_thenThrowException() throws Exception {
         /* given */
-        FileStore expiredFileStore = givenFile(ContentType.PLAIN_TEXT, FILE_PATH_TEXT,
+        FileUpload expiredFileUpload = givenFile(ContentType.PLAIN_TEXT, FILE_PATH_TEXT,
                 "plain.txt", 25L,
                 LocalDateTime.now(ZoneId.of("UTC")).minusSeconds(10));
-        when(fileRepository.findById(FILE_ID_VALID))
-                .thenReturn(Optional.of(expiredFileStore));
+        when(fileUploadRepository.findById(FILE_ID_VALID))
+                .thenReturn(Optional.of(expiredFileUpload));
 
         /* when / then */
         assertThrows(ExpiredFileException.class, () -> fileService.getFileResource(FILE_ID_VALID));
@@ -131,11 +129,11 @@ class FileStoreServiceTest {
     @DisplayName("[파일 리소스 조회 - 단건] 5.텍스트 파일인 경우")
     void getFileResource_whenFileIsText_thenReturnFileResource() throws Exception {
         /* given */
-        FileStore textFileStore = givenFile(ContentType.PLAIN_TEXT, FILE_PATH_TEXT,
+        FileUpload textFileUpload = givenFile(ContentType.PLAIN_TEXT, FILE_PATH_TEXT,
                 "plain.txt", 25L,
                 LocalDateTime.now(ZoneId.of("UTC")).plusWeeks(2));
-        when(fileRepository.findById(FILE_ID_VALID))
-                .thenReturn(Optional.of(textFileStore));
+        when(fileUploadRepository.findById(FILE_ID_VALID))
+                .thenReturn(Optional.of(textFileUpload));
 
         /* when */
         FileResourceReadDto fileResource = fileService.getFileResource(FILE_ID_VALID);
@@ -148,11 +146,11 @@ class FileStoreServiceTest {
     @Test
     @DisplayName("[파일 리소스 조회 - 단건] 6.이미지 파일인 경우")
     void getFileResource_whenFileIsImage_thenReturnFileResource() throws Exception {
-        FileStore imageFileStore = givenFile(ContentType.IMAGE_PNG, FILE_PATH_IMAGE,
+        FileUpload imageFileUpload = givenFile(ContentType.IMAGE_PNG, FILE_PATH_IMAGE,
                 "image.png", 25L,
                 LocalDateTime.now(ZoneId.of("UTC")).plusWeeks(2));
-        when(fileRepository.findById(FILE_ID_VALID))
-                .thenReturn(Optional.of(imageFileStore));
+        when(fileUploadRepository.findById(FILE_ID_VALID))
+                .thenReturn(Optional.of(imageFileUpload));
 
         /* when */
         FileResourceReadDto file = fileService.getFileResource(FILE_ID_VALID);
@@ -170,11 +168,11 @@ class FileStoreServiceTest {
     @Test
     @DisplayName("[파일 base64 조회 - 단건] 2.이미지 파일인 경우")
     void getFileBase64_whenFileIsImage_thenReturnFileBase64() {
-        FileStore imageFileStore = givenFile(ContentType.IMAGE_PNG, FILE_PATH_IMAGE,
+        FileUpload imageFileUpload = givenFile(ContentType.IMAGE_PNG, FILE_PATH_IMAGE,
                 "image.png", 25L,
                 LocalDateTime.now(ZoneId.of("UTC")).plusWeeks(2));
-        when(fileRepository.findById(FILE_ID_VALID))
-                .thenReturn(Optional.of(imageFileStore));
+        when(fileUploadRepository.findById(FILE_ID_VALID))
+                .thenReturn(Optional.of(imageFileUpload));
 
         /* when */
         FileBase64ReadDto file = fileService.getFileBase64(FILE_ID_VALID);
@@ -194,19 +192,19 @@ class FileStoreServiceTest {
     @DisplayName("[파일 제거] 2.저장된 파일 제거")
     void deleteFile_whenDeleteStoredFile() {
         /* given */
-        FileStore givenFileStore = fileService.uploadBase64(FILE_NAME_VALID, CONTENT_TYPE_PNG, BASE64_IMAGE);
-        when(fileRepository.findById(FILE_ID_VALID))
-                .thenReturn(Optional.of(givenFileStore));
+        FileUpload givenFileUpload = fileService.uploadBase64(FILE_NAME_VALID, CONTENT_TYPE_PNG, BASE64_IMAGE);
+        when(fileUploadRepository.findById(FILE_ID_VALID))
+                .thenReturn(Optional.of(givenFileUpload));
 
         /* when */
         fileService.deleteFile(FILE_ID_VALID);
 
         /* then */
-        verify(fileRepository).delete(givenFileStore);
+        verify(fileUploadRepository).delete(givenFileUpload);
     }
 
-    private FileStore givenFile(ContentType contentType, String storeFilePath, String uploadFileName, Long fileSize, LocalDateTime expiredTimeUTC) {
-        return FileStore.builder()
+    private FileUpload givenFile(ContentType contentType, String storeFilePath, String uploadFileName, Long fileSize, LocalDateTime expiredTimeUTC) {
+        return FileUpload.builder()
                 .id(FILE_ID_VALID)
                 .contentType(contentType)
                 .storeFilePath(storeFilePath)

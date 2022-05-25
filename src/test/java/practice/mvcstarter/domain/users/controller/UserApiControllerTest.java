@@ -34,6 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Commit
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserApiControllerTest {
+    private static final String      MEMBER_NICKNAME  = "멤버 닉네임1";
+    private static final String      MEMBER_NICKNAME_UPDATE  = "갱신 멤버 닉네임";
     private static final String      BASE64_IMAGE     = "iVBORw0KGgoAAAANSUhEUgAAAAgAAAAKCAYAAACJxx+AAAABYWlDQ1BrQ0dDb2xvclNwYWNlRGlzcGxheVAzAAAokWNgYFJJLCjIYWFgYMjNKykKcndSiIiMUmB/yMAOhLwMYgwKicnFBY4BAT5AJQwwGhV8u8bACKIv64LMOiU1tUm1XsDXYqbw1YuvRJsw1aMArpTU4mQg/QeIU5MLikoYGBhTgGzl8pICELsDyBYpAjoKyJ4DYqdD2BtA7CQI+whYTUiQM5B9A8hWSM5IBJrB+API1klCEk9HYkPtBQFul8zigpzESoUAYwKuJQOUpFaUgGjn/ILKosz0jBIFR2AopSp45iXr6SgYGRiaMzCAwhyi+nMgOCwZxc4gxJrvMzDY7v////9uhJjXfgaGjUCdXDsRYhoWDAyC3AwMJ3YWJBYlgoWYgZgpLY2B4dNyBgbeSAYG4QtAPdHFacZGYHlGHicGBtZ7//9/VmNgYJ/MwPB3wv//vxf9//93MVDzHQaGA3kAFSFl7jXH0fsAAACKZVhJZk1NACoAAAAIAAQBGgAFAAAAAQAAAD4BGwAFAAAAAQAAAEYBKAADAAAAAQACAACHaQAEAAAAAQAAAE4AAAAAAAAAkAAAAAEAAACQAAAAAQADkoYABwAAABIAAAB4oAIABAAAAAEAAAAIoAMABAAAAAEAAAAKAAAAAEFTQ0lJAAAAU2NyZWVuc2hvdPoE6XgAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAHTaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA2LjAuMCI+CiAgIDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+CiAgICAgIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICAgICAgICAgIHhtbG5zOmV4aWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vZXhpZi8xLjAvIj4KICAgICAgICAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjEwPC9leGlmOlBpeGVsWURpbWVuc2lvbj4KICAgICAgICAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjg8L2V4aWY6UGl4ZWxYRGltZW5zaW9uPgogICAgICAgICA8ZXhpZjpVc2VyQ29tbWVudD5TY3JlZW5zaG90PC9leGlmOlVzZXJDb21tZW50PgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KbJxrmQAAABxpRE9UAAAAAgAAAAAAAAAFAAAAKAAAAAUAAAAFAAAAStvdOSgAAAAWSURBVCgVYmRgYPgPxDgBI1BmoBUAAAAA//8vs7vuAAAAFElEQVRjZGBg+A/EOAEjUGagFQAA8MwKAQlk/YkAAAAASUVORK5CYII=";
     private static final ContentType CONTENT_TYPE_PNG = ContentType.IMAGE_PNG;
 
@@ -60,10 +62,10 @@ class UserApiControllerTest {
 
     @Test
     @DisplayName("회원 생성")
-    void createMember() throws Exception {
-        UserCreateDto dto = new UserCreateDto("멤버 이름1", "멤버 닉네임1", 21);
+    void createUser() throws Exception {
+        UserCreateDto dto = new UserCreateDto(MEMBER_NICKNAME);
         mockMvc.perform(
-                        post("/api/v1.0/members")
+                        post("/api/users")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(dto))
                 )
@@ -73,16 +75,16 @@ class UserApiControllerTest {
     @Test
     @DisplayName("회원 조회 - 단건")
     void getSingleMember() throws Exception {
-        mockMvc.perform(get("/api/v1.0/members/{memberId}", 1L))
+        mockMvc.perform(get("/api/user/{userId}", 1L))
                 .andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("회원 갱신")
     void updateMember() throws Exception {
-        UserUpdateDto dto = new UserUpdateDto("멤버 닉네임", 23);
+        UserUpdateDto dto = new UserUpdateDto(MEMBER_NICKNAME_UPDATE);
         mockMvc.perform(
-                        put("/api/v1.0/members/{memberId}", 1L)
+                        put("/api/users/{userId}", 1L)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(dto))
                 )
@@ -94,7 +96,7 @@ class UserApiControllerTest {
     void updateMemberProfile_whenReqBodyHasBase64Image() throws Exception {
         UserUpdateProfileDto dto = new UserUpdateProfileDto(BASE64_IMAGE, CONTENT_TYPE_PNG);
         mockMvc.perform(
-                        put("/api/v1.0/members/{memberId}/profile", 1L)
+                        put("/api/users/{userId}/profile", 1L)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(dto))
                 )
@@ -106,7 +108,7 @@ class UserApiControllerTest {
     void updateMemberProfile_whenReqBodyHasNoBase64Image() throws Exception {
         UserUpdateProfileDto dto = new UserUpdateProfileDto(null, null);
         mockMvc.perform(
-                        put("/api/v1.0/members/{memberId}/profile", 1L)
+                        put("/api/users/{userId}/profile", 1L)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(dto))
                 )
@@ -116,7 +118,7 @@ class UserApiControllerTest {
     @Test
     @DisplayName("회원 삭제")
     void deleteMember() throws Exception {
-        mockMvc.perform(delete("/api/v1.0/members/{memberId}", 1L))
+        mockMvc.perform(delete("/api/users/{userId}", 1L))
                 .andExpect(status().isNoContent());
     }
 
@@ -124,7 +126,7 @@ class UserApiControllerTest {
     @DisplayName("관심 게시글 조회 - 목록")
     void getAttractiveBoards() throws Exception {
         Long memberId = 1L;
-        mockMvc.perform(get("/api/v1.0/members/{memberId}/boards/attractive", memberId))
+        mockMvc.perform(get("/api/users/{userId}/boards/attractive", memberId))
                 .andExpect(status().isOk());
     }
 
@@ -132,7 +134,7 @@ class UserApiControllerTest {
     @DisplayName("내가 쓴 게시글 조회 - 목록")
     void getMineBoards() throws Exception {
         Long memberId = 1L;
-        mockMvc.perform(get("/api/v1.0/members/{memberId}/boards/mine", memberId))
+        mockMvc.perform(get("/api/users/{userId}/boards/mine", memberId))
                 .andExpect(status().isOk());
     }
 

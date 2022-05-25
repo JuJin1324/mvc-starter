@@ -22,7 +22,6 @@ import java.util.List;
 public class PostComment {
     @Id
     @GeneratedValue
-    @Column(name = "comment_id")
     private Long id;
 
     private String content;
@@ -33,12 +32,12 @@ public class PostComment {
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User writer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_board_comment_id")
+    @JoinColumn(name = "parent_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private PostComment parent;
 

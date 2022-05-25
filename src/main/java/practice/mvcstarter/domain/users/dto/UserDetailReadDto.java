@@ -15,18 +15,14 @@ import java.util.Optional;
 
 @Getter
 public class UserDetailReadDto {
-    private final Long        memberId;
-    private final String      name;
-    private final String      nickName;
-    private final Integer     age;
+    private final Long        userId;
+    private final String      nickname;
     private       ContentType contentType;
     private       String      base64Image;
 
     public UserDetailReadDto(User user, Optional<FileBase64ReadDto> profileOptional) {
-        this.memberId = user.getId();
-        this.name = user.getName();
-        this.nickName = user.getNickName();
-        this.age = user.getAge();
+        this.userId = user.getId();
+        this.nickname = user.getNickname();
 
         if (profileOptional.isPresent()) {
             FileBase64ReadDto profile = profileOptional.get();

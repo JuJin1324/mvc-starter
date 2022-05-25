@@ -22,7 +22,7 @@ public class UserReadDto {
 
     public UserReadDto(User user, Optional<FileBase64ReadDto> profileOptional) {
         this.memberId = user.getId();
-        this.nickName = user.getNickName();
+        this.nickName = user.getNickname();
 
         if (profileOptional.isPresent()) {
             FileBase64ReadDto profile = profileOptional.get();

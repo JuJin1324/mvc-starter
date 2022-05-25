@@ -43,7 +43,7 @@ public class BoardPost extends TimeBaseEntity {
     private final List<PostComment> postComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<PostFile> attachedFiles = new ArrayList<>();
+    private final List<PostFileUpload> attachedFiles = new ArrayList<>();
 
     public BoardPost(String title, String content, Board board, User writer) {
         this.title = title;

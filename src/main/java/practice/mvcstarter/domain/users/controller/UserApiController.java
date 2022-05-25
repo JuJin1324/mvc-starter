@@ -21,7 +21,7 @@ import practice.mvcstarter.domain.users.service.UserService;
  */
 
 @RestController
-@RequestMapping("/api/v1.0/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserApiController {
     private final UserService      userService;
@@ -33,7 +33,7 @@ public class UserApiController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public Long createUser(@Validated @RequestBody UserCreateDto dto) {
-        return userService.createMember(dto);
+        return userService.createUser(dto);
     }
 
     /**

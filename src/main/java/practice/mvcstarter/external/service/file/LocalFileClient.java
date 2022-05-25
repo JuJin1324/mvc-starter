@@ -21,7 +21,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-public class LocalFileStoreClient implements FileStoreClient {
+public class LocalFileClient implements FileClient {
     private static final String STORE_DIR_PATH = "/Users/J.Reo/Documents/dev/workspace-git-spring/mvc-starter/src/test/resources/files";
 //    private static final String STORE_DIR_PATH = "/Users/ju-jinyoo/Documents/dev/workspace-git-jujin/mvc-starter/src/test/resources/files";
 

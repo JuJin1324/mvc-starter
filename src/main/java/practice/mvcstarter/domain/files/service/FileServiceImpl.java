@@ -10,10 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 import practice.mvcstarter.domain.files.dto.FileBase64ReadDto;
 import practice.mvcstarter.domain.files.dto.FileResourceReadDto;
 import practice.mvcstarter.domain.files.entity.ContentType;
-import practice.mvcstarter.domain.files.entity.FileStore;
+import practice.mvcstarter.domain.files.entity.FileUpload;
 import practice.mvcstarter.domain.files.exception.*;
-import practice.mvcstarter.domain.files.repository.FileRepository;
-import practice.mvcstarter.external.service.file.FileStoreClient;
+import practice.mvcstarter.domain.files.repository.FileUploadRepository;
+import practice.mvcstarter.external.service.file.FileClient;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -29,12 +29,12 @@ import java.time.temporal.ChronoUnit;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class FileServiceImpl implements FileService {
-    private final FileStoreClient fileStoreClient;
-    private final FileRepository  fileRepository;
+    private final FileClient           fileClient;
+    private final FileUploadRepository fileUploadRepository;
 
     @Transactional
     @Override
-    public FileStore uploadBase64(String fileName, ContentType contentType, String base64Image) {
+    public FileUpload uploadBase64(String fileName, ContentType contentType, String base64Image) {
         if (!StringUtils.hasText(fileName)) {
             throw new IllegalArgumentException();
         }
@@ -46,11 +46,11 @@ public class FileServiceImpl implements FileService {
         }
 
         try {
-            String storeFilePath = fileStoreClient.uploadBase64(contentType, base64Image, null);
-            FileStore newFileStore = FileStore.createFile(contentType, storeFilePath, fileName, (long) base64Image.getBytes().length);
-            newFileStore.expireAfter(2, ChronoUnit.WEEKS);
-            fileRepository.save(newFileStore);
-            return newFileStore;
+            String storeFilePath = fileClient.uploadBase64(contentType, base64Image, null);
+            FileUpload newFileUpload = FileUpload.createFile(contentType, storeFilePath, fileName, (long) base64Image.getBytes().length);
+            newFileUpload.expireAfter(2, ChronoUnit.WEEKS);
+            fileUploadRepository.save(newFileUpload);
+            return newFileUpload;
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new StoreFileException(fileName);
@@ -62,15 +62,15 @@ public class FileServiceImpl implements FileService {
      */
     @Transactional
     @Override
-    public FileStore uploadFile(MultipartFile multipartFile) {
+    public FileUpload uploadFile(MultipartFile multipartFile) {
         String uploadFileName = multipartFile.getOriginalFilename();
         try {
-            String storedFilePath = fileStoreClient.uploadFile(multipartFile, null);
+            String storedFilePath = fileClient.uploadFile(multipartFile, null);
             ContentType contentType = ContentType.getValueOf(multipartFile.getContentType());
-            FileStore newFileStore = FileStore.createFile(contentType, storedFilePath, uploadFileName, multipartFile.getSize());
-            newFileStore.expireAfter(2, ChronoUnit.WEEKS);
-            fileRepository.save(newFileStore);
-            return newFileStore;
+            FileUpload newFileUpload = FileUpload.createFile(contentType, storedFilePath, uploadFileName, multipartFile.getSize());
+            newFileUpload.expireAfter(2, ChronoUnit.WEEKS);
+            fileUploadRepository.save(newFileUpload);
+            return newFileUpload;
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new StoreFileException(uploadFileName);
@@ -86,21 +86,21 @@ public class FileServiceImpl implements FileService {
             throw new IllegalArgumentException();
         }
 
-        FileStore fileStore = fileRepository.findById(fileId)
+        FileUpload fileUpload = fileUploadRepository.findById(fileId)
                 .orElseThrow(() -> new FileNotFoundException(fileId));
-        if (fileStore.isExpired()) {
-            throw new ExpiredFileException(fileStore.getUploadFileName());
+        if (fileUpload.isExpired()) {
+            throw new ExpiredFileException(fileUpload.getUploadFileName());
         }
 
         try {
-            UrlResource urlResource = new UrlResource("file:" + fileStore.getStoreFilePath());
+            UrlResource urlResource = new UrlResource("file:" + fileUpload.getStoreFilePath());
             if (!urlResource.exists()) {
-                throw new FileNotFoundException(fileStore.getUploadFileName());
+                throw new FileNotFoundException(fileUpload.getUploadFileName());
             }
-            return new FileResourceReadDto(fileStore, urlResource);
+            return new FileResourceReadDto(fileUpload, urlResource);
         } catch (MalformedURLException e) {
             log.error(e.getMessage());
-            throw new FileNotFoundException(fileStore.getUploadFileName());
+            throw new FileNotFoundException(fileUpload.getUploadFileName());
         }
     }
 
@@ -128,13 +128,13 @@ public class FileServiceImpl implements FileService {
             throw new IllegalArgumentException();
         }
 
-        fileRepository.findById(fileId)
+        fileUploadRepository.findById(fileId)
                 .ifPresent(file -> {
-                    boolean isDeleted = fileStoreClient.deleteFile(file.getStoreFilePath());
+                    boolean isDeleted = fileClient.deleteFile(file.getStoreFilePath());
                     if (!isDeleted) {
                         throw new DeleteFileException(file.getUploadFileName());
                     }
-                    fileRepository.delete(file);
+                    fileUploadRepository.delete(file);
                 });
     }
 }

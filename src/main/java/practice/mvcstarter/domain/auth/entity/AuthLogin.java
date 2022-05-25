@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 public class AuthLogin extends TimeBaseEntity {
     @Id
     @GeneratedValue
-    @Column(name = "login_id")
     private Long id;
 
     private String loginID;

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import practice.mvcstarter.domain.base.exception.InvalidAccessTimeException;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -16,8 +17,10 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 public abstract class TimeBaseEntity {
+    @Column(name = "created_date")
     private LocalDateTime createdDateUTC;
 
+    @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDateUTC;
 
     @PrePersist

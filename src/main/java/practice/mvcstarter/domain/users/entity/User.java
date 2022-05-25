@@ -1,13 +1,11 @@
 package practice.mvcstarter.domain.users.entity;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import practice.mvcstarter.domain.base.entity.TimeBaseEntity;
-import practice.mvcstarter.domain.boards.entity.Board;
 import practice.mvcstarter.domain.boards.entity.PostComment;
-import practice.mvcstarter.domain.files.entity.FileStore;
+import practice.mvcstarter.domain.files.entity.FileUpload;
 import practice.mvcstarter.domain.files.exception.FileIsNotBase64Exception;
 
 import javax.persistence.*;
@@ -26,20 +24,12 @@ import java.util.Optional;
 public class User extends TimeBaseEntity {
     @Id
     @GeneratedValue
-    @Column(name = "user_id")
     private Long id;
 
-    private String name;
-
-    private String nickName;
-
-    private Integer age;
+    private String nickname;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<UserFile> userFiles = new ArrayList<>();
-
-    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<Board> myBoards = new ArrayList<>();
+    private final List<UserFileUpload> userFileUploads = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<PostComment> myPostComments = new ArrayList<>();
@@ -47,53 +37,40 @@ public class User extends TimeBaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<UserLikeBoard> likeBoards = new ArrayList<>();
 
-    @Builder
-    private User(Long id, String name, String nickName, Integer age) {
-        this.id = id;
-        this.name = name;
-        this.nickName = nickName;
-        this.age = age;
+    public User(String nickname) {
+        this.nickname = nickname;
     }
 
-    public static User createMember(String name, String nickName, Integer age) {
-        return User.builder()
-                .name(name)
-                .nickName(nickName)
-                .age(age)
-                .build();
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public void update(String nickName, Integer age) {
-        this.nickName = nickName;
-        this.age = age;
-    }
-
-    public void updateProfile(FileStore fileStore) {
-        if (!fileStore.isImage()) {
-            throw new FileIsNotBase64Exception(fileStore.getUploadFileName());
+    public void updateProfilePhoto(FileUpload profileFile) {
+        if (!profileFile.isImage()) {
+            throw new FileIsNotBase64Exception(profileFile.getUploadFileName());
         }
 
-        Optional<UserFile> optional = this.findMemberFile(UserFileType.PROFILE);
+        Optional<UserFileUpload> optional = this.findMemberFile(UserFileType.PROFILE);
         if (optional.isPresent()) {
-            UserFile profile = optional.get();
-            profile.updateFile(fileStore);
+            UserFileUpload profile = optional.get();
+            profile.updateFile(profileFile);
         } else {
-            UserFile newProfile = UserFile.createProfile(this, fileStore);
-            userFiles.add(newProfile);
+            UserFileUpload newProfile = new UserFileUpload(UserFileType.PROFILE, this, profileFile);
+            userFileUploads.add(newProfile);
         }
     }
 
-    public Optional<FileStore> getProfile() {
+    public Optional<FileUpload> getProfile() {
         return this.findMemberFile(UserFileType.PROFILE)
-                .map(UserFile::getFileStore);
+                .map(UserFileUpload::getFileUpload);
     }
 
-    private Optional<UserFile> findMemberFile(UserFileType fileType) {
-        if (this.getUserFiles().isEmpty()) {
+    private Optional<UserFileUpload> findMemberFile(UserFileType fileType) {
+        if (this.getUserFileUploads().isEmpty()) {
             return Optional.empty();
         }
-        return this.getUserFiles().stream()
-                .filter(userFile -> userFile.getFileType() == fileType)
+        return this.getUserFileUploads().stream()
+                .filter(userFileUpload -> userFileUpload.getFileType() == fileType)
                 .findAny();
     }
 }

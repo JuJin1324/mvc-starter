@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
  */
 
 @RestController
-@RequestMapping("/api/v1.0/files")
+@RequestMapping("/api/files")
 @RequiredArgsConstructor
 public class FileApiController {
     private final FileService fileService;

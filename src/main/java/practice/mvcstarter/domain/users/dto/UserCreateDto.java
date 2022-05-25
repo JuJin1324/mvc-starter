@@ -13,25 +13,15 @@ import org.springframework.util.StringUtils;
 @NoArgsConstructor
 @Getter
 public class UserCreateDto {
-    private String  name;
-    private String  nickName;
-    private Integer age;
+    private String nickname;
 
-    public UserCreateDto(String name, String nickName, Integer age) {
-        this.name = name;
-        this.nickName = nickName;
-        this.age = age;
+    public UserCreateDto(String nickname) {
+        this.nickname = nickname;
     }
 
     public void validate() {
-        if (!StringUtils.hasText(name)) {
-            throw new IllegalArgumentException("[MemberCreateDto] name is blank.");
-        }
-        if (!StringUtils.hasText(nickName)) {
+        if (!StringUtils.hasText(nickname)) {
             throw new IllegalArgumentException("[MemberCreateDto] nickName is blank.");
-        }
-        if (age == null) {
-            throw new IllegalArgumentException("[MemberCreateDto] age is null.");
         }
     }
 }

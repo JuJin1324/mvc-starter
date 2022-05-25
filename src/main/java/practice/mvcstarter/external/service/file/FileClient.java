@@ -10,7 +10,7 @@ import java.io.IOException;
  * Created by Yoo Ju Jin(jujin1324@daum.net)
  * Created Date : 2022/02/15
  */
-public interface FileStoreClient {
+public interface FileClient {
 
     /**
      * 파일 업로드 - base64

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import practice.mvcstarter.domain.base.entity.TimeBaseEntity;
-import practice.mvcstarter.domain.files.entity.FileStore;
+import practice.mvcstarter.domain.files.entity.FileUpload;
 
 import javax.persistence.*;
 
@@ -18,10 +18,9 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class PostFile extends TimeBaseEntity {
+public class PostFileUpload extends TimeBaseEntity {
     @Id
     @GeneratedValue
-    @Column(name = "board_file_id")
     private Long id;
 
     @Convert(converter = PostFileTypeConverter.class)
@@ -33,7 +32,7 @@ public class PostFile extends TimeBaseEntity {
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "file_id")
+    @JoinColumn(name = "file_upload_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private FileStore fileStore;
+    private FileUpload fileUpload;
 }

@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import practice.mvcstarter.domain.base.entity.TimeBaseEntity;
 
-import javax.persistence.*;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -20,10 +23,9 @@ import java.time.temporal.ChronoUnit;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class FileStore extends TimeBaseEntity {
+public class FileUpload extends TimeBaseEntity {
     @Id
     @GeneratedValue
-    @Column(name = "file_store_id")
     private Long id;
 
     @Convert(converter = ContentTypeConverter.class)
@@ -38,7 +40,7 @@ public class FileStore extends TimeBaseEntity {
     private LocalDateTime expiredTimeUTC;
 
     @Builder
-    private FileStore(Long id, ContentType contentType, String storeFilePath, String uploadFileName, Long fileSize, LocalDateTime expiredTimeUTC) {
+    private FileUpload(Long id, ContentType contentType, String storeFilePath, String uploadFileName, Long fileSize, LocalDateTime expiredTimeUTC) {
         this.id = id;
         this.contentType = contentType;
         this.storeFilePath = storeFilePath;
@@ -47,8 +49,8 @@ public class FileStore extends TimeBaseEntity {
         this.expiredTimeUTC = expiredTimeUTC;
     }
 
-    public static FileStore createFile(ContentType contentType, String storeFilePath, String uploadFileName, Long fileSize) {
-        return FileStore.builder()
+    public static FileUpload createFile(ContentType contentType, String storeFilePath, String uploadFileName, Long fileSize) {
+        return FileUpload.builder()
                 .contentType(contentType)
                 .storeFilePath(storeFilePath)
                 .uploadFileName(uploadFileName)

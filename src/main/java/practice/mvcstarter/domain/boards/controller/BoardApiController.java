@@ -20,7 +20,7 @@ import practice.mvcstarter.domain.boards.service.PostCommentService;
  */
 
 @RestController
-@RequestMapping("/api/v1.0/boards")
+@RequestMapping("/api/boards")
 @RequiredArgsConstructor
 public class BoardApiController {
     private final BoardService       boardService;
